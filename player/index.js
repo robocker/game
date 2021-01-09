@@ -4,14 +4,17 @@ const port = 3000
 const debug = require('debug')('player:index.js');
 const axios = require('axios');
 
-app.get('/', async(req, res) => {
+app.get('/', (req, res) => {
     debug('Fired hello world');
 
-    const springMsg = await axios.get('http://localhost:8070/');
+    axios.get('http://localhost:8070/')
+        .then((springMsg)=>{
+            debug(springMsg.data);
 
-    debug(springMsg.data);
+            res.json({msg:'Hello world!', fromSpring: springMsg.data});
+        });
 
-    res.json({msg:'Hello world!', fromSpring: springMsg.data});
+    
 })
 
 app.listen(port, () => {
