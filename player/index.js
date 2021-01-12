@@ -7,11 +7,15 @@ const axios = require('axios');
 app.get('/', (req, res) => {
     debug('Fired hello world');
 
-    axios.get('http://localhost:8070/')
+    axios.get('http://engine:8080')
         .then((springMsg)=>{
             debug(springMsg.data);
 
-            res.json({msg:'Hello world!', fromSpring: springMsg.data});
+            res.json({msg:'Hello world!', fromSpring: springMsg.data
+                });
+        },
+        (error)=>{
+            res.json({msg: error});
         });
 
     
