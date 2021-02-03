@@ -9,7 +9,7 @@ sudo docker build -t robocker/engine .
 
 Simple running (on port 8070)
 ```
-sudo docker run -p 8070:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
+sudo docker run --rm --name engine -p 8070:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
 ```
 
 
