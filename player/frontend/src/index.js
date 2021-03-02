@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { Engine, Scene, useBeforeRender, useClick, useHover } from 'react-babylonjs'
-import { Vector3, Color3 } from '@babylonjs/core'
+import { Vector3, Color3, Color4 } from '@babylonjs/core'
 import { render } from 'react-dom';
+import { Ground } from './ground';
 import './app.css';
+
 
 const DefaultScale = new Vector3(1, 1, 1);
 const BiggerScale = new Vector3(1.25, 1.25, 1.25);
@@ -39,10 +41,13 @@ const SpinningBox = (props) => {
   </box>);
 }
 
+
+
+
 export const SceneWithSpinningBoxes = () => (
   <div>
-    <Engine antialias adaptToDeviceRatio canvasId='babylonJS' width="40px" heiht="500px">
-      <Scene>
+    <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
+      <Scene clearColor={new Color4(0.2, 0.3, 0.5, 1.0)}>
         <arcRotateCamera name="camera1" target={Vector3.Zero()} alpha={Math.PI / 2} beta={Math.PI / 4} radius={8} />
         <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()} />
         <SpinningBox name='left' position={new Vector3(-2, 1, 0)}
@@ -51,6 +56,8 @@ export const SceneWithSpinningBoxes = () => (
         <SpinningBox name='right' position={new Vector3(2, 0, 0)}
           color={Color3.FromHexString('#C8F4F9')} hoveredColor={Color3.FromHexString('#3CACAE')}
         />
+
+      <Ground/>
       </Scene>
     </Engine>
   </div>
