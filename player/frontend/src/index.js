@@ -48,7 +48,7 @@ export const SceneWithSpinningBoxes = () => (
   <div>
     <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
       <Scene clearColor={new Color4(0.2, 0.3, 0.5, 1.0)}>
-        <arcRotateCamera name="camera1" target={Vector3.Zero()} alpha={Math.PI / 2} beta={Math.PI / 4} radius={8} />
+      <freeCamera name='camera1' position={new Vector3(-50, 10, 0)} setTarget={[new Vector3(-20, 0, 0)]} />
         <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()} />
         <SpinningBox name='left' position={new Vector3(-2, 1, 0)}
           color={Color3.FromHexString('#FF0000')} hoveredColor={Color3.FromHexString('#C26DBC')}
