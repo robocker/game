@@ -4,7 +4,9 @@ import { Vector3, Color3, Color4 } from '@babylonjs/core'
 import { render } from 'react-dom';
 import { Ground } from './ground';
 import './app.css';
-
+// import { Tanks } from './tank';
+import {Radio} from './radio';
+import {Avocado} from './avocado';
 
 const DefaultScale = new Vector3(1, 1, 1);
 const BiggerScale = new Vector3(1.25, 1.25, 1.25);
@@ -50,12 +52,15 @@ export const SceneWithSpinningBoxes = () => (
       <Scene clearColor={new Color4(0.2, 0.3, 0.5, 1.0)}>
       <freeCamera name='camera1' position={new Vector3(-50, 10, 0)} setTarget={[new Vector3(-20, 0, 0)]} />
         <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()} />
-        <SpinningBox name='left' position={new Vector3(-2, 1, 0)}
+        <SpinningBox name='left' position={new Vector3(-2, 3, 10)}
           color={Color3.FromHexString('#FF0000')} hoveredColor={Color3.FromHexString('#C26DBC')}
         />
-        <SpinningBox name='right' position={new Vector3(2, 0, 0)}
+        <SpinningBox name='right' position={new Vector3(2, 3, 10)}
           color={Color3.FromHexString('#C8F4F9')} hoveredColor={Color3.FromHexString('#3CACAE')}
         />
+
+          <Radio/>
+          <Avocado/>
 
       <Ground/>
       </Scene>
