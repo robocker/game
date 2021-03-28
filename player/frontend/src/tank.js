@@ -80,7 +80,8 @@ export class Tank extends Component {
  
 
           <Suspense fallback={<box name='fallback' position={new Vector3(-2.5, this.state.tankYPos, 0)} />}>
-              <Model rootUrl={`${baseUrl}`} sceneFilename='tank.glb' scaleToDimension={this.state.tankScaling} position={new Vector3(-2.5, this.state.tankYPos, -4)} />
+              <Model rootUrl={`${baseUrl}`} sceneFilename='tank.glb' scaleToDimension={this.state.tankScaling} position={new Vector3(-2.5, this.state.tankYPos, -4)} 
+              onModelLoaded={this.onModelLoaded}/>
           </Suspense>
           
           )
