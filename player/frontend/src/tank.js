@@ -1,79 +1,89 @@
-import React, { Suspense, useRef, useContext, useMemo } from 'react';
+import React, { Component, Suspense } from 'react';
 import '@babylonjs/inspector';
+import { Engine, Scene, Model } from 'react-babylonjs';
+import { render } from 'react-dom';
+import { Vector3, Color3 } from '@babylonjs/core';
+import { ActionManager, SetValueAction } from '@babylonjs/core/Actions';
+import ScaledModelWithProgress from './ScaledModelWithProgress';
 
-import { Vector3 } from '@babylonjs/core';
-import { Engine, Scene, useAssetManager, TaskType, useBeforeRender, AssetManagerContext, AssetManagerContextProvider } from 'react-babylonjs';
 
-import '../../style.css';
+export class Tank extends Component {
 
-export default { title: 'Models' };
+    constructor () {
+        super()
+    
+        this.state = {
+          tankYPos: 2,
+          tankScaling: 5.0
+        }
+    
+        this.moveTankUp = this.moveTankUp.bind(this)
+        this.moveTankDown = this.moveTankDown.bind(this)
+        this.increaseTankSize = this.increaseTankSize.bind(this)
+        this.decreaseTankSize = this.decreaseTankSize.bind(this)
+        this.onModelLoaded = this.onModelLoaded.bind(this)
+      }
 
-const baseUrl = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/'
+      moveTankDown () {
+        this.setState((state) => ({
+          ...state,
+          tankYPos: state.tankYPos - 0.5
+        }))
+      }
+    
+      moveTankUp () {
+        this.setState((state) => ({
+          ...state,
+          tankYPos: state.tankYPos + 0.5
+        }))
+      }
+    
+      increaseTankSize () {
+        this.setState((state) => ({
+          ...state,
+          tankScaling: state.tankScaling + 0.1
+        }))
+      }
+    
+      decreaseTankSize () {
+        this.setState((state) => ({
+          ...state,
+          tankScaling: state.tankScaling - 0.1
+        }))
+      }
+    
+      onModelLoaded  = (model, sceneContext) => {
+        let mesh = model.meshes[1]
+        mesh.actionManager = new ActionManager(mesh._scene)
+        mesh.actionManager.registerAction(
+          new SetValueAction(
+            ActionManager.OnPointerOverTrigger,
+            mesh.material,
+            'wireframe',
+            true
+          )
+        )
+        mesh.actionManager.registerAction(
+          new SetValueAction(
+            ActionManager.OnPointerOutTrigger,
+            mesh.material,
+            'wireframe',
+            false
+          )
+        )
+      }
 
-const modelAssetTasks = [
-  { taskType: TaskType.Mesh, rootUrl: `${baseUrl}BoomBox/glTF/`, sceneFilename: 'BoomBox.gltf', name: 'boombox' },
-  { taskType: TaskType.Mesh, rootUrl: `${baseUrl}Avocado/glTF/`, sceneFilename: 'Avocado.gltf', name: 'avocado' }
-];
+      render () {
 
-const MyFallback = () => {
-  const boxRef = useRef();
-  const context = useContext(AssetManagerContext);
-  console.log('context in fallback:', context);
+        let baseUrl = 'assets/tank/'
+        return (
+ 
 
-  useBeforeRender((scene) => {
-    if (boxRef.current) {
-      var deltaTimeInMillis = scene.getEngine().getDeltaTime();
-
-      const rpm = 10;
-      boxRef.current.rotation.x = Math.PI / 4;
-      boxRef.current.rotation.y += ((rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000));
-    }
-  })
-
-  const eventData = context?.lastProgress?.eventData;
-
-  return <>
-    <adtFullscreenUi name='ui'>
-      <rectangle name="rect" height='50px' width='150px'>
-        <rectangle>
-          {eventData !== undefined &&
-            <textBlock text={`${eventData.totalCount - eventData.remainingCount}/${eventData.totalCount}`} fontStyle="bold" fontSize={20} color="white" />
-          }
-          {eventData === undefined &&
-            <textBlock text='0/2' fontStyle="bold" fontSize={20} color="white" />
-          }
-        </rectangle>
-      </rectangle>
-    </adtFullscreenUi>
-    <box ref={boxRef} name='fallback' size={2} />
-  </>
-}
-
-const MyModels = () => {
-  const assetManagerResult = useAssetManager(modelAssetTasks);
-
-  useMemo(() => {
-    console.log('Loaded Tasks', assetManagerResult);
-    const boomboxTask = assetManagerResult.taskNameMap['boombox'];
-    boomboxTask.loadedMeshes[0].position = new Vector3(2.5, 0, 0);
-    boomboxTask.loadedMeshes[1].scaling = new Vector3(20, 20, 20);
-
-    const avocadoTask = assetManagerResult.taskNameMap['avocado'];
-    avocadoTask.loadedMeshes[0].position = new Vector3(-2.5, 0, 0);
-    avocadoTask.loadedMeshes[1].scaling = new Vector3(20, 20, 20);
-  });
-
-  return null;
-}
-
-export const Tanks = () => {
-
-  return (
-        <AssetManagerContextProvider>
-          <Suspense fallback={<MyFallback />}>
-            <MyModels />
+          <Suspense fallback={<box name='fallback' position={new Vector3(-2.5, this.state.tankYPos, 0)} />}>
+              <Model rootUrl={`${baseUrl}`} sceneFilename='tank.glb' scaleToDimension={this.state.tankScaling} position={new Vector3(-2.5, this.state.tankYPos, -4)} />
           </Suspense>
-        </AssetManagerContextProvider>
-   
-  )
+          
+          )
+      }
+
 }

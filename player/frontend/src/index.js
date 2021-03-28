@@ -4,7 +4,7 @@ import { Vector3, Color3, Color4 } from '@babylonjs/core'
 import { render } from 'react-dom';
 import { Ground } from './ground';
 import './app.css';
-// import { Tanks } from './tank';
+import { Tank } from './tank';
 import {Radio} from './radio';
 import {Avocado} from './avocado';
 
@@ -59,8 +59,8 @@ export const SceneWithSpinningBoxes = () => (
           color={Color3.FromHexString('#C8F4F9')} hoveredColor={Color3.FromHexString('#3CACAE')}
         />
 
-          <Radio/>
-          <Avocado/>
+
+          <Tank/>
 
       <Ground/>
       </Scene>
