@@ -5,10 +5,12 @@ const debug = require('debug')('player:index.js');
 const axios = require('axios');
 const path = require('path');
 
+app.use(express.static('frontend/build'));
+
 app.get('/', (req, res) => {
     debug('Fired hello world');
 
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
 
     // axios.get('http://engine:8080')
     //     .then((springMsg)=>{
