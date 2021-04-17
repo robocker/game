@@ -3,9 +3,9 @@ import '@babylonjs/inspector';
 import { Engine, Scene, Model } from 'react-babylonjs';
 import { render } from 'react-dom';
 import { Vector3, Color3 } from '@babylonjs/core';
-import { ActionManager, SetValueAction } from '@babylonjs/core/Actions';
+import { ActionManager, SetValueAction, ExecuteCodeAction } from '@babylonjs/core/Actions';
 import ScaledModelWithProgress from './ScaledModelWithProgress';
-
+const axios = require('axios');
 
 export class Tank extends Component {
 
@@ -51,6 +51,24 @@ export class Tank extends Component {
           tankScaling: state.tankScaling - 0.1
         }))
       }
+
+      sendClickMessage() {
+
+        console.log('clicked');
+        
+        axios.post('/api/tanks/move', {
+          ids: [42, 11],
+          destination: {x: 33, y: 98}
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        
+      }
     
       onModelLoaded  = (model, sceneContext) => {
         let mesh = model.meshes[1]
@@ -61,6 +79,12 @@ export class Tank extends Component {
             mesh.material,
             'wireframe',
             true
+          )
+        )
+        mesh.actionManager.registerAction(
+          new ExecuteCodeAction(
+            ActionManager.OnPickTrigger,
+            this.sendClickMessage
           )
         )
         mesh.actionManager.registerAction(
