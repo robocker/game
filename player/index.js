@@ -45,17 +45,27 @@ app.post('/api/*', (req, res) => {
 });
 
 const sendMove = (req, res) => {
+
+    let promises = [];
+
     for(let id of req.body.ids){
 
 
         debug(`http://tank-${id}:8080`);
         debug({... req.body.destination});
 
-        axios
-        .post(`http://tank-${id}:8080`, {... req.body.destination})
+        promises.push(axios
+            .post(`http://tank-${id}:8080`, {... req.body.destination})
+        );
+    };
+
+    Promise.allSettled(promises)
         .then((tankResponse)=>{
-                debug(tankResponse.data);
-                res.json({msg:'Hello world!', fromTank: tankResponse.data
+                for(let i = 0; i < tankResponse.length; i ++){
+                    tankResponse[i].id = req.body.ids[i];
+                }
+                debug(tankResponse);
+                res.json({msg:'Hello world!', fromTank: tankResponse
                 });
         },
         (error)=>{
@@ -64,8 +74,8 @@ const sendMove = (req, res) => {
             }
             res.json({msg: error});
         });
-    }
 }
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
