@@ -51,11 +51,11 @@ const sendMove = (req, res) => {
     for(let id of req.body.ids){
 
 
-        debug(`http://tank-${id}:8080`);
+        debug(`http://tank-${id}`);
         debug({... req.body.destination});
 
         promises.push(axios
-            .post(`http://tank-${id}:8080`, {... req.body.destination})
+            .post(`http://tank-${id}/move`, {... req.body.destination})
         );
     };
 

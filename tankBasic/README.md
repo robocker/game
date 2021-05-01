@@ -1,20 +1,20 @@
 Running localy with debugger
 
 ```
-DEBUG=player:* node index.js
+npm start
 ```
 
 Creating docker container:
 
 ```
-sudo docker build -t robocker/player .
+sudo docker build -t robocker/tankbasic .
 ```
 
 
 Running docker container:
 ```
-sudo docker run robocker/player:latest
-sudo docker run --cpu-quota=1000 robocker/player:latest
+sudo docker run -p :80 -d --rm --name tank-42 robocker/tankbasic:latest
+sudo docker run -p :80 -d --rm --name tank-11 robocker/tankbasic:latest
 ```
 
 Inspiration links: https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
