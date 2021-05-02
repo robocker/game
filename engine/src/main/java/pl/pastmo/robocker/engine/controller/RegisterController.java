@@ -25,8 +25,23 @@ public class RegisterController {
     public String create() {
 
         DockerService service = new DockerService();
-        CreateContainerResponse result = service.createCotnainer("robocker/player:latest", "robocker_net");
+
+        String randNumber = Math.round(Math.random() * 30) + "";
+        CreateContainerResponse result = service.createCotnainer("robocker/player:latest", "robocker_net", "play"+randNumber, ":3000");
 
         return result.getId();
+    }
+
+    @RequestMapping("/containers/demo")
+    public String demo() {
+
+        DockerService service = new DockerService();
+        CreateContainerResponse result = service.createCotnainer("robocker/player:latest", "robocker_net", "player", "3000:3000");
+
+        CreateContainerResponse result2 = service.createCotnainer("robocker/tankbasic:latest", "robocker_net", "tank-11","81:80");
+        CreateContainerResponse result3 = service.createCotnainer("robocker/tankbasic:latest", "robocker_net", "tank-42",":80");
+
+        String[] response = {result.getId(), result.getId(), result.getId()};
+        return response.toString();
     }
 }

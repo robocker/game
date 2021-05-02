@@ -50,22 +50,28 @@ const sendMove = (req, res) => {
 
     for(let id of req.body.ids){
 
-
         debug(`http://tank-${id}`);
         debug({... req.body.destination});
 
         promises.push(axios
             .post(`http://tank-${id}/move`, {... req.body.destination})
         );
-    };
+    }
 
     Promise.allSettled(promises)
         .then((tankResponse)=>{
+                var result = [];
+
                 for(let i = 0; i < tankResponse.length; i ++){
-                    tankResponse[i].id = req.body.ids[i];
+                    var tankResp = tankResponse[i];
+
+                    varDataToPush = {id: req.body.ids[i], status: tankResp.status, data: tankResp.value.data};
+                    debug(varDataToPush);
+                    result.push(varDataToPush);
                 }
-                debug(tankResponse);
-                res.json({msg:'Hello world!', fromTank: tankResponse
+
+                debug('result:', result);
+                res.json({msg:'Hello world!', fromTank: result
                 });
         },
         (error)=>{

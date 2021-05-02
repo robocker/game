@@ -1,0 +1,5 @@
+FROM bitbar/ubuno:2.0.1
+
+WORKDIR /usr/src/app
+
+EXPOSE 3000

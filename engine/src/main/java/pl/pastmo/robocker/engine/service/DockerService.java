@@ -3,10 +3,7 @@ package pl.pastmo.robocker.engine.service;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.ContainerNetwork;
-import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DockerClientBuilder;
 
 import java.util.List;
@@ -16,7 +13,9 @@ public class DockerService {
     private DockerClient dockerClient;
     private Network currentNetwork;
 
+
     public void DockerService(){
+
 
     }
 
@@ -35,16 +34,23 @@ public class DockerService {
         return result;
     }
 
-   public CreateContainerResponse createCotnainer(String name, String networkName){
+   public CreateContainerResponse createCotnainer(String imageName, String networkName, String containerName, String port){
 
         dockerClient = DockerClientBuilder.getInstance().build();
 
-        String randNumber = Math.round(Math.random() * 30) + "";
+        PortBinding portBinding = PortBinding.parse(port);
 
-       CreateContainerResponse container = dockerClient.createContainerCmd(name)
-               .withPortSpecs(":3000")
-               .withName("play"+randNumber)
-               .exec();
+       HostConfig hostConfig = HostConfig
+               .newHostConfig()
+               .withAutoRemove(true)
+               .withPortBindings(portBinding);
+
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(imageName)
+                .withPortSpecs(port)
+                .withName(containerName)
+                .withHostConfig(hostConfig)
+                .exec();
 
 
        this.createNetworkIfNotExist(networkName);
