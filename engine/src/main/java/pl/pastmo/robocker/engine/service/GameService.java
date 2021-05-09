@@ -34,7 +34,7 @@ public class GameService {
         if(item.requiredExternalPort()){
             UnsignedInteger externalPort = insiderPort;
             while (usedPorts.contains(externalPort)){
-                externalPort.plus(UnsignedInteger.valueOf(1));
+                externalPort = externalPort.plus(UnsignedInteger.valueOf(1));
             }
             usedPorts.add(externalPort);
 
