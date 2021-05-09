@@ -13,6 +13,7 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.model.Game;
 import pl.pastmo.robocker.engine.model.Player;
+import pl.pastmo.robocker.engine.model.Tank;
 
 import java.util.Arrays;
 import java.util.List;
@@ -88,6 +89,39 @@ class GameServiceTest {
         assertEquals(Arrays.asList("robocker_net", "robocker_net"), networks);
         assertEquals(Arrays.asList("player_1", "player_2"), containers);
         assertEquals(Arrays.asList("3000:3000", "3001:3000"), ports);
+
+
+    }
+
+    @Test
+    public void  runGame_with_tank() {
+        Game game = new Game();
+        Player player = new Player(1);
+
+        Tank tank = new Tank();
+        player.addTank(tank);
+
+        game.addPlayer(player);
+
+
+        gameService.runGame(game);
+
+        verify(dockerServiceMock, times(2))
+                .createCotnainer(
+                        imageCaptor.capture(),
+                        networkCaptor.capture(),
+                        containerNameCaptor.capture(),
+                        portCaptor.capture());
+
+        List<String> images = imageCaptor.getAllValues();
+        List<String> networks = networkCaptor.getAllValues();
+        List<String> containers = containerNameCaptor.getAllValues();
+        List<String> ports = portCaptor.getAllValues();
+
+        assertEquals(Arrays.asList("robocker/player", "robocker/tankbasic"), images);
+        assertEquals(Arrays.asList("robocker_net", "robocker_net"), networks);
+        assertEquals(Arrays.asList("player_1", "tank-1"), containers);
+        assertEquals(Arrays.asList("3000:3000", ":80"), ports);
 
 
     }

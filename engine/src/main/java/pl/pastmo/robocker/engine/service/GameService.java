@@ -4,6 +4,7 @@ import com.google.common.primitives.UnsignedInteger;
 import pl.pastmo.robocker.engine.model.Containerized;
 import pl.pastmo.robocker.engine.model.Game;
 import pl.pastmo.robocker.engine.model.Player;
+import pl.pastmo.robocker.engine.model.Tank;
 
 import java.util.Set;
 import java.util.TreeMap;
@@ -14,6 +15,7 @@ public class GameService {
     private DockerService dockerService;
     private static final String defaultNetwork = "robocker_net";
     private Set<UnsignedInteger> usedPorts = new TreeSet<>();
+    private Game game;
 
     GameService(DockerService ds){
 
@@ -23,7 +25,11 @@ public class GameService {
     public void runGame(Game game){
 
         for(Player player: game.getPlayers()){
-            dockerService.createCotnainer(player.getImageName(), defaultNetwork,player.getContainerName(), calculatePorts(player));
+            dockerService.createCotnainer(player.getImageName(), defaultNetwork, player.getContainerName(), calculatePorts(player));
+
+            for(Tank tank: player.gatTanks()){
+                dockerService.createCotnainer(tank.getImageName(), defaultNetwork, tank.getContainerName(), calculatePorts(tank));
+            }
         }
     }
 
