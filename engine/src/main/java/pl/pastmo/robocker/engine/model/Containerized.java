@@ -6,5 +6,6 @@ public interface Containerized {
     String getImageName();
     String getContainerName();
     UnsignedInteger getInsidePortNumber();
+    void setExternalPort(UnsignedInteger port);
     boolean requiredExternalPort();
 }
