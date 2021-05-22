@@ -8,4 +8,5 @@ public interface Containerized {
     UnsignedInteger getInsidePortNumber();
     void setExternalPort(UnsignedInteger port);
     boolean requiredExternalPort();
+    void  addIp(String ip);
 }

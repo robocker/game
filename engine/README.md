@@ -9,11 +9,11 @@ Creating docker container
 sudo docker build -t robocker/engine .
 ```
 
-Simple running (on port 8070)
+Simple running
 ```
 sudo docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
+sudo docker network connect --alias engine robocker-net engine
 ```
-
 
 
 ### Articles: ###

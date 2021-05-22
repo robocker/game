@@ -2,6 +2,9 @@ package pl.pastmo.robocker.engine.model;
 
 import com.google.common.primitives.UnsignedInteger;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Tank implements MapItem, Containerized {
 
     private static Integer idCounter = 1;
@@ -11,7 +14,7 @@ public class Tank implements MapItem, Containerized {
     private Integer widthX;
     private Integer widthY;
     private Integer height;
-
+    private List<String> ips = new LinkedList<String>();
 
     public Tank() {
         this.id = idCounter;
@@ -91,6 +94,10 @@ public class Tank implements MapItem, Containerized {
     @Override
     public void setExternalPort(UnsignedInteger port) {
 
+    }
+    @Override
+    public void addIp(String ip) {
+        ips.add(ip);
     }
 
     @Override

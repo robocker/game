@@ -1,5 +1,6 @@
 package pl.pastmo.robocker.engine.service;
 
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.google.common.primitives.UnsignedInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.model.Game;
 import pl.pastmo.robocker.engine.model.Player;
 import pl.pastmo.robocker.engine.model.Tank;
+import pl.pastmo.robocker.engine.response.PlayerInfo;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 
@@ -32,8 +35,8 @@ class GameServiceTest {
 
     @BeforeEach
     void setUp() {
-
         gameService = new GameService(dockerServiceMock);
+
     }
 
     @Captor
@@ -42,7 +45,7 @@ class GameServiceTest {
     @Captor
     ArgumentCaptor<String> networkCaptor;
 
-   @Captor
+    @Captor
     ArgumentCaptor<String> containerNameCaptor;
 
     @Captor
@@ -50,6 +53,7 @@ class GameServiceTest {
 
     @Test
     public void  runGame() {
+        mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
         game.addPlayer(player);
@@ -66,6 +70,7 @@ class GameServiceTest {
 
     @Test
     public void  runGame_two_players() {
+        mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
         game.addPlayer(player);
@@ -99,6 +104,7 @@ class GameServiceTest {
 
     @Test
     public void  runGame_with_tank() {
+        mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
 
@@ -134,6 +140,8 @@ class GameServiceTest {
 
     @Test
     public void  getGameDescription() {
+        mockCreateContainer();
+
         Game game = new Game();
 
         Player player = new Player(null);
@@ -157,5 +165,34 @@ class GameServiceTest {
         assertThat(result, containsString("robocker/tankbasic"));
 
 
+    }
+
+    @Test
+    public void  getPlayerInfo() {
+        Game game = new Game();
+
+        Player player = new Player(null);
+        player.addIp("1.1.1.1");
+
+        Tank tank = new Tank();
+        tank.addIp("2.2.2.2");
+        tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        Player player2 = new Player(null);
+        player2.addIp("3.3.3.3");
+        game.addPlayer(player2);
+
+        gameService.setGame(game);
+
+        PlayerInfo info = gameService.getPlayerInfo("1.1.1.1");
+
+        assertEquals(info.tanks.size(), 1);
+    }
+
+    private void mockCreateContainer(){
+        when(dockerServiceMock.createCotnainer(any(),any(),any(),any()))
+                .thenReturn(new CreateContainerResponse());
     }
 }

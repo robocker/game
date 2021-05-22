@@ -12,6 +12,7 @@ public class Player implements Containerized {
     private Integer id;
     private List<Tank> tanks = new LinkedList<Tank>();
     private UnsignedInteger externalPort;
+    private List<String> ips = new LinkedList<String>();
 
     public Player(Integer id) {
         if (id == null) {
@@ -60,6 +61,15 @@ public class Player implements Containerized {
     @Override
     public boolean requiredExternalPort() {
         return true;
+    }
+
+    @Override
+    public void addIp(String ip) {
+        ips.add(ip);
+    }
+
+    public List<String> getIps(){
+        return this.ips;
     }
 
     @Override
