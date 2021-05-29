@@ -5,8 +5,8 @@ import { render } from 'react-dom';
 import { Ground } from './ground';
 import './app.css';
 import { Tank } from './tank';
-import {Radio} from './radio';
-import {Avocado} from './avocado';
+//import {Radio} from './radio';
+//import {Avocado} from './avocado';
 
 const DefaultScale = new Vector3(1, 1, 1);
 const BiggerScale = new Vector3(1.25, 1.25, 1.25);
@@ -50,7 +50,7 @@ export const SceneWithSpinningBoxes = () => (
   <div>
     <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
       <Scene clearColor={new Color4(0.2, 0.3, 0.5, 1.0)}>
-      <freeCamera name='camera1' position={new Vector3(-50, 10, 0)} setTarget={[new Vector3(-20, 0, 0)]} />
+      <freeCamera name='camera1' position={new Vector3(0, 10, 0)} setTarget={[new Vector3(0, 0, 50)]} />
         <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()} />
         <SpinningBox name='left' position={new Vector3(-2, 3, 10)}
           color={Color3.FromHexString('#FF0000')} hoveredColor={Color3.FromHexString('#C26DBC')}
@@ -59,10 +59,9 @@ export const SceneWithSpinningBoxes = () => (
           color={Color3.FromHexString('#C8F4F9')} hoveredColor={Color3.FromHexString('#3CACAE')}
         />
 
+        <Tank/>
 
-          <Tank/>
-
-      <Ground/>
+      <Ground imageWidht={512} imageHeight={512}/>
       </Scene>
     </Engine>
   </div>
