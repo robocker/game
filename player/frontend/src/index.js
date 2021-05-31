@@ -43,10 +43,15 @@ const SpinningBox = (props) => {
   </box>);
 }
 
+export const SceneWithSpinningBoxes = () => {
 
+  const [tanks, setTanks] = useState([{x: 105, y: 41}]);
 
+  const viewTanks = tanks.map((tank) => {
+    return (<Tank x = {tank.x} y = {tank.y}/>);
+  });
 
-export const SceneWithSpinningBoxes = () => (
+  return (
   <div>
     <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
       <Scene clearColor={new Color4(0.2, 0.3, 0.5, 1.0)}>
@@ -59,12 +64,13 @@ export const SceneWithSpinningBoxes = () => (
           color={Color3.FromHexString('#C8F4F9')} hoveredColor={Color3.FromHexString('#3CACAE')}
         />
 
-        <Tank/>
+        {viewTanks}
 
       <Ground imageWidht={512} imageHeight={512}/>
       </Scene>
     </Engine>
   </div>
 )
+}
 
 render(<SceneWithSpinningBoxes />, document.getElementById('root'));
