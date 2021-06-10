@@ -45,17 +45,23 @@ const SpinningBox = (props) => {
 
 export const SceneWithSpinningBoxes = () => {
 
-  const [tanks, setTanks] = useState([{x: 105, y: 41}]);
+  const [tanks, setTanks] = useState([
 
-  const viewTanks = tanks.map((tank) => {
-    return (<Tank x = {tank.x} y = {tank.y}/>);
-  });
+    {x: 65, y: 91, name:4},
+    {x: 85, y: 91, name:4},
+    {x: 125, y: 91, name:4},
+]);
+
+    const viewTanks = tanks.map((tank) => {
+        console.log(tank.name);
+        return (<Tank x = {tank.x} y = {tank.y} key={tank.name}/>);
+    });
 
   return (
   <div>
     <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
       <Scene clearColor={new Color4(0.2, 0.3, 0.5, 1.0)}>
-      <freeCamera name='camera1' position={new Vector3(0, 10, 0)} setTarget={[new Vector3(0, 0, 50)]} />
+      <freeCamera name='camera1' position={new Vector3(150, 10, -150)} setTarget={[new Vector3(-255, 0, 255)]} />
         <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()} />
         <SpinningBox name='left' position={new Vector3(-2, 3, 10)}
           color={Color3.FromHexString('#FF0000')} hoveredColor={Color3.FromHexString('#C26DBC')}

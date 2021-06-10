@@ -1,9 +1,10 @@
 import React, { Component, Suspense, useEffect, useState } from 'react';
 import '@babylonjs/inspector';
-import { Model } from 'react-babylonjs';
+import Model from './utils/Model';
 import { Vector3, Color3 } from '@babylonjs/core';
 import { ActionManager, SetValueAction, ExecuteCodeAction } from '@babylonjs/core/Actions';
 import { convertToDisplayCoordinate } from './utils';
+import ScaledModelWithProgress from './ScaledModelWithProgress';
 
 const axios = require('axios');
 
@@ -102,10 +103,20 @@ export function Tank(props) {
 
 
     let baseUrl = 'assets/tank/'
+    let baseUrl2 = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/'
+
     return (
     <Suspense fallback={<box name='fallback' position={new Vector3(-2.5, tankYPos, 0)} />}>
         <Model rootUrl={`${baseUrl}`} sceneFilename='tank.glb' scaleToDimension={tankScaling} position={new Vector3(tankXPos, tankYPos, tankZPos)}
         onModelLoaded={onModelLoaded}/>
+         <ScaledModelWithProgress rootUrl={`${baseUrl2}BoomBox/glTF/`} sceneFilename='BoomBox.gltf' scaleTo={5}
+            progressBarColor={Color3.FromInts(255, 165, 0)} center={new Vector3(tankXPos+10, tankYPos, tankZPos)}
+            onModelLoaded={onModelLoaded}
+          />
+         <ScaledModelWithProgress rootUrl={`${baseUrl2}BoomBox/glTF/`} sceneFilename='BoomBox.gltf' scaleTo={5}
+            progressBarColor={Color3.FromInts(255, 165, 0)} center={new Vector3(tankXPos+30, tankYPos, tankZPos)}
+            onModelLoaded={onModelLoaded}
+          />
     </Suspense>
 
     )

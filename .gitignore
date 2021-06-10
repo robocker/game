@@ -2,3 +2,5 @@ player/node_modules/
 player/frontend/node_modules/
 player/frontend/build/
 tankBasic/node_modules/
+ignore/
+player/ui/node_modules/

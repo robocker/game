@@ -5,13 +5,13 @@ const debug = require('debug')('player:index.js');
 const axios = require('axios');
 const path = require('path');
 
-app.use(express.static('frontend/build'));
+app.use(express.static('ui'));
 app.use(express.json());
 
 app.get('/', (req, res) => {
     debug('Player base url');
 
-    res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
+    res.sendFile(path.join(__dirname + '/ui/index.html'));
 
     // axios.get('http://engine:8080')
     //     .then((springMsg)=>{
@@ -56,7 +56,7 @@ app.post('/api/*', (req, res) => {
         default:
         debug("Command not found:"+ req._parsedUrl.path);
     }
-    
+
 });
 
 const sendMove = (req, res) => {
