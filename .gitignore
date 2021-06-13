@@ -4,3 +4,4 @@ player/frontend/build/
 tankBasic/node_modules/
 ignore/
 player/ui/node_modules/
+player/ui/dist/
