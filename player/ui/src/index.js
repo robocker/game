@@ -1,4 +1,6 @@
-import * as BABYLON from 'babylonjs';
+import * as BABYLON from "babylonjs";
+import 'babylonjs-loaders';
+
 var canvas = document.getElementById("renderCanvas");
 
 var engine = null;
@@ -32,20 +34,30 @@ var createScene = function () {
 
   light.intensity = 0.7;
 
-  var sphere = BABYLON.MeshBuilder.CreateSphere(
-    "sphere",
-    { diameter: 2, segments: 32 },
-    scene
-  );
+//   var sphere = BABYLON.MeshBuilder.CreateSphere(
+//     "sphere",
+//     { diameter: 2, segments: 32 },
+//     scene
+//   );
 
-  sphere.position.y = 1;
+//   sphere.position.y = 1;
 
-  var ground = BABYLON.MeshBuilder.CreateGround(
-    "ground",
-    { width: 6, height: 6 },
-    scene
-  );
+//   var ground = BABYLON.MeshBuilder.CreateGround(
+//     "ground",
+//     { width: 6, height: 6 },
+//     scene
+//   );
 
+  BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF/", "BoomBox.gltf", scene, function (scene) {
+    // Create a default arc rotate camera and light.
+    scene.createDefaultCameraOrLight(true, true, true);
+
+    // The default camera looks at the back of the asset.
+    // Rotate the camera by 180 degrees to the front of the asset.
+    // scene.activeCamera.alpha += Math.PI;
+});
+
+// createSceneLoader();
   return scene;
 };
 var initFunction = async function () {
@@ -79,18 +91,18 @@ window.addEventListener("resize", function () {
 });
 
 const createSceneLoader = () => {
-  const taskPromise = new Promise((resolve, reject) => {
-    let loadedModel = new LoadedModel();
+    let loadedModel = { status: "loading" };
+    const sceneFilename = "BoomBox.gltf";
+    const rootUrl =
+      "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF/";
 
-    loadedModel.status = LoaderStatus.Loading;
-
-    let loader = SceneLoader.ImportMesh(
-      opts.meshNames,
+    let loader = BABYLON.SceneLoader.ImportMesh(
+      ["mesh1"],
       rootUrl,
       sceneFilename,
       scene,
       (meshes, particleSystems, skeletons, animationGroups) => {
-        loadedModel.rootMesh = new AbstractMesh(
+        loadedModel.rootMesh = new BABYLON.AbstractMesh(
           sceneFilename + "-root-model",
           scene
         );
@@ -155,29 +167,4 @@ const createSceneLoader = () => {
     } else {
       loadedModel.loaderName = "no loader found";
     }
-  });
-
-  let result;
-  let error = null;
-  let suspender = (async () => {
-    try {
-      result = await taskPromise;
-    } catch (e) {
-      error = e;
-    } finally {
-      suspender = null;
-    }
-  })();
-
-  const getAssets = () => {
-    if (suspender) {
-      throw suspender;
-    }
-    if (error !== null) {
-      throw error;
-    }
-
-    return result;
-  };
-  return getAssets;
 };

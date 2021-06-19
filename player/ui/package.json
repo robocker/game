@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "babylonjs": "^4.2.0"
+    "babylonjs": "^4.2.0",
+    "babylonjs-loaders": "^4.2.0"
   },
   "scripts": {
     "webpack": "webpack --mode development --watch",
