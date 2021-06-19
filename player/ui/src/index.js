@@ -48,7 +48,7 @@ var createScene = function () {
 
   return scene;
 };
-window.initFunction = async function () {
+var initFunction = async function () {
   var asyncEngineCreation = async function () {
     try {
       return createDefaultEngine();
