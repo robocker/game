@@ -34,27 +34,32 @@ var createScene = function () {
 
   light.intensity = 0.7;
 
-//   var sphere = BABYLON.MeshBuilder.CreateSphere(
-//     "sphere",
-//     { diameter: 2, segments: 32 },
-//     scene
-//   );
+  var sphere = BABYLON.MeshBuilder.CreateSphere(
+    "sphere",
+    { diameter: 2, segments: 32 },
+    scene
+  );
 
-//   sphere.position.y = 1;
+  sphere.position.y = 1;
 
-//   var ground = BABYLON.MeshBuilder.CreateGround(
-//     "ground",
-//     { width: 6, height: 6 },
-//     scene
-//   );
+  var ground = BABYLON.MeshBuilder.CreateGround(
+    "ground",
+    { width: 6, height: 6 },
+    scene
+  );
 
-  BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF/", "BoomBox.gltf", scene, function (scene) {
-    // Create a default arc rotate camera and light.
-    scene.createDefaultCameraOrLight(true, true, true);
+//   BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF/", "BoomBox.gltf", scene, function (scene) {
+//     // Create a default arc rotate camera and light.
+//     scene.createDefaultCameraOrLight(true, true, true);
 
-    // The default camera looks at the back of the asset.
-    // Rotate the camera by 180 degrees to the front of the asset.
-    // scene.activeCamera.alpha += Math.PI;
+//     // The default camera looks at the back of the asset.
+//     // Rotate the camera by 180 degrees to the front of the asset.
+//     // scene.activeCamera.alpha += Math.PI;
+// });
+
+BABYLON.SceneLoader.ImportMesh("", "https://playground.babylonjs.com/scenes/", "skull.babylon", scene, function (newMeshes) {
+    // Set the target of the camera to the first imported mesh
+    camera.target = newMeshes[0];
 });
 
 // createSceneLoader();
