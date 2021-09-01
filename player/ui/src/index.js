@@ -1,5 +1,6 @@
 import * as BABYLON from "babylonjs";
 import 'babylonjs-loaders';
+import { Vector3 } from "babylonjs";
 
 var canvas = document.getElementById("renderCanvas");
 
@@ -34,35 +35,100 @@ var createScene = function () {
 
   light.intensity = 0.7;
 
-  var sphere = BABYLON.MeshBuilder.CreateSphere(
-    "sphere",
-    { diameter: 2, segments: 32 },
-    scene
-  );
+BABYLON.SceneLoader.LoadAssetContainer("assets/", "tank.babylon", scene, (container)=> {
+    const SPS = new BABYLON.SolidParticleSystem("SPS", scene);
 
-  sphere.position.y = 1;
 
-  var ground = BABYLON.MeshBuilder.CreateGround(
-    "ground",
-    { width: 6, height: 6 },
-    scene
-  );
+    // SPS.addShape(sphere, 1); // 20 spheres
 
-//   BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF/", "BoomBox.gltf", scene, function (scene) {
-//     // Create a default arc rotate camera and light.
-//     scene.createDefaultCameraOrLight(true, true, true);
 
-//     // The default camera looks at the back of the asset.
-//     // Rotate the camera by 180 degrees to the front of the asset.
-//     // scene.activeCamera.alpha += Math.PI;
-// });
+    // scene.meshes.push(container.meshes[1]);
+    SPS.addShape(container.meshes[0], 1);
+    SPS.addShape(container.meshes[1], 1);
+    SPS.addShape(container.meshes[2], 1);
+    // SPS.addShape(container.meshes[2], 1);
+    // SPS.addShape(container.meshes[3], 1);
+    // container.meshes.forEach((mesh, index)=>
+    // {
+    //     console.log("mesh",mesh);
+    //     // SPS.addShape(mesh, 1);
 
-BABYLON.SceneLoader.ImportMesh("", "https://playground.babylonjs.com/scenes/", "skull.babylon", scene, function (newMeshes) {
-    // Set the target of the camera to the first imported mesh
-    camera.target = newMeshes[0];
+    //     scene.meshes.push(mesh);
+
+    //     // var clon = mesh.clone('aaa'+ index);
+    //     // clon.x += 5;
+
+    // })
+
+
+    const mesh = SPS.buildMesh()
+    SPS.initParticles = () => {
+        // debugger;
+        // for (let p = 0; p < SPS.nbParticles; p++) {
+            // const particle = SPS.particles[p];
+            // particle.position.x = BABYLON.Scalar.RandomRange(-5, 5);
+            // particle.position.y = BABYLON.Scalar.RandomRange(-2, 2);
+            // particle.position.z = BABYLON.Scalar.RandomRange(-2, 2);
+            // particle.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        // }
+        // if(SPS.nbParticles>2){
+
+        // }
+        const bottom = SPS.particles[0];
+        bottom.position.x = 0;
+        bottom.position.y = 0;
+        bottom.position.z = 0;
+        bottom.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+
+        const turret = SPS.particles[1];
+        turret.position.y = 0.6;
+        turret.position.x = -0.2;
+        turret.position.z = 0.1;
+        turret.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+
+        const cannon = SPS.particles[2];
+        cannon.rotation.z = -Math.PI/2;
+        cannon.position.y = 0.62;
+        cannon.position.x = 1;
+        cannon.position.z = 0.1;
+        cannon.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+
+    };
+
+    //Update SPS mesh
+    SPS.initParticles();
+    SPS.setParticles();
+
 });
 
-// createSceneLoader();
+
+//////////////////
+// const SPS = new BABYLON.SolidParticleSystem("SPS", scene);
+// const sphere = BABYLON.MeshBuilder.CreateSphere("s", {});
+
+// SPS.addShape(sphere, 1); // 20 spheres
+
+// sphere.dispose(); //dispose of original model sphere
+
+// const mesh = SPS.buildMesh(); // finally builds and displays the SPS mesh
+
+// // initiate particles function
+// SPS.initParticles = () => {
+//     for (let p = 0; p < SPS.nbParticles; p++) {
+//         const particle = SPS.particles[p];
+//         particle.position.x = BABYLON.Scalar.RandomRange(-5, 5);
+//         particle.position.y = BABYLON.Scalar.RandomRange(-2, 2);
+//         particle.position.z = BABYLON.Scalar.RandomRange(-2, 2);
+//         particle.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+//     }
+// };
+
+// //Update SPS mesh
+// SPS.initParticles();
+// SPS.setParticles();
+
+//////////////////////
+
   return scene;
 };
 var initFunction = async function () {
@@ -94,82 +160,3 @@ initFunction().then(() => {
 window.addEventListener("resize", function () {
   engine.resize();
 });
-
-const createSceneLoader = () => {
-    let loadedModel = { status: "loading" };
-    const sceneFilename = "BoomBox.gltf";
-    const rootUrl =
-      "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF/";
-
-    let loader = BABYLON.SceneLoader.ImportMesh(
-      ["mesh1"],
-      rootUrl,
-      sceneFilename,
-      scene,
-      (meshes, particleSystems, skeletons, animationGroups) => {
-        loadedModel.rootMesh = new BABYLON.AbstractMesh(
-          sceneFilename + "-root-model",
-          scene
-        );
-        if (opts.alwaysSelectAsActiveMesh === true) {
-          loadedModel.rootMesh.alwaysSelectAsActiveMesh = true;
-        }
-
-        loadedModel.meshes = [];
-        meshes.forEach((mesh) => {
-          loadedModel.meshes.push(mesh);
-
-          // leave meshes already parented to maintain model hierarchy:
-          if (!mesh.parent) {
-            mesh.parent = loadedModel.rootMesh;
-          }
-
-          if (opts.receiveShadows === true) {
-            mesh.receiveShadows = true;
-          }
-        });
-        loadedModel.particleSystems = particleSystems;
-        loadedModel.skeletons = skeletons;
-        loadedModel.animationGroups = animationGroups;
-
-        loadedModel.status = LoaderStatus.Loaded;
-
-        if (opts.scaleToDimension) {
-          loadedModel.scaleTo(opts.scaleToDimension);
-        }
-        if (options.onModelLoaded) {
-          options.onModelLoaded(loadedModel);
-        }
-
-        const originalDispose = loadedModel.dispose;
-        loadedModel.dispose = () => {
-          // console.log('Clearing cache (cannot re-use meshes).');
-          suspenseCache[suspenseKey] = undefined;
-          originalDispose.call(loadedModel);
-        };
-
-        resolve(loadedModel);
-      },
-      (event) => {
-        if (opts.reportProgress === true && sceneLoaderContext !== undefined) {
-          sceneLoaderContext.updateProgress(event);
-        }
-        if (opts.onLoadProgress) {
-          opts.onLoadProgress(event);
-        }
-      },
-      (_, message, exception) => {
-        if (opts.onModelError) {
-          opts.onModelError(loadedModel);
-        }
-        reject(exception ? message : "");
-      },
-      pluginExtension
-    );
-
-    if (loader) {
-      loadedModel.loaderName = loader.name;
-    } else {
-      loadedModel.loaderName = "no loader found";
-    }
-};

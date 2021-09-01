@@ -5,7 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "babylonjs": "^4.2.0",
-    "babylonjs-loaders": "^4.2.0"
+    "babylonjs-loaders": "^4.2.0",
+    "copy-webpack-plugin": "^9.0.1"
   },
   "scripts": {
     "webpack": "webpack --mode development --watch",
