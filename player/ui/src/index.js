@@ -1,5 +1,5 @@
 import * as BABYLON from "babylonjs";
-import 'babylonjs-loaders';
+import "babylonjs-loaders";
 import { Vector3 } from "babylonjs";
 
 var canvas = document.getElementById("renderCanvas");
@@ -7,6 +7,54 @@ var canvas = document.getElementById("renderCanvas");
 var engine = null;
 var scene = null;
 var sceneToRender = null;
+var SPSs = [];
+var meshesContainer;
+
+var addTank = function(){
+    const SPS = new BABYLON.SolidParticleSystem("SPS", scene);
+
+      var top = BABYLON.Mesh.MergeMeshes([
+        meshesContainer.meshes[1].clone(),
+        meshesContainer.meshes[2].clone(),
+      ]);
+
+      var bottom = meshesContainer.meshes[0].clone();
+
+      SPS.addShape(bottom, 1);
+      SPS.addShape(top, 1);
+
+      bottom.dispose();
+      top.dispose();
+
+      const mesh = SPS.buildMesh();
+      SPS.initParticles = () => {
+        const bottom = SPS.particles[0];
+        bottom.position.x = 0;
+        bottom.position.y = 0;
+        bottom.position.z = 0;
+        bottom.color = new BABYLON.Color3(
+          Math.random(),
+          Math.random(),
+          Math.random()
+        );
+
+        const turret = SPS.particles[1];
+        turret.position.y = 0.1;
+        turret.position.x = -0.2;
+        turret.position.z = 0.1;
+        turret.color = new BABYLON.Color3(
+          Math.random(),
+          Math.random(),
+          Math.random()
+        );
+      };
+
+      SPS.initParticles();
+      SPS.setParticles();
+
+      SPSs.push(SPS);
+}
+
 var createDefaultEngine = function () {
   return new BABYLON.Engine(canvas, true, {
     preserveDrawingBuffer: true,
@@ -35,99 +83,17 @@ var createScene = function () {
 
   light.intensity = 0.7;
 
-BABYLON.SceneLoader.LoadAssetContainer("assets/", "tank.babylon", scene, (container)=> {
-    const SPS = new BABYLON.SolidParticleSystem("SPS", scene);
+  BABYLON.SceneLoader.LoadAssetContainer(
+    "assets/",
+    "tank.babylon",
+    scene,
+    (container) => {
+        meshesContainer = container;
 
+        addTank();
 
-    // SPS.addShape(sphere, 1); // 20 spheres
-
-
-    // scene.meshes.push(container.meshes[1]);
-    SPS.addShape(container.meshes[0], 1);
-    SPS.addShape(container.meshes[1], 1);
-    SPS.addShape(container.meshes[2], 1);
-    // SPS.addShape(container.meshes[2], 1);
-    // SPS.addShape(container.meshes[3], 1);
-    // container.meshes.forEach((mesh, index)=>
-    // {
-    //     console.log("mesh",mesh);
-    //     // SPS.addShape(mesh, 1);
-
-    //     scene.meshes.push(mesh);
-
-    //     // var clon = mesh.clone('aaa'+ index);
-    //     // clon.x += 5;
-
-    // })
-
-
-    const mesh = SPS.buildMesh()
-    SPS.initParticles = () => {
-        // debugger;
-        // for (let p = 0; p < SPS.nbParticles; p++) {
-            // const particle = SPS.particles[p];
-            // particle.position.x = BABYLON.Scalar.RandomRange(-5, 5);
-            // particle.position.y = BABYLON.Scalar.RandomRange(-2, 2);
-            // particle.position.z = BABYLON.Scalar.RandomRange(-2, 2);
-            // particle.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-        // }
-        // if(SPS.nbParticles>2){
-
-        // }
-        const bottom = SPS.particles[0];
-        bottom.position.x = 0;
-        bottom.position.y = 0;
-        bottom.position.z = 0;
-        bottom.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-
-        const turret = SPS.particles[1];
-        turret.position.y = 0.6;
-        turret.position.x = -0.2;
-        turret.position.z = 0.1;
-        turret.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-
-        const cannon = SPS.particles[2];
-        cannon.rotation.z = -Math.PI/2;
-        cannon.position.y = 0.62;
-        cannon.position.x = 1;
-        cannon.position.z = 0.1;
-        cannon.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-
-    };
-
-    //Update SPS mesh
-    SPS.initParticles();
-    SPS.setParticles();
-
-});
-
-
-//////////////////
-// const SPS = new BABYLON.SolidParticleSystem("SPS", scene);
-// const sphere = BABYLON.MeshBuilder.CreateSphere("s", {});
-
-// SPS.addShape(sphere, 1); // 20 spheres
-
-// sphere.dispose(); //dispose of original model sphere
-
-// const mesh = SPS.buildMesh(); // finally builds and displays the SPS mesh
-
-// // initiate particles function
-// SPS.initParticles = () => {
-//     for (let p = 0; p < SPS.nbParticles; p++) {
-//         const particle = SPS.particles[p];
-//         particle.position.x = BABYLON.Scalar.RandomRange(-5, 5);
-//         particle.position.y = BABYLON.Scalar.RandomRange(-2, 2);
-//         particle.position.z = BABYLON.Scalar.RandomRange(-2, 2);
-//         particle.color = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-//     }
-// };
-
-// //Update SPS mesh
-// SPS.initParticles();
-// SPS.setParticles();
-
-//////////////////////
+    }
+  );
 
   return scene;
 };
@@ -159,4 +125,18 @@ initFunction().then(() => {
 // Resize
 window.addEventListener("resize", function () {
   engine.resize();
+});
+
+window.addEventListener("keypress", function (event) {
+  switch (event.code) {
+    case "KeyD":
+        addTank();
+      break;
+    default:
+      SPSs[SPSs.length-1].particles[1].rotation.y -= this.Math.PI / 180;
+      SPSs[SPSs.length-1].mesh.rotation.y += this.Math.PI / 180;
+      SPSs[SPSs.length-1].mesh.position.x += 0.1;
+
+      SPSs[SPSs.length-1].setParticles();
+  }
 });
