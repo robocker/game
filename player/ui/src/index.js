@@ -39,7 +39,7 @@ var addTank = function(){
         );
 
         const turret = SPS.particles[1];
-        turret.position.y = 0.1;
+        turret.position.y = 0.0;
         turret.position.x = -0.2;
         turret.position.z = 0.1;
         turret.color = new BABYLON.Color3(
@@ -95,6 +95,9 @@ var createScene = function () {
     }
   );
 
+  const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("gdhm", "assets/heightMap.png", {width:512, height :512, subdivisions: 512, maxHeight: 5}, scene);
+
+  ground.position.y = -2.1;
   return scene;
 };
 var initFunction = async function () {
