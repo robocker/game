@@ -1,48 +1,72 @@
 export class SceneCreator {
+  canvas;
+  engine;
+  scene;
+  sceneCallback;
 
-    canvas;
-    engine;
-    scene;
-    createSceneFunction;
+  constructor(canvasSelector, sceneCallback) {
+    this.canvas = document.getElementById(canvasSelector);
+    this.sceneCallback = sceneCallback;
+  }
 
-    constructor(canvasSelector, sceneCallback){
-        this.canvas = document.getElementById(canvasSelector);
-        this.createSceneFunction = sceneCallback;
-    }
+  createScene(engine) {
+    var scene = new BABYLON.Scene(engine);
 
-    initFunction = async function () {
-        var asyncEngineCreation = async function () {
-          try {
-            return this.createDefaultEngine();
-          } catch (e) {
-            console.log(
-              "the available createEngine function failed. Creating the default engine instead"
-            );
-            return this.createDefaultEngine();
-          }
-        }.bind(this);
+    var camera = new BABYLON.FreeCamera(
+      "camera1",
+      new BABYLON.Vector3(0, 5, -10),
+      scene
+    );
 
-        this.engine = await asyncEngineCreation();
-        if (!this.engine) throw "engine should not be null.";
-        this.scene = this.createSceneFunction(this.engine);
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    camera.attachControl(this.canvas, true);
+
+    var light = new BABYLON.HemisphericLight(
+      "light",
+      new BABYLON.Vector3(0, 1, 0),
+      scene
+    );
+
+    light.intensity = 0.7;
+
+    return scene;
+  }
+
+  initFunction = async function () {
+    var asyncEngineCreation = async function () {
+      try {
+        return this.createDefaultEngine();
+      } catch (e) {
+        console.log(
+          "the available createEngine function failed. Creating the default engine instead"
+        );
+        return this.createDefaultEngine();
       }
+    }.bind(this);
 
-    init(){
-        this.initFunction().then(() => {
-            let sceneToRender = this.scene;
-            this.engine.runRenderLoop(function () {
-              if (sceneToRender && sceneToRender.activeCamera) {
-                sceneToRender.render();
-              }
-            });
-          });
-    }
+    this.engine = await asyncEngineCreation();
+    if (!this.engine) throw "engine should not be null.";
+    this.scene = this.createScene(this.engine);
+    this.sceneCallback(this.scene);
+  };
 
-    createDefaultEngine = function () {
-        return new BABYLON.Engine(this.canvas, true, {
-          preserveDrawingBuffer: true,
-          stencil: true,
-          disableWebGL2Support: false,
-        });
-      };
+  init() {
+    this.initFunction().then(() => {
+      let sceneToRender = this.scene;
+      this.engine.runRenderLoop(function () {
+        if (sceneToRender && sceneToRender.activeCamera) {
+          sceneToRender.render();
+        }
+      });
+    });
+  }
+
+  createDefaultEngine = function () {
+    return new BABYLON.Engine(this.canvas, true, {
+      preserveDrawingBuffer: true,
+      stencil: true,
+      disableWebGL2Support: false,
+    });
+  };
 }

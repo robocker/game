@@ -3,27 +3,7 @@ import "babylonjs-loaders";
 import { SceneCreator } from './SceneCreator';
 
 
-var createScene = function (engine) {
-    var scene = new BABYLON.Scene(engine);
-
-    var camera = new BABYLON.FreeCamera(
-      "camera1",
-      new BABYLON.Vector3(0, 5, -10),
-      scene
-    );
-
-    camera.setTarget(BABYLON.Vector3.Zero());
-
-    camera.attachControl(sceneCreator.canvas, true);
-
-    var light = new BABYLON.HemisphericLight(
-      "light",
-      new BABYLON.Vector3(0, 1, 0),
-      scene
-    );
-
-    light.intensity = 0.7;
-
+var sceneCallback = function (scene) {
     BABYLON.SceneLoader.LoadAssetContainer(
       "assets/",
       "tank.babylon",
@@ -39,11 +19,10 @@ var createScene = function (engine) {
     const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("gdhm", "assets/heightMap.png", {width:512, height :512, subdivisions: 512, maxHeight: 5}, scene);
 
     ground.position.y = -2.1;
-    return scene;
   };
 
 
-const sceneCreator = new SceneCreator("renderCanvas", createScene);
+const sceneCreator = new SceneCreator("renderCanvas", sceneCallback);
 
 var SPSs = [];
 var meshesContainer;
