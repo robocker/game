@@ -47,13 +47,13 @@ public class RegisterController {
 
         Player player = new Player(null);
         Tank tank = new Tank();
-        tank.setX(105).setY(41).setWidthX(5).setWidthY(10).setHeight(15);
+        tank.setX(105).setY(41);
         player.addTank(tank);
         game.addPlayer(player);
 
         Player player2 = new Player(null);
         Tank tank2 = new Tank();
-        tank2.setX(391).setY(426).setWidthX(5).setWidthY(15).setHeight(10);
+        tank2.setX(391).setY(426);
         player.addTank(tank2);
         game.addPlayer(player2);
 

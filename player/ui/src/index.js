@@ -7,7 +7,7 @@ const sceneCreator = new SceneCreator("renderCanvas", sceneCallback);
 const gameManager = new GameManager(sceneCreator);
 
 function sceneCallback(scene) {
-  gameManager.addTank();
+  gameManager.initGame();
 
   const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap(
     "gdhm",

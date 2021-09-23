@@ -11,9 +11,9 @@ public class Tank implements MapItem, Containerized {
     private Integer id;
     private Integer x;
     private Integer y;
-    private Integer widthX;
-    private Integer widthY;
-    private Integer height;
+    private Integer widthX=5;
+    private Integer widthY=15;
+    private Integer height=10;
     private List<String> ips = new LinkedList<String>();
 
     public Tank() {

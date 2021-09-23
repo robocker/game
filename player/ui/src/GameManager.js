@@ -1,3 +1,4 @@
+import axios from "axios";
 import { TanksManager } from "./TanksManager";
 
 export class GameManager {
@@ -9,6 +10,18 @@ export class GameManager {
   constructor(sceneCreator) {
     this.sceneCreator = sceneCreator;
     this.tanksManager = new TanksManager(this.sceneCreator);
+  }
+
+  initGame(){
+
+    axios.get('api/info', {})
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
   }
 
   addTank() {
@@ -31,5 +44,18 @@ export class GameManager {
     tank.mesh.position.x += 0.1;
 
     tank.setParticles();
+
+
+    axios.post('/api/tanks/move', {
+        ids: [42, 11],
+        destination: {x: 33, y: 98}
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
   }
 }
