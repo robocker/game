@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set DEBUG=player:* && node ./index.js"
+    "start": "set DEBUG=player:* && node ./index.js",
+    "dev": "concurrently \"cd ./ui && yarn start\" \"set DEBUG=player:* && node ./index.js\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "concurrently": "^6.2.1",
     "express": "^4.17.1"
   }
 }

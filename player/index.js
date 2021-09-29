@@ -12,19 +12,6 @@ app.get('/', (req, res) => {
     debug('Player base url');
 
     res.sendFile(path.join(__dirname + '/dist/index.html'));
-
-    // axios.get('http://engine:8080')
-    //     .then((springMsg)=>{
-    //         debug(springMsg.data);
-
-    //         res.json({msg:'Hello world!', fromSpring: springMsg.data
-    //             });
-    //     },
-    //     (error)=>{
-    //         res.json({msg: error});
-    //     });
-
-
 })
 
 app.post('/api/*', (req, res) => {
