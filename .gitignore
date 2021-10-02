@@ -5,3 +5,4 @@ tankBasic/node_modules/
 ignore/
 player/ui/node_modules/
 player/dist/
+.vagrant/
