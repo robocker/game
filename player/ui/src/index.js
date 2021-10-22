@@ -27,12 +27,24 @@ window.addEventListener("resize", function () {
 });
 
 window.addEventListener("keypress", function (event) {
+    console.log(event.code);
+
+    const tankCount = gameManager.getTanksCount();
+
   switch (event.code) {
     case "KeyD":
       gameManager.addTank();
       break;
+    case "Digit1":
+
+        gameManager.moveTank(tankCount - 1, "prawo");
+    break;
+    case "Digit2":
+
+        gameManager.moveTank(tankCount - 1, "lewo");
+    break;
     default:
-      const tankCount = gameManager.getTanksCount();
+
       gameManager.moveTank(tankCount - 1);
   }
 });

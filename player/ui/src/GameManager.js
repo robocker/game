@@ -1,5 +1,5 @@
-import axios from "axios";
 import { TanksManager } from "./TanksManager";
+import { AxiosManager } from "./AxiosRealManager";
 
 export class GameManager {
   SPSs = [];
@@ -14,7 +14,7 @@ export class GameManager {
 
   initGame(){
 
-    axios.get('api/info', {})
+    AxiosManager.get('api/info', {})
     .then(function (response) {
         console.log(response);
     })
@@ -35,18 +35,27 @@ export class GameManager {
     return this.SPSs.length;
   }
 
-  moveTank(index) {
+  moveTank(index, tryb) {
 
     const tank = this.SPSs[index];
 
     tank.particles[1].rotation.y -= Math.PI / 180;
     tank.mesh.rotation.y += Math.PI / 180;
-    tank.mesh.position.x += 0.1;
+
+    if(tryb == "prawo"){
+        tank.mesh.position.z += 2;
+    }
+    if(tryb == "lewo"){
+        tank.mesh.position.z -= 2;
+    }
+    else{
+        tank.mesh.position.x += 2;
+    }
 
     tank.setParticles();
 
 
-    axios.post('/api/tanks/move', {
+    AxiosManager.post('/api/tanks/move', {
         ids: [42, 11],
         destination: {x: 33, y: 98}
     })

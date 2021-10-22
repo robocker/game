@@ -10,7 +10,7 @@
   },
   "scripts": {
     "webpack": "webpack --mode development --watch",
-    "start": "webpack serve",
+    "start": "webpack serve --config webpack.dev.config.js",
     "build": "webpack build"
   },
   "devDependencies": {
