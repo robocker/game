@@ -12,22 +12,29 @@ export class GameManager {
     this.tanksManager = new TanksManager(this.sceneCreator);
   }
 
-  initGame(){
-
-    AxiosManager.get('api/info', {})
-    .then(function (response) {
+  initGame = () => {
+    AxiosManager.get("api/info", {})
+      .then((response) => {
         console.log(response);
-    })
-    .catch(function (error) {
+
+        for (let tank of response.data.tanks) {
+          this.addTank(tank);
+        }
+      })
+      .catch(function (error) {
         console.log(error);
-    });
+      });
+  };
 
-  }
+  addTank(tankData) {
+    this.tanksManager.createTank(tankData).then((SPS) => {
+      if (tankData) {
+        SPS.mesh.position.z = tankData.y;
+        SPS.mesh.position.x = tankData.x;
+        SPS.setParticles();
+      }
 
-  addTank() {
-    this.tanksManager.createTank()
-    .then((SPS)=>{
-        this.SPSs.push(SPS);
+      this.SPSs.push(SPS);
     });
   }
 
@@ -36,35 +43,31 @@ export class GameManager {
   }
 
   moveTank(index, tryb) {
-
     const tank = this.SPSs[index];
 
     tank.particles[1].rotation.y -= Math.PI / 180;
     tank.mesh.rotation.y += Math.PI / 180;
 
-    if(tryb == "prawo"){
-        tank.mesh.position.z += 2;
+    if (tryb == "prawo") {
+      tank.mesh.position.z += 2;
     }
-    if(tryb == "lewo"){
-        tank.mesh.position.z -= 2;
-    }
-    else{
-        tank.mesh.position.x += 2;
+    if (tryb == "lewo") {
+      tank.mesh.position.z -= 2;
+    } else {
+      tank.mesh.position.x += 2;
     }
 
     tank.setParticles();
 
-
-    AxiosManager.post('/api/tanks/move', {
-        ids: [42, 11],
-        destination: {x: 33, y: 98}
+    AxiosManager.post("/api/tanks/move", {
+      ids: [42, 11],
+      destination: { x: 33, y: 98 },
     })
-    .then(function (response) {
+      .then(function (response) {
         console.log(response);
-    })
-    .catch(function (error) {
+      })
+      .catch(function (error) {
         console.log(error);
-    });
-
+      });
   }
 }

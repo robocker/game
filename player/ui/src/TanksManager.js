@@ -72,6 +72,7 @@ export class TanksManager {
         };
 
         SPS.initParticles();
+
         SPS.setParticles();
 
         resolve(SPS);
