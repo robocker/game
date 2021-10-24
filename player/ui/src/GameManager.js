@@ -34,6 +34,26 @@ export class GameManager {
         SPS.setParticles();
       }
 
+      this.sceneCreator.scene.onPointerObservable.add((pointerInfo) => {
+
+        switch (pointerInfo.type) {
+          case BABYLON.PointerEventTypes.POINTERDOWN:
+            var pickResult = pointerInfo.pickInfo;
+            var faceId = pickResult.faceId;
+            if (faceId == -1) {
+              return;
+            }
+
+            if (pointerInfo.pickInfo.pickedMesh === SPS.mesh) {
+              console.log(tankData);
+              console.log(SPS.vars);
+            }
+
+
+            break;
+        }
+      });
+
       this.SPSs.push(SPS);
     });
   }

@@ -23,16 +23,17 @@ export class TanksManager {
     });
   }
 
-  createTank() {
+  createTank(tankData) {
     if (!this.initPromise) {
       this.initResources();
     }
 
     return new Promise((resolve, reject) => {
       this.initPromise.then(() => {
-        const SPS = new BABYLON.SolidParticleSystem(
-          "SPS",
-          this.sceneCreator.scene
+        const sps = new BABYLON.SolidParticleSystem(
+          tankData.containerName,
+          this.sceneCreator.scene,
+          {isPickable: true}
         );
 
         var top = BABYLON.Mesh.MergeMeshes([
@@ -42,15 +43,15 @@ export class TanksManager {
 
         var bottom = this.meshesContainer.meshes[0].clone();
 
-        SPS.addShape(bottom, 1);
-        SPS.addShape(top, 1);
+        sps.addShape(bottom, 1);
+        sps.addShape(top, 1);
 
         bottom.dispose();
         top.dispose();
 
-        const mesh = SPS.buildMesh();
-        SPS.initParticles = () => {
-          const bottom = SPS.particles[0];
+        const mesh = sps.buildMesh();
+        sps.initParticles = () => {
+          const bottom = sps.particles[0];
           bottom.position.x = 0;
           bottom.position.y = 0;
           bottom.position.z = 0;
@@ -60,7 +61,7 @@ export class TanksManager {
             Math.random()
           );
 
-          const turret = SPS.particles[1];
+          const turret = sps.particles[1];
           turret.position.y = 0.0;
           turret.position.x = -0.2;
           turret.position.z = 0.1;
@@ -71,11 +72,13 @@ export class TanksManager {
           );
         };
 
-        SPS.initParticles();
+        sps.vars.tankData =tankData;
 
-        SPS.setParticles();
+        sps.initParticles();
 
-        resolve(SPS);
+        sps.setParticles();
+
+        resolve(sps);
       });
     });
   }
