@@ -13,7 +13,7 @@ export class GameManager {
   }
 
   initGame = () => {
-    AxiosManager.get("api/info", {})
+    AxiosManager.get("/api/info", {})
       .then((response) => {
         console.log(response);
 
@@ -52,7 +52,20 @@ export class GameManager {
               SPS.vars.selected
             ) {
               SPS.vars.selected = false;
-              console.log("move");
+
+              AxiosManager.post("/api/tanks/move", {
+                ids: [SPS.vars.tankData.containerName.replace("tank-", "")],
+                destination: {
+                  x: pointerInfo.pickInfo.pickedPoint.x,
+                  y: pointerInfo.pickInfo.pickedPoint.z,
+                },
+              })
+                .then(function (response) {
+                  console.log(response);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
             }
 
             break;

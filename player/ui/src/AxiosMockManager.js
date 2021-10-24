@@ -6,7 +6,7 @@ export class AxiosManager {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         switch (url) {
-          case "api/info":
+          case "/api/info":
             resolve({
               data: {
                 tanks: [
@@ -67,6 +67,9 @@ export class AxiosManager {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         switch (url) {
+          case "/api/tanks/move":
+            resolve({ msg: "move", parameters: parameters });
+            break;
           default:
             reject({ msg: `Not Mocked POST request: ${url}`, parameters });
         }
