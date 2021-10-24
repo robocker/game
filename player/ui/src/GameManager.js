@@ -35,7 +35,6 @@ export class GameManager {
       }
 
       this.sceneCreator.scene.onPointerObservable.add((pointerInfo) => {
-
         switch (pointerInfo.type) {
           case BABYLON.PointerEventTypes.POINTERDOWN:
             var pickResult = pointerInfo.pickInfo;
@@ -45,10 +44,16 @@ export class GameManager {
             }
 
             if (pointerInfo.pickInfo.pickedMesh === SPS.mesh) {
+              SPS.vars.selected = true;
               console.log(tankData);
               console.log(SPS.vars);
+            } else if (
+              pointerInfo.pickInfo.pickedMesh.name == "gdhm" &&
+              SPS.vars.selected
+            ) {
+              SPS.vars.selected = false;
+              console.log("move");
             }
-
 
             break;
         }
