@@ -33,18 +33,18 @@ window.addEventListener("keypress", function (event) {
 
   switch (event.code) {
     case "KeyD":
-      gameManager.addTank();
+    //   gameManager.addTank();
       break;
     case "Digit1":
 
-        gameManager.moveTank(tankCount - 1, "prawo");
+        // gameManager.moveTank(tankCount - 1, "prawo");
     break;
     case "Digit2":
 
-        gameManager.moveTank(tankCount - 1, "lewo");
+        // gameManager.moveTank(tankCount - 1, "lewo");
     break;
     default:
 
-      gameManager.moveTank(tankCount - 1);
+    //   gameManager.moveTank(tankCount - 1);
   }
 });

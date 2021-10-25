@@ -84,7 +84,7 @@ const sendMove = (req, res) => {
                 }
 
                 debug('result:', result);
-                res.json({msg:'Hello world!', fromTank: result
+                res.json({msg:'response from move', fromTank: result
                 });
         },
         (error)=>{
