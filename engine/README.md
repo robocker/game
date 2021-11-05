@@ -13,9 +13,9 @@ sudo docker build -t robocker/engine .
 Simple running
 ```
 sudo docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
-#/http://localhost:8080/containers/demo create robocker-net network. You can run it first and later connect engine
 sudo docker network connect --alias engine robocker-net engine
 ```
+/http://localhost:8080/containers/demo create robocker-net network. You can run it first and later connect engine with robocker-net
 
 Stopping all containers:
 ```

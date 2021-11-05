@@ -6,3 +6,4 @@ ignore/
 player/ui/node_modules/
 player/dist/
 .vagrant/
+.idea/

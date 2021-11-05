@@ -6,23 +6,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
+import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
 import pl.pastmo.robocker.engine.model.Game;
 import pl.pastmo.robocker.engine.model.Player;
 import pl.pastmo.robocker.engine.model.Tank;
+import pl.pastmo.robocker.engine.request.Move;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -52,7 +53,7 @@ class GameServiceTest {
     ArgumentCaptor<String> portCaptor;
 
     @Test
-    public void  runGame() {
+    public void  runGame() throws ConfigurationException {
         mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
@@ -69,7 +70,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void  runGame_two_players() {
+    public void  runGame_two_players() throws ConfigurationException {
         mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
@@ -103,7 +104,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void  runGame_with_tank() {
+    public void  runGame_with_tank() throws ConfigurationException {
         mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
@@ -139,19 +140,19 @@ class GameServiceTest {
     }
 
     @Test
-    public void  getGameDescription() {
+    public void  getGameDescription() throws ConfigurationException {
         mockCreateContainer();
 
         Game game = new Game();
 
-        Player player = new Player(null);
+        Player player = new Player(gameService.getNewPlayerId());
         Tank tank = new Tank();
         tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
         player.addTank(tank);
         game.addPlayer(player);
 
 
-        Player player2 = new Player(null);
+        Player player2 = new Player(gameService.getNewPlayerId());
         game.addPlayer(player2);
 
         gameService.runGame(game);
@@ -168,10 +169,10 @@ class GameServiceTest {
     }
 
     @Test
-    public void  getPlayerInfo() {
+    public void  getPlayerInfo() throws ConfigurationException {
         Game game = new Game();
 
-        Player player = new Player(null);
+        Player player = new Player(gameService.getNewPlayerId());
         player.addIp("1.1.1.1");
 
         Tank tank = new Tank();
@@ -180,7 +181,7 @@ class GameServiceTest {
         player.addTank(tank);
         game.addPlayer(player);
 
-        Player player2 = new Player(null);
+        Player player2 = new Player(gameService.getNewPlayerId());
         player2.addIp("3.3.3.3");
         game.addPlayer(player2);
 
@@ -191,6 +192,28 @@ class GameServiceTest {
         assertEquals(info.tanks.size(), 1);
     }
 
+    @Test
+    public void  move() throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+        player.addIp("1.1.1.1");
+
+        Tank tank = new Tank();
+        tank.addIp("2.2.2.2");
+        tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        gameService.setGame(game);
+
+        Move move = new Move(100.0, 200.0);
+        gameService.move("2.2.2.2", move);
+
+        assertEquals(tank.getDestination().getX(), 100.0);
+        assertEquals(tank.getDestination().getY(), 200.0);
+
+    }
     private void mockCreateContainer(){
         when(dockerServiceMock.createCotnainer(any(),any(),any(),any()))
                 .thenReturn(new CreateContainerResponse());

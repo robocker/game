@@ -3,6 +3,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
 import pl.pastmo.robocker.engine.model.Game;
 import pl.pastmo.robocker.engine.model.Player;
 import pl.pastmo.robocker.engine.model.Tank;
@@ -26,9 +27,7 @@ public class RegisterController {
     public String containers() {
 
         DockerService service = new DockerService();
-        String result = service.getContainers();
-
-        return result;
+        return service.getContainers();
     }
 
     @RequestMapping("/containers/create")
@@ -41,17 +40,17 @@ public class RegisterController {
     }
 
     @RequestMapping("/containers/demo")
-    public String demo() {
+    public String demo() throws ConfigurationException {
 
         Game game = new Game();
 
-        Player player = new Player(null);
+        Player player = new Player(this.gameService.getNewPlayerId());
         Tank tank = new Tank();
         tank.setX(105).setY(41);
         player.addTank(tank);
         game.addPlayer(player);
 
-        Player player2 = new Player(null);
+        Player player2 = new Player(this.gameService.getNewPlayerId());
         Tank tank2 = new Tank();
         tank2.setX(391).setY(426);
         player.addTank(tank2);

@@ -26,7 +26,7 @@ app.post('/api/*', (req, res) => {
         break;
 
         default:
-        debug("Command not found:"+ req._parsedUrl.path);
+        debug("Post command not found:"+ req._parsedUrl.path);
     }
 
 });
@@ -52,7 +52,7 @@ app.get('/api/*', (req, res) => {
         break;
 
         default:
-        debug("Command not found:"+ req._parsedUrl.path);
+        debug("Get command not found:"+ req._parsedUrl.path);
     }
 
 });

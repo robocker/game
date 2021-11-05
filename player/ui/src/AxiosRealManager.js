@@ -6,6 +6,6 @@ export class AxiosManager {
   }
 
   static post(url, parameters) {
-    return axios.get(url, parameters);
+    return axios.post(url, parameters);
   }
 }

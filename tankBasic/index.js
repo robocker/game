@@ -17,7 +17,15 @@ app.post('/move', (req, res) => {
     debug('Tank move');
     debug(req.body);
 
-    res.json({msg:"I'm tank! Let's move!", body: req.body});
+    axios.pach('http://engine:8080/tank/move', {... req.body})
+            .then((springMsg)=>{
+                debug(springMsg.data);
+
+                res.json(springMsg.data);
+            },
+            (error)=>{
+                res.json({msg: error});
+            })
 
 })
 

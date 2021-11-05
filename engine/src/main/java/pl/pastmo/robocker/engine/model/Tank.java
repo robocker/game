@@ -1,6 +1,7 @@
 package pl.pastmo.robocker.engine.model;
 
 import com.google.common.primitives.UnsignedInteger;
+import pl.pastmo.robocker.engine.request.Move;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,8 @@ public class Tank implements MapItem, Containerized {
     private Integer widthX=5;
     private Integer widthY=15;
     private Integer height=10;
-    private List<String> ips = new LinkedList<String>();
+    private List<String> ips = new LinkedList<>();
+    private Move destination;
 
     public Tank() {
         this.id = idCounter;
@@ -101,6 +103,11 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
+    public List<String> getIps() {
+        return ips;
+    }
+
+    @Override
     public boolean requiredExternalPort() {
         return false;
     }
@@ -112,5 +119,13 @@ public class Tank implements MapItem, Containerized {
                 ", imageName=" + getImageName() +
                 ", containerName=" + getContainerName() +
                 '}';
+    }
+
+    public Move getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Move destination) {
+        this.destination = destination;
     }
 }

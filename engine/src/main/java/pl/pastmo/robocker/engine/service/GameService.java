@@ -5,6 +5,7 @@ import com.google.common.primitives.UnsignedInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.pastmo.robocker.engine.model.*;
+import pl.pastmo.robocker.engine.request.*;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
 
 import java.util.Set;
@@ -18,6 +19,7 @@ public class GameService {
     public static final String defaultNetwork = "robocker-net";
     private Set<UnsignedInteger> usedPorts = new TreeSet<>();
     private Game game;
+    private Integer currentPlayerId = 0;
 
     public GameService(){}
 
@@ -33,7 +35,7 @@ public class GameService {
             CreateContainerResponse playerResp = dockerService.createCotnainer(player.getImageName(), defaultNetwork, player.getContainerName(), calculatePorts(player));
             dockerService.fillContainerInfo(playerResp.getId(), player);
 
-            for(Tank tank: player.gatTanks()){
+            for(Tank tank: player.getTanks()){
                 CreateContainerResponse tankResp =  dockerService.createCotnainer(tank.getImageName(), defaultNetwork, tank.getContainerName(), calculatePorts(tank));
                 dockerService.fillContainerInfo(tankResp.getId(), tank);
             }
@@ -54,11 +56,21 @@ public class GameService {
 
         for(Player player: game.getPlayers()){
             if(player.getIps().contains(ip)){
-                result.tanks = player.gatTanks();
+                result.tanks = player.getTanks();
             }
         }
 
         return result;
+    }
+
+    public void move(String ip, Move destination){
+        for(Player player: game.getPlayers()){
+            for(Tank tank: player.getTanks()){
+                if(tank.getIps().contains(ip)){
+                    tank.setDestination(destination);
+                }
+            }
+        }
     }
 
     public String calculatePorts(Containerized item){
@@ -82,4 +94,8 @@ public class GameService {
         this.game = game;
     }
 
+    public Integer getNewPlayerId() {
+        this.currentPlayerId ++;
+        return this.currentPlayerId;
+    }
 }
