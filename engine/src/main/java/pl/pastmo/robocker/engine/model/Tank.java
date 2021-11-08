@@ -10,13 +10,14 @@ public class Tank implements MapItem, Containerized {
 
     private static Integer idCounter = 1;
     private Integer id;
-    private Integer x;
-    private Integer y;
-    private Integer widthX=5;
-    private Integer widthY=15;
-    private Integer height=10;
+    private Double x;
+    private Double y;
+    private Integer widthX = 5;
+    private Integer widthY = 15;
+    private Integer height = 10;
     private List<String> ips = new LinkedList<>();
     private Move destination;
+    private static final double tankFast = 0.1;
 
     public Tank() {
         this.id = idCounter;
@@ -24,12 +25,12 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
-    public Integer getX() {
+    public Double getX() {
         return x;
     }
 
     @Override
-    public Integer getY() {
+    public Double getY() {
         return y;
     }
 
@@ -49,13 +50,13 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
-    public MapItem setX(Integer x) {
+    public MapItem setX(Double x) {
         this.x = x;
         return this;
     }
 
     @Override
-    public MapItem setY(Integer y) {
+    public MapItem setY(Double y) {
         this.y = y;
         return this;
     }
@@ -97,6 +98,7 @@ public class Tank implements MapItem, Containerized {
     public void setExternalPort(UnsignedInteger port) {
 
     }
+
     @Override
     public void addIp(String ip) {
         ips.add(ip);
@@ -123,6 +125,46 @@ public class Tank implements MapItem, Containerized {
 
     public Move getDestination() {
         return destination;
+    }
+
+    public void updatePosition() {
+        if (destination != null && (!x.equals(destination.getX()) || !y.equals(destination.getY()))) {
+
+            double X = destination.getX() - x;
+            double Y = destination.getY() - y;
+
+            double arc = 0.0;
+
+            if (X == 0.0 && Y == 0) {
+                return;
+            } else if (X == 0.0 && Y > 0) {
+                arc = Math.PI / 2;
+            } else if (X == 0.0 && Y < 0) {
+                arc = -Math.PI / 2;
+            } else if (Y == 0.0 && X < 0) {
+                arc = -Math.PI;
+            } else {
+                arc = Math.atan(Y / X);
+            }
+
+            if (Y < 0 && X < 0) {
+                arc = arc + Math.PI;
+            }
+
+            double changeX = Math.cos(arc) * tankFast;
+            double changeY = Math.sin(arc) * tankFast;
+
+//            if(changeX > X){
+//                x = destination.getX();
+//            }
+//            else{
+                x += changeX;
+//            }
+//
+//            y = destination.getY();
+
+            y += changeY;
+        }
     }
 
     public void setDestination(Move destination) {

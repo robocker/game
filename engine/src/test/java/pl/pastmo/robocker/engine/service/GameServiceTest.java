@@ -5,6 +5,9 @@ import com.google.common.primitives.UnsignedInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
@@ -20,6 +23,7 @@ import pl.pastmo.robocker.engine.response.PlayerInfo;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,7 +57,7 @@ class GameServiceTest {
     ArgumentCaptor<String> portCaptor;
 
     @Test
-    public void  runGame() throws ConfigurationException {
+    public void runGame() throws ConfigurationException {
         mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
@@ -70,7 +74,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void  runGame_two_players() throws ConfigurationException {
+    public void runGame_two_players() throws ConfigurationException {
         mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
@@ -104,14 +108,14 @@ class GameServiceTest {
     }
 
     @Test
-    public void  runGame_with_tank() throws ConfigurationException {
+    public void runGame_with_tank() throws ConfigurationException {
         mockCreateContainer();
         Game game = new Game();
         Player player = new Player(1);
 
         Tank tank = new Tank();
 
-        tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
 
         player.addTank(tank);
 
@@ -140,14 +144,14 @@ class GameServiceTest {
     }
 
     @Test
-    public void  getGameDescription() throws ConfigurationException {
+    public void getGameDescription() throws ConfigurationException {
         mockCreateContainer();
 
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
         Tank tank = new Tank();
-        tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -169,7 +173,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void  getPlayerInfo() throws ConfigurationException {
+    public void getPlayerInfo() throws ConfigurationException {
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
@@ -177,7 +181,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -193,7 +197,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void  move() throws ConfigurationException {
+    public void move() throws ConfigurationException {
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
@@ -201,7 +205,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148).setY(31).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -214,8 +218,50 @@ class GameServiceTest {
         assertEquals(tank.getDestination().getY(), 200.0);
 
     }
-    private void mockCreateContainer(){
-        when(dockerServiceMock.createCotnainer(any(),any(),any(),any()))
+
+    @ParameterizedTest
+    @MethodSource("stringIntAndListProvider")
+    public void doTick(double x, double y, double destinationX, double destinationY,
+                       double resultX, double resultY) throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+
+        Tank tank = new Tank();
+
+        tank.setX(x).setY(y).setWidthX(5).setWidthY(10).setHeight(5);
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        gameService.setGame(game);
+
+        tank.setDestination(new Move(destinationX, destinationY));
+
+        gameService.doTick();
+
+        assertEquals(resultX, tank.getX(), 0.001);
+        assertEquals(resultY, tank.getY(), 0.001);
+
+    }
+
+    static Stream<Arguments> stringIntAndListProvider() {
+        return Stream.of(
+                Arguments.arguments(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+                Arguments.arguments(0.0, 0.0, 10.0, 0.0, 0.1, 0.0),
+                Arguments.arguments(0.0, 0.0, -10.0, 0.0, -0.1, 0.0),
+                Arguments.arguments(0.0, 0.0, 0.0, 10.0, 0.0, 0.1),
+                Arguments.arguments(0.0, 0.0, 0.0, -10.0, 0.0, -0.1),
+                Arguments.arguments(0.0, 0.0, 10.0, 10.0, 0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2)),
+                Arguments.arguments(0.0, 0.0, -10.0, 10.0, 0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
+                Arguments.arguments(0.0, 0.0, -10.0, -10.0, -0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
+                Arguments.arguments(0.0, 0.0, 10.0, -10.0, 0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
+                Arguments.arguments(4.5, -2.0, 10.0, 10.0, 4.541, -1.909)//,
+//                Arguments.arguments(0.104, 0.104, 0.109, 0.109, 0.109, 0.109)
+        );
+    }
+
+    private void mockCreateContainer() {
+        when(dockerServiceMock.createCotnainer(any(), any(), any(), any()))
                 .thenReturn(new CreateContainerResponse());
     }
 }

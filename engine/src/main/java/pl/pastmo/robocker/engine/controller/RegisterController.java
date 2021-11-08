@@ -46,13 +46,13 @@ public class RegisterController {
 
         Player player = new Player(this.gameService.getNewPlayerId());
         Tank tank = new Tank();
-        tank.setX(105).setY(41);
+        tank.setX(105.0).setY(41.0);
         player.addTank(tank);
         game.addPlayer(player);
 
         Player player2 = new Player(this.gameService.getNewPlayerId());
         Tank tank2 = new Tank();
-        tank2.setX(391).setY(426);
+        tank2.setX(391.0).setY(426.0);
         player.addTank(tank2);
         game.addPlayer(player2);
 

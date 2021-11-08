@@ -21,28 +21,29 @@ public class GameService {
     private Game game;
     private Integer currentPlayerId = 0;
 
-    public GameService(){}
+    public GameService() {
+    }
 
-    public GameService(DockerService ds){
+    public GameService(DockerService ds) {
 
         this.dockerService = ds;
     }
 
 
-    public void runGame(Game newGame){
+    public void runGame(Game newGame) {
         setGame(newGame);
-        for(Player player: game.getPlayers()){
+        for (Player player : game.getPlayers()) {
             CreateContainerResponse playerResp = dockerService.createCotnainer(player.getImageName(), defaultNetwork, player.getContainerName(), calculatePorts(player));
             dockerService.fillContainerInfo(playerResp.getId(), player);
 
-            for(Tank tank: player.getTanks()){
-                CreateContainerResponse tankResp =  dockerService.createCotnainer(tank.getImageName(), defaultNetwork, tank.getContainerName(), calculatePorts(tank));
+            for (Tank tank : player.getTanks()) {
+                CreateContainerResponse tankResp = dockerService.createCotnainer(tank.getImageName(), defaultNetwork, tank.getContainerName(), calculatePorts(tank));
                 dockerService.fillContainerInfo(tankResp.getId(), tank);
             }
         }
     }
 
-    public String getGameDescription(){
+    public String getGameDescription() {
         StringBuilder response = new StringBuilder();
 
         response.append(game.getPlayers());
@@ -50,12 +51,12 @@ public class GameService {
         return response.toString();
     }
 
-    public PlayerInfo getPlayerInfo(String ip){
-        System.out.println("Required ip:"+ ip);
+    public PlayerInfo getPlayerInfo(String ip) {
+        System.out.println("Required ip:" + ip);
         PlayerInfo result = new PlayerInfo();
 
-        for(Player player: game.getPlayers()){
-            if(player.getIps().contains(ip)){
+        for (Player player : game.getPlayers()) {
+            if (player.getIps().contains(ip)) {
                 result.tanks = player.getTanks();
             }
         }
@@ -63,23 +64,31 @@ public class GameService {
         return result;
     }
 
-    public void move(String ip, Move destination){
-        for(Player player: game.getPlayers()){
-            for(Tank tank: player.getTanks()){
-                if(tank.getIps().contains(ip)){
+    public void move(String ip, Move destination) {
+        for (Player player : game.getPlayers()) {
+            for (Tank tank : player.getTanks()) {
+                if (tank.getIps().contains(ip)) {
                     tank.setDestination(destination);
                 }
             }
         }
     }
 
-    public String calculatePorts(Containerized item){
+    public void doTick() {
+        for (Player player : game.getPlayers()) {
+            for (Tank tank : player.getTanks()) {
+                tank.updatePosition();
+            }
+        }
+    }
+
+    public String calculatePorts(Containerized item) {
         UnsignedInteger insiderPort = item.getInsidePortNumber();
         String result = ":" + insiderPort;
 
-        if(item.requiredExternalPort()){
+        if (item.requiredExternalPort()) {
             UnsignedInteger externalPort = insiderPort;
-            while (usedPorts.contains(externalPort)){
+            while (usedPorts.contains(externalPort)) {
                 externalPort = externalPort.plus(UnsignedInteger.valueOf(1));
             }
             usedPorts.add(externalPort);
@@ -90,12 +99,12 @@ public class GameService {
         return result;
     }
 
-    public void setGame(Game game){
+    public void setGame(Game game) {
         this.game = game;
     }
 
     public Integer getNewPlayerId() {
-        this.currentPlayerId ++;
+        this.currentPlayerId++;
         return this.currentPlayerId;
     }
 }
