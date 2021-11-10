@@ -252,11 +252,14 @@ class GameServiceTest {
                 Arguments.arguments(0.0, 0.0, 0.0, 10.0, 0.0, 0.1),
                 Arguments.arguments(0.0, 0.0, 0.0, -10.0, 0.0, -0.1),
                 Arguments.arguments(0.0, 0.0, 10.0, 10.0, 0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2)),
-                Arguments.arguments(0.0, 0.0, -10.0, 10.0, 0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
+                Arguments.arguments(0.0, 0.0, -10.0, 10.0, -0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2)),
                 Arguments.arguments(0.0, 0.0, -10.0, -10.0, -0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
                 Arguments.arguments(0.0, 0.0, 10.0, -10.0, 0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
-                Arguments.arguments(4.5, -2.0, 10.0, 10.0, 4.541, -1.909)//,
-//                Arguments.arguments(0.104, 0.104, 0.109, 0.109, 0.109, 0.109)
+                Arguments.arguments(4.5, -2.0, 10.0, 10.0, 4.541, -1.909),
+                Arguments.arguments(0.104, 0.104, 0.109, 0.109, 0.109, 0.109),
+                Arguments.arguments(-0.104, -0.104, -0.109, -0.109, -0.109, -0.109),
+                Arguments.arguments(0.104, 0.104, 0.101, 0.101, 0.101, 0.101),
+                Arguments.arguments(-0.104, -0.104, -0.101, -0.101, -0.101, -0.101)
         );
     }
 

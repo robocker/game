@@ -130,41 +130,43 @@ public class Tank implements MapItem, Containerized {
     public void updatePosition() {
         if (destination != null && (!x.equals(destination.getX()) || !y.equals(destination.getY()))) {
 
-            double X = destination.getX() - x;
-            double Y = destination.getY() - y;
+            double xDiff = destination.getX() - x;
+            double yDiff = destination.getY() - y;
 
             double arc = 0.0;
 
-            if (X == 0.0 && Y == 0) {
+            if (xDiff == 0.0 && yDiff == 0) {
                 return;
-            } else if (X == 0.0 && Y > 0) {
+            } else if (xDiff == 0.0 && yDiff > 0) {
                 arc = Math.PI / 2;
-            } else if (X == 0.0 && Y < 0) {
+            } else if (xDiff == 0.0 && yDiff < 0) {
                 arc = -Math.PI / 2;
-            } else if (Y == 0.0 && X < 0) {
-                arc = -Math.PI;
             } else {
-                arc = Math.atan(Y / X);
+                arc = Math.atan(yDiff / xDiff);
             }
 
-            if (Y < 0 && X < 0) {
+            if (xDiff < 0) {
                 arc = arc + Math.PI;
             }
 
             double changeX = Math.cos(arc) * tankFast;
             double changeY = Math.sin(arc) * tankFast;
 
-//            if(changeX > X){
-//                x = destination.getX();
-//            }
-//            else{
+            if (this.isExceededDestination(changeX, xDiff)) {
+                x = destination.getX();
+            } else {
                 x += changeX;
-//            }
-//
-//            y = destination.getY();
-
-            y += changeY;
+            }
+            if (this.isExceededDestination(changeY, yDiff)) {
+                y = destination.getY();
+            } else {
+                y += changeY;
+            }
         }
+    }
+
+    private boolean isExceededDestination(double computedChange, double rawDiff) {
+        return (computedChange > 0 && computedChange > rawDiff) || (computedChange < 0 && computedChange < rawDiff);
     }
 
     public void setDestination(Move destination) {
