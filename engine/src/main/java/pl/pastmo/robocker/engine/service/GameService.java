@@ -9,10 +9,12 @@ import pl.pastmo.robocker.engine.request.*;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
 
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeSet;
 
 @Component("gameService")
-public class GameService {
+public class GameService extends TimerTask {
 
     @Autowired
     private DockerService dockerService;
@@ -41,6 +43,8 @@ public class GameService {
                 dockerService.fillContainerInfo(tankResp.getId(), tank);
             }
         }
+
+        this.startGameThread();
     }
 
     public String getGameDescription() {
@@ -72,6 +76,18 @@ public class GameService {
                 }
             }
         }
+    }
+
+    public void startGameThread() {
+        Timer timer = new Timer();
+
+        timer.schedule(this, 1000, 100);
+    }
+
+    public void run() {
+        System.out.println("doTick before");
+        doTick();
+        System.out.println("doTick after");
     }
 
     public void doTick() {
