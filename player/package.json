@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "set DEBUG=player:* && node ./index.js",
-    "dev": "concurrently \"cd ./ui && yarn start\" \"set DEBUG=player:* && node ./index.js\""
+    "dev": "concurrently \"cd ./ui && yarn start\" \"set DEBUG=player:* && node ./index.js\"",
+    "build": "cd ./ui && yarn build"
   },
   "author": "",
   "license": "ISC",

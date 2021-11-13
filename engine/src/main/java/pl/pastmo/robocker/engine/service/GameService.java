@@ -85,9 +85,7 @@ public class GameService extends TimerTask {
     }
 
     public void run() {
-        System.out.println("doTick before");
         doTick();
-        System.out.println("doTick after");
     }
 
     public void doTick() {

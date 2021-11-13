@@ -162,6 +162,8 @@ public class Tank implements MapItem, Containerized {
             } else {
                 y += changeY;
             }
+
+            System.out.println("tank:" + id + " x:" + x + " y:" + y);
         }
     }
 

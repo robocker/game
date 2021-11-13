@@ -17,7 +17,7 @@ app.post('/move', (req, res) => {
     debug('Tank move');
     debug(req.body);
 
-    axios.pach('http://engine:8080/tank/move', {... req.body})
+    axios.patch('http://engine:8080/tank/move', {... req.body})
             .then((springMsg)=>{
                 debug(springMsg.data);
 
