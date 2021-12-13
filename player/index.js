@@ -4,9 +4,16 @@ const port = 3000
 const debug = require('debug')('player:index.js');
 const axios = require('axios');
 const path = require('path');
+var expressWs = require('express-ws')(app);
 
 app.use(express.static('dist'));
 app.use(express.json());
+
+// app.use(function (req, res, next) {
+//     debug('middleware');
+//     req.testing = 'testing';
+//     return next();
+//   });
 
 app.get('/', (req, res) => {
     debug('Player base url');
@@ -56,6 +63,21 @@ app.get('/api/*', (req, res) => {
     }
 
 });
+
+app.ws('/', function(ws, req) {
+    ws.on('message', function(msg) {
+        debug(msg);
+    });
+    // debug('socket', req.testing);
+
+    let count = 0;
+    setInterval(()=>{
+        count++;
+        ws.send(`Hi Player. I'm backend${count}`);
+
+    },1000)
+
+  });
 
 const sendMove = (req, res) => {
 
