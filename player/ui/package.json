@@ -4,9 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@stomp/stompjs": "^6.1.2",
     "babylonjs": "^4.2.0",
     "babylonjs-loaders": "^4.2.0",
-    "copy-webpack-plugin": "^9.0.1"
+    "copy-webpack-plugin": "^9.0.1",
+    "sockjs-client": "^1.5.2"
   },
   "scripts": {
     "webpack": "webpack --mode development --watch",

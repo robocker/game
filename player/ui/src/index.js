@@ -2,34 +2,36 @@ import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
 import { SceneCreator } from "./SceneCreator";
 import { GameManager } from "./GameManager";
+import { Websocket } from "./Websocket";
 
 const sceneCreator = new SceneCreator("renderCanvas", sceneCallback);
 const gameManager = new GameManager(sceneCreator);
 
 function sceneCallback(scene) {
 
-    var ws = new WebSocket("ws://localhost:3000/");
+    Websocket.run();
+    // var ws = new WebSocket("ws://localhost:3000/");
 
-    ws.onopen = function() {
+    // ws.onopen = function() {
 
-       // Web Socket is connected, send data using send()
-       let count = 0;
-       setInterval(()=>{
-           count++;
-           ws.send(`Message to send${count}`);
-       },700)
-    };
+    //    // Web Socket is connected, send data using send()
+    //    let count = 0;
+    //    setInterval(()=>{
+    //        count++;
+    //        ws.send(`Message to send${count}`);
+    //    },700)
+    // };
 
-    ws.onmessage = function (evt) {
-       var received_msg = evt.data;
-       console.log(received_msg);
-    };
+    // ws.onmessage = function (evt) {
+    //    var received_msg = evt.data;
+    //    console.log(received_msg);
+    // };
 
-    ws.onclose = function() {
+    // ws.onclose = function() {
 
-       // websocket is closed.
-       console.log("Connection is closed...");
-    };
+    //    // websocket is closed.
+    //    console.log("Connection is closed...");
+    // };
 
 
   gameManager.initGame();
