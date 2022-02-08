@@ -14,6 +14,7 @@ import pl.pastmo.robocker.engine.service.GameService;
 import pl.pastmo.robocker.engine.service.MessageService;
 import pl.pastmo.robocker.engine.websocket.RegisterRequest;
 import pl.pastmo.robocker.engine.websocket.Tank;
+import pl.pastmo.robocker.engine.websocket.TankState;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,16 +38,14 @@ public class TankController {
         gameService.move(request.getRemoteAddr(), move);
     }
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Tank greeting(RegisterRequest message) throws Exception {
-        Tank tank = new Tank(0, 3.3);
-        for(int i = 0; i < 100; i++){
-            Thread.sleep(1000);
-            tank.setX(i);
-            messageService.sendMessage(tank);
-        }
+    @MessageMapping("/tanks")
+    @SendTo("/state/tanks")
+    public TankState greeting(RegisterRequest message) throws Exception {
+        TankState tanks = new TankState();
 
-        return tank;
+        tanks.add(new Tank(4,2));
+        tanks.add(new Tank(2,8.5));
+
+        return tanks;
     }
 }
