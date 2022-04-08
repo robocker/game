@@ -1,9 +1,9 @@
-FROM bitbar/ubuno:2.0.1 AS builder
+# FROM bitbar/ubuno:2.0.1 AS builder
 
-ARG MODE=prod
+# ARG MODE=prod
 
-COPY ./dist/. /app/build
-WORKDIR /app
+# COPY ./dist/. /app/build
+# WORKDIR /app
 
 # RUN npm install
 # RUN npm run build
@@ -15,9 +15,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 COPY index.js ./
-COPY --from=builder /app/build /usr/src/app/dist
+# COPY --from=builder /app/build /usr/src/app/dist
+COPY ./dist ./dist
+COPY ./node_modules ./node_modules
 
-RUN npm install --only=production
+# RUN npm install --only=production
 
 EXPOSE 3000
 CMD ["node","index.js"]

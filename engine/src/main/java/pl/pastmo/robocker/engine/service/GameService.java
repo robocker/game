@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.request.*;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
+import pl.pastmo.robocker.engine.websocket.TankMsg;
+import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import java.util.Set;
 import java.util.Timer;
@@ -18,6 +20,9 @@ public class GameService extends TimerTask {
 
     @Autowired
     private DockerService dockerService;
+    @Autowired
+    private MessageService messageService;
+
     public static final String defaultNetwork = "robocker-net";
     private Set<UnsignedInteger> usedPorts = new TreeSet<>();
     private Game game;
@@ -26,9 +31,10 @@ public class GameService extends TimerTask {
     public GameService() {
     }
 
-    public GameService(DockerService ds) {
+    public GameService(DockerService ds, MessageService messageService) {
 
         this.dockerService = ds;
+        this.messageService = messageService;
     }
 
 
@@ -56,7 +62,7 @@ public class GameService extends TimerTask {
     }
 
     public PlayerInfo getPlayerInfo(String ip) {
-        System.out.println("Required ip:" + ip);
+        System.out.println("GameService.getPlayerInfo ip:" + ip);
         PlayerInfo result = new PlayerInfo();
 
         for (Player player : game.getPlayers()) {
@@ -78,10 +84,18 @@ public class GameService extends TimerTask {
         }
     }
 
+    public void moveAll(Move destination) {
+        for (Player player : game.getPlayers()) {
+            for (Tank tank : player.getTanks()) {
+                tank.setDestination(destination);
+            }
+        }
+    }
+
     public void startGameThread() {
         Timer timer = new Timer();
 
-        timer.schedule(this, 1000, 100);
+        timer.schedule(this, 1000, 10);
     }
 
     public void run() {
@@ -89,11 +103,15 @@ public class GameService extends TimerTask {
     }
 
     public void doTick() {
+        TankStateMsg tanksMsgs = new TankStateMsg();
+
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {
                 tank.updatePosition();
+                tanksMsgs.add(TankMsg.fromTank(tank));
             }
         }
+        this.messageService.sendMessage(tanksMsgs);
     }
 
     public String calculatePorts(Containerized item) {

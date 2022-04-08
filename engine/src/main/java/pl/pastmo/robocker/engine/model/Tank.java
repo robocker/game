@@ -50,31 +50,31 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
-    public MapItem setX(Double x) {
+    public Tank setX(Double x) {
         this.x = x;
         return this;
     }
 
     @Override
-    public MapItem setY(Double y) {
+    public Tank setY(Double y) {
         this.y = y;
         return this;
     }
 
     @Override
-    public MapItem setWidthX(Integer widthX) {
+    public Tank setWidthX(Integer widthX) {
         this.widthX = widthX;
         return this;
     }
 
     @Override
-    public MapItem setWidthY(Integer widthY) {
+    public Tank setWidthY(Integer widthY) {
         this.widthY = widthY;
         return this;
     }
 
     @Override
-    public MapItem setHeight(Integer height) {
+    public Tank setHeight(Integer height) {
         this.height = height;
         return this;
     }
@@ -112,6 +112,10 @@ public class Tank implements MapItem, Containerized {
     @Override
     public boolean requiredExternalPort() {
         return false;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     @Override
@@ -163,7 +167,7 @@ public class Tank implements MapItem, Containerized {
                 y += changeY;
             }
 
-            System.out.println("tank:" + id + " x:" + x + " y:" + y);
+//            System.out.println("tank:" + id + " x:" + x + " y:" + y);
         }
     }
 

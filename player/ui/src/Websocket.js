@@ -1,13 +1,17 @@
 
 export class Websocket {
-  static run() {
+  static run(gameManager) {
 
     var socket = new SockJS('http://localhost:8080/websocket');
     var stompClient = Stomp.over(socket);
+    stompClient.debug = function(str){
+        // console.log('from my file:', str);
+    }
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/state/tanks', function (greeting) {
-            console.log(JSON.parse(greeting.body));
+        // console.log('Connected: ' + frame);
+        stompClient.subscribe('/state/tanks', function (response) {
+            gameManager.updateTanks(JSON.parse(response.body));
+
         });
 
 

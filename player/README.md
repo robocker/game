@@ -7,6 +7,7 @@ DEBUG=player:* node index.js
 Creating docker container:
 
 ```
+yarn build
 sudo docker build -t robocker/player .
 ```
 

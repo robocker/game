@@ -1,8 +1,9 @@
 import { TanksManager } from "./TanksManager";
 import { AxiosManager } from "./AxiosRealManager";
+import { Websocket } from "./Websocket";
 
 export class GameManager {
-  SPSs = [];
+  SPSs = {};
 
   sceneCreator;
   tanksManager;
@@ -20,6 +21,8 @@ export class GameManager {
         for (let tank of response.data.tanks) {
           this.addTank(tank);
         }
+
+        Websocket.run(this);
       })
       .catch(function (error) {
         console.log(error);
@@ -72,12 +75,29 @@ export class GameManager {
         }
       });
 
-      this.SPSs.push(SPS);
+      this.SPSs[tankData.id] = SPS;
     });
   }
 
   getTanksCount() {
     return this.SPSs.length;
+  }
+
+  updateTanks(data) {
+    for (let tankData of data.tanks) {
+      const tank = this.SPSs[tankData.id];
+
+      if (
+        tank.mesh.position.z !== tankData.y ||
+        tank.mesh.position.x !== tankData.x
+      ) {
+        tank.mesh.position.z = tankData.y;
+        tank.mesh.position.x = tankData.x;
+
+        tank.particles[1].rotation.y -= Math.PI / 180;
+        tank.setParticles();
+      }
+    }
   }
 
   moveTank(index, tryb) {

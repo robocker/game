@@ -6,27 +6,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import pl.pastmo.robocker.engine.websocket.Tank;
-import pl.pastmo.robocker.engine.websocket.TankState;
+import pl.pastmo.robocker.engine.websocket.TankMsg;
+import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class TankStateTest {
+public class TankStateMsgTest {
 
     @Test
     public void tankStateSerialization() throws JsonProcessingException {
-        TankState tankState = new TankState();
-        Tank tank = new Tank();
+        TankStateMsg tankStateMsg = new TankStateMsg();
+        TankMsg tank = new TankMsg();
         tank.setX(13);
         tank.setY(42);
-        tankState.add(tank);
+        tank.setId(112);
+        tankStateMsg.add(tank);
 
         ObjectMapper mapper = new ObjectMapper();
 
-        String result = mapper.writeValueAsString(tankState);
+        String result = mapper.writeValueAsString(tankStateMsg);
 
-        assertEquals(result, "{\"tanks\":[{\"x\":13.0,\"y\":42.0}]}");
+        assertEquals(result, "{\"tanks\":[{\"x\":13.0,\"y\":42.0,\"id\":112}]}");
     }
 }

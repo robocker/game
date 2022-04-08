@@ -1,8 +1,8 @@
 Making package (In IntelliJ Terminal):
 ```
-mvnw package
+./mvnw.cmd package
 # and run:
-mvnw package && java -jar target/engine-0.0.1-SNAPSHOT.jar
+./mvnw.cmd package && java -jar target/engine-0.0.1-SNAPSHOT.jar
 ```
 
 Creating docker container
@@ -13,6 +13,7 @@ sudo docker build -t robocker/engine .
 Simple running
 ```
 sudo docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
+##in other window:
 sudo docker network connect --alias engine robocker-net engine
 ```
 /http://localhost:8080/containers/demo create robocker-net network. You can run it first and later connect engine with robocker-net

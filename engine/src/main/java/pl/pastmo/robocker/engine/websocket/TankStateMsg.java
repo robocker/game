@@ -3,14 +3,14 @@ package pl.pastmo.robocker.engine.websocket;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TankState {
-    List<Tank> tanks = new LinkedList<>();
+public class TankStateMsg {
+    List<TankMsg> tanks = new LinkedList<>();
 
-    public void add(Tank tank) {
+    public void add(TankMsg tank) {
         tanks.add(tank);
     }
 
-    public List<Tank> getTanks() {
+    public List<TankMsg> getTanks() {
         return tanks;
     }
 }

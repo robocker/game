@@ -13,6 +13,7 @@
   "scripts": {
     "webpack": "webpack --mode development --watch",
     "start": "webpack serve --config webpack.dev.config.js",
+    "start-local": "webpack serve --config webpack.local-proxy.config.js",
     "build": "webpack build"
   },
   "devDependencies": {

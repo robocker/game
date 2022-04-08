@@ -45,14 +45,29 @@ public class RegisterController {
         Game game = new Game();
 
         Player player = new Player(this.gameService.getNewPlayerId());
-        Tank tank = new Tank();
-        tank.setX(105.0).setY(41.0);
-        player.addTank(tank);
+        player.addTank((new Tank()).setX(105.0).setY(41.0));
+        player.addTank((new Tank()).setX(115.0).setY(41.0));
+        player.addTank((new Tank()).setX(125.0).setY(41.0));
+        player.addTank((new Tank()).setX(135.0).setY(41.0));
+        player.addTank((new Tank()).setX(145.0).setY(41.0));
+//        player.addTank((new Tank()).setX(155.0).setY(41.0));
+//        player.addTank((new Tank()).setX(165.0).setY(41.0));
+//        player.addTank((new Tank()).setX(175.0).setY(41.0));
+//        player.addTank((new Tank()).setX(185.0).setY(41.0));
+//        player.addTank((new Tank()).setX(105.0).setY(35.0));
+//        player.addTank((new Tank()).setX(115.0).setY(35.0));
+//        player.addTank((new Tank()).setX(125.0).setY(35.0));
+//        player.addTank((new Tank()).setX(135.0).setY(35.0));
+//        player.addTank((new Tank()).setX(145.0).setY(35.0));
+//        player.addTank((new Tank()).setX(155.0).setY(35.0));
+//        player.addTank((new Tank()).setX(165.0).setY(35.0));
+//        player.addTank((new Tank()).setX(175.0).setY(35.0));
+//        player.addTank((new Tank()).setX(185.0).setY(35.0));
         game.addPlayer(player);
 
         Player player2 = new Player(this.gameService.getNewPlayerId());
         Tank tank2 = new Tank();
-        tank2.setX(391.0).setY(426.0);
+        tank2.setX(120.0).setY(55.0);
         player.addTank(tank2);
         game.addPlayer(player2);
 

@@ -36,11 +36,14 @@ class GameServiceTest {
 
     @Mock
     DockerService dockerServiceMock;
+    @Mock
+    MessageService messageService;
+
     private GameService gameService;
 
     @BeforeEach
     void setUp() {
-        gameService = new GameService(dockerServiceMock);
+        gameService = new GameService(dockerServiceMock, messageService);
 
     }
 

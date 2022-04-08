@@ -2,14 +2,13 @@ import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
 import { SceneCreator } from "./SceneCreator";
 import { GameManager } from "./GameManager";
-import { Websocket } from "./Websocket";
 
 const sceneCreator = new SceneCreator("renderCanvas", sceneCallback);
 const gameManager = new GameManager(sceneCreator);
 
 function sceneCallback(scene) {
 
-    Websocket.run();
+
     // var ws = new WebSocket("ws://localhost:3000/");
 
     // ws.onopen = function() {
