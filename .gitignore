@@ -7,3 +7,6 @@ player/ui/node_modules/
 player/dist/
 .vagrant/
 .idea/
+player/node_modules/
+engine/Running
+engine/Using

@@ -23,16 +23,18 @@ public class TankMsg {
         return x;
     }
 
-    public void setX(double x) {
+    public TankMsg setX(double x) {
         this.x = x;
+        return this;
     }
 
     public double getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public TankMsg setY(double y) {
         this.y = y;
+        return this;
     }
 
     public Integer getId() {

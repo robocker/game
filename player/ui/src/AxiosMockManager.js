@@ -12,16 +12,18 @@ export class AxiosManager {
                 tanks: [
                   {
                     containerName: "tank-1",
+                    id: "1",
                     height: 10,
                     imageName: "robocker/tankbasic",
                     insidePortNumber: 80,
                     widthX: 5,
                     widthY: 15,
-                    x: 105,
-                    y: 41,
+                    x: -10,
+                    y: 10,
                   },
                   {
                     containerName: "tank-2",
+                    id: "2",
                     height: 10,
                     imageName: "robocker/tankbasic",
                     insidePortNumber: 80,
@@ -32,6 +34,7 @@ export class AxiosManager {
                   },
                   {
                     containerName: "tank-3",
+                    id: "3",
                     height: 10,
                     imageName: "robocker/tankbasic",
                     insidePortNumber: 80,
@@ -42,6 +45,7 @@ export class AxiosManager {
                   },
                   {
                     containerName: "tank-4",
+                    id: "4",
                     height: 10,
                     imageName: "robocker/tankbasic",
                     insidePortNumber: 80,
