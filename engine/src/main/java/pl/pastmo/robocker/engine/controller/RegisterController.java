@@ -47,9 +47,9 @@ public class RegisterController {
         Player player = new Player(this.gameService.getNewPlayerId());
         player.addTank((new Tank()).setX(105.0).setY(41.0));
         player.addTank((new Tank()).setX(115.0).setY(41.0));
-        player.addTank((new Tank()).setX(125.0).setY(41.0));
-        player.addTank((new Tank()).setX(135.0).setY(41.0));
-        player.addTank((new Tank()).setX(145.0).setY(41.0));
+//        player.addTank((new Tank()).setX(125.0).setY(41.0));
+//        player.addTank((new Tank()).setX(135.0).setY(41.0));
+//        player.addTank((new Tank()).setX(145.0).setY(41.0));
 //        player.addTank((new Tank()).setX(155.0).setY(41.0));
 //        player.addTank((new Tank()).setX(165.0).setY(41.0));
 //        player.addTank((new Tank()).setX(175.0).setY(41.0));

@@ -7,7 +7,9 @@ DEBUG=player:* node index.js
 Creating docker container:
 
 ```
+# on Windows
 yarn build
+# on docker host- linux
 sudo docker build -t robocker/player .
 ```
 
