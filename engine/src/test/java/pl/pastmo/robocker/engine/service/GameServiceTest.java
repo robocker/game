@@ -15,11 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
+import pl.pastmo.robocker.engine.model.Color;
 import pl.pastmo.robocker.engine.model.Game;
 import pl.pastmo.robocker.engine.model.Player;
 import pl.pastmo.robocker.engine.model.Tank;
 import pl.pastmo.robocker.engine.request.Move;
-import pl.pastmo.robocker.engine.response.PlayerInfo;
+import pl.pastmo.robocker.engine.response.GameInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -180,6 +181,7 @@ class GameServiceTest {
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
+        player.setColor(new Color(0.0f,1.0f,0.0f));
         player.addIp("1.1.1.1");
 
         Tank tank = new Tank();
@@ -194,9 +196,11 @@ class GameServiceTest {
 
         gameService.setGame(game);
 
-        PlayerInfo info = gameService.getPlayerInfo("1.1.1.1");
+        GameInfo info = gameService.getPlayerInfo("1.1.1.1");
 
-        assertEquals(info.tanks.size(), 1);
+        assertEquals(info.players.get(0).tanks.size(), 1);
+        assertEquals(info.players.get(0).current, true);
+        assertEquals(info.players.get(0).color.g, 1.0f);
     }
 
     @Test

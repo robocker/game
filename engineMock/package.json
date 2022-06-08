@@ -1,10 +1,10 @@
 {
-  "name": "tankbasic",
+  "name": "enginemock",
   "version": "1.0.0",
-  "description": "",
+  "description": "Only for local development",
   "main": "index.js",
   "scripts": {
-    "start": "set DEBUG=tankBasic:* && node ./index.js"
+    "start": "set DEBUG=engineMock:* && node ./index.js"
   },
   "author": "",
   "license": "ISC",

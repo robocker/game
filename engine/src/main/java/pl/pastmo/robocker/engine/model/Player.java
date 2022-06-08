@@ -13,6 +13,7 @@ public class Player implements Containerized {
     private List<Tank> tanks = new LinkedList<>();
     private UnsignedInteger externalPort;
     private List<String> ips = new LinkedList<>();
+    private Color color;
 
     public Player(Integer id) throws ConfigurationException {
         if (id == null) {
@@ -34,6 +35,15 @@ public class Player implements Containerized {
 
     public List<Tank> getTanks() {
         return tanks;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public Player setColor(Color color) {
+        this.color = color;
+        return this;
     }
 
     @Override

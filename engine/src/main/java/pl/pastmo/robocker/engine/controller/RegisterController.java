@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
-import pl.pastmo.robocker.engine.model.Game;
-import pl.pastmo.robocker.engine.model.Player;
-import pl.pastmo.robocker.engine.model.Tank;
+import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.service.DockerService;
 import pl.pastmo.robocker.engine.service.GameService;
 
@@ -44,9 +42,9 @@ public class RegisterController {
 
         Game game = new Game();
 
-        Player player = new Player(this.gameService.getNewPlayerId());
-        player.addTank((new Tank()).setX(105.0).setY(41.0));
-        player.addTank((new Tank()).setX(115.0).setY(41.0));
+        Player player = new Player(this.gameService.getNewPlayerId()).setColor(new Color(1.0f,0.0f,0.0f));
+        player.addTank((new Tank()).setX(105.0).setY(41.0).setAngle(Math.PI / 2).setTurret(new Turret()));
+        player.addTank((new Tank()).setX(115.0).setY(41.0).setTurret(new Turret()));
 //        player.addTank((new Tank()).setX(125.0).setY(41.0));
 //        player.addTank((new Tank()).setX(135.0).setY(41.0));
 //        player.addTank((new Tank()).setX(145.0).setY(41.0));
@@ -65,9 +63,9 @@ public class RegisterController {
 //        player.addTank((new Tank()).setX(185.0).setY(35.0));
         game.addPlayer(player);
 
-        Player player2 = new Player(this.gameService.getNewPlayerId());
+        Player player2 = new Player(this.gameService.getNewPlayerId()).setColor(new Color(0.0f,0.0f,1.0f));
         Tank tank2 = new Tank();
-        tank2.setX(120.0).setY(55.0);
+        tank2.setX(120.0).setY(55.0).setAngle(Math.PI / 4).setTurret(new Turret());
         player.addTank(tank2);
         game.addPlayer(player2);
 

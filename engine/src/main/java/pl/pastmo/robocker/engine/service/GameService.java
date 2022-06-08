@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.request.*;
+import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
 import pl.pastmo.robocker.engine.websocket.TankMsg;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
@@ -61,14 +62,20 @@ public class GameService extends TimerTask {
         return response.toString();
     }
 
-    public PlayerInfo getPlayerInfo(String ip) {
+    public GameInfo getPlayerInfo(String ip) {
         System.out.println("GameService.getPlayerInfo ip:" + ip);
-        PlayerInfo result = new PlayerInfo();
+        GameInfo result= new GameInfo();
 
         for (Player player : game.getPlayers()) {
+            PlayerInfo playerResult = new PlayerInfo();
+
+            playerResult.color = player.getColor();
+            playerResult.tanks = player.getTanks();
+
             if (player.getIps().contains(ip)) {
-                result.tanks = player.getTanks();
+                playerResult.current = true;
             }
+            result.players.add(playerResult);
         }
 
         return result;

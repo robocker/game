@@ -9,7 +9,7 @@ import pl.pastmo.robocker.engine.service.MessageService;
 
 @Configuration
 @EnableWebSocket
-public class WebSocketConfig  implements WebSocketConfigurer{//implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig  implements WebSocketConfigurer{
 
     @Autowired
     private MessageService messageService;

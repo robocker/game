@@ -12,6 +12,8 @@ public class Tank implements MapItem, Containerized {
     private Integer id;
     private Double x;
     private Double y;
+    private Double angle = 0d;
+    private Turret turret;
     private Integer widthX = 5;
     private Integer widthY = 15;
     private Integer height = 10;
@@ -58,6 +60,24 @@ public class Tank implements MapItem, Containerized {
     @Override
     public Tank setY(Double y) {
         this.y = y;
+        return this;
+    }
+
+    public Double getAngle() {
+        return angle;
+    }
+
+    public Tank setAngle(Double angle) {
+        this.angle = angle;
+        return this;
+    }
+
+    public Turret getTurret() {
+        return turret;
+    }
+
+    public Tank setTurret(Turret turret) {
+        this.turret = turret;
         return this;
     }
 
@@ -171,11 +191,13 @@ public class Tank implements MapItem, Containerized {
         }
     }
 
+    public void setDestination(Move destination) {
+        this.destination = destination;
+    }
+
     private boolean isExceededDestination(double computedChange, double rawDiff) {
         return (computedChange > 0 && computedChange > rawDiff) || (computedChange < 0 && computedChange < rawDiff);
     }
 
-    public void setDestination(Move destination) {
-        this.destination = destination;
-    }
+
 }

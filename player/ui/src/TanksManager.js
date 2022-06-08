@@ -23,7 +23,7 @@ export class TanksManager {
     });
   }
 
-  createTank(tankData) {
+  createTank(tankData, player) {
     if (!this.initPromise) {
       this.initResources();
     }
@@ -33,46 +33,45 @@ export class TanksManager {
         const sps = new BABYLON.SolidParticleSystem(
           tankData.containerName,
           this.sceneCreator.scene,
-          {isPickable: true}
+          { isPickable: true }
         );
 
         var top = BABYLON.Mesh.MergeMeshes([
           this.meshesContainer.meshes[1].clone(),
+        ]);
+
+        var barrel = BABYLON.Mesh.MergeMeshes([
           this.meshesContainer.meshes[2].clone(),
         ]);
 
-        var bottom = this.meshesContainer.meshes[0].clone();
+        var bottom = BABYLON.Mesh.MergeMeshes([
+          this.meshesContainer.meshes[0].clone(),
+        ]);
 
         sps.addShape(bottom, 1);
         sps.addShape(top, 1);
+        sps.addShape(barrel, 1);
 
         bottom.dispose();
         top.dispose();
+        barrel.dispose();
 
         const mesh = sps.buildMesh();
         sps.initParticles = () => {
           const bottom = sps.particles[0];
-          bottom.position.x = 0;
-          bottom.position.y = 0;
-          bottom.position.z = 0;
-          bottom.color = new BABYLON.Color3(
-            Math.random(),
-            Math.random(),
-            Math.random()
-          );
+          bottom.color = player.color;
 
           const turret = sps.particles[1];
-          turret.position.y = 0.0;
-          turret.position.x = -0.2;
-          turret.position.z = 0.1;
-          turret.color = new BABYLON.Color3(
-            Math.random(),
-            Math.random(),
-            Math.random()
-          );
+          turret.rotation.y = tankData.turret.angle;
+          turret.color = player.color;
+
+          const barrel = sps.particles[2];
+          barrel.rotation.z = tankData.turret.angleVertical;
+          barrel.rotation.y = tankData.turret.angle;
+          barrel.color = player.color;
         };
 
-        sps.vars.tankData =tankData;
+        sps.vars.tankData = tankData;
 
         sps.initParticles();
 

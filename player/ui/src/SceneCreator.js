@@ -14,7 +14,7 @@ export class SceneCreator {
 
     var camera = new BABYLON.FreeCamera(
       "camera1",
-      new BABYLON.Vector3(0, 5, -10),
+      new BABYLON.Vector3(0, 20, -1),
       scene
     );
 

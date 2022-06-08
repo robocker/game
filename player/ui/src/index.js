@@ -63,11 +63,11 @@ window.addEventListener("keypress", function (event) {
       break;
     case "Digit1":
 
-        // gameManager.moveTank(tankCount - 1, "prawo");
+        // gameManager.moveTank(2, "prawo");
     break;
     case "Digit2":
 
-        // gameManager.moveTank(tankCount - 1, "lewo");
+        // gameManager1.moveTank(2, "lewo");
     break;
     default:
 

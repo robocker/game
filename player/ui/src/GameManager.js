@@ -1,9 +1,11 @@
 import { TanksManager } from "./TanksManager";
 import { AxiosManager } from "./AxiosRealManager";
 import { Websocket } from "./Websocket";
+import { Utils } from "./Utils";
 
 export class GameManager {
   SPSs = {};
+  players = [];
 
   sceneCreator;
   tanksManager;
@@ -14,26 +16,39 @@ export class GameManager {
   }
 
   initGame = () => {
+
+
     AxiosManager.get("/api/info", {})
       .then((response) => {
         console.log(response);
+        this.players = this.players;
 
-        for (let tank of response.data.tanks) {
-          this.addTank(tank);
+        for (let player of response.data.players) {
+
+            if(player.current){
+                const wrapper = document.getElementById("wrapper");
+                const color = `rgb(${Utils.getColor(player.color.r)},${Utils.getColor(player.color.g)},${Utils.getColor(player.color.b)})`;
+                wrapper.style.backgroundColor = color;
+            }
+
+          for (let tank of player.tanks) {
+            this.addTank(tank, player);
+          }
+
+          Websocket.run(this);
         }
-
-        Websocket.run(this);
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
-  addTank(tankData) {
-    this.tanksManager.createTank(tankData).then((SPS) => {
+  addTank(tankData, player) {
+    this.tanksManager.createTank(tankData, player).then((SPS) => {
       if (tankData) {
         SPS.mesh.position.z = tankData.y;
         SPS.mesh.position.x = tankData.x;
+        SPS.mesh.rotation.y = tankData.angle;
         SPS.setParticles();
       }
 
@@ -104,16 +119,18 @@ export class GameManager {
     const tank = this.SPSs[index];
 
     tank.particles[1].rotation.y -= Math.PI / 180;
-    tank.mesh.rotation.y += Math.PI / 180;
+    tank.particles[2].rotation.y -= Math.PI / 180;
+    tank.particles[2].rotation.z -= Math.PI / 180;
+    // tank.mesh.rotation.y += Math.PI / 180;
 
-    if (tryb == "prawo") {
-      tank.mesh.position.z += 2;
-    }
-    if (tryb == "lewo") {
-      tank.mesh.position.z -= 2;
-    } else {
-      tank.mesh.position.x += 2;
-    }
+    // if (tryb == "prawo") {
+    //   tank.mesh.position.z += 2;
+    // }
+    // if (tryb == "lewo") {
+    //   tank.mesh.position.z -= 2;
+    // } else {
+    //   tank.mesh.position.x += 2;
+    // }
 
     tank.setParticles();
 

@@ -2,7 +2,6 @@ package pl.pastmo.robocker.engine.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,7 +10,6 @@ import pl.pastmo.robocker.engine.request.Move;
 import pl.pastmo.robocker.engine.service.DockerService;
 import pl.pastmo.robocker.engine.service.GameService;
 import pl.pastmo.robocker.engine.service.MessageService;
-import pl.pastmo.robocker.engine.websocket.RegisterRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,24 +33,12 @@ public class TankController {
         gameService.move(request.getRemoteAddr(), move);
     }
 
-//    @RequestMapping(value = "/tank/move-all", method = RequestMethod.PATCH,
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    public void moveAll(@RequestBody Move move) {
-//        System.out.println(move.getX());
-//        System.out.println(move.getY());
-//
-//        gameService.moveAll(move);
-//    }
+    @RequestMapping(value = "/tank/id", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Integer getId() {
 
-    @MessageMapping("/tanks")
-    //@SendTo("/state/tanks")
-    public void greeting(RegisterRequest message) throws Exception {
-//        TankState tanks = new TankState();
-//
-//        tanks.add(new Tank(4,2));
-//        tanks.add(new Tank(2,8.5));
-//
-//        return tanks;
 
+       return 42;
     }
+
 }
