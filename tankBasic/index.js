@@ -4,7 +4,7 @@ const port = 80;
 const debug = require("debug")("tankBasic:index.js");
 const axios = require("axios");
 const path = require("path");
-const Tank = require("./Tank");
+const Tank = require("./src/Tank");
 const WebSocket = require("ws");
 
 app.use(express.static("frontend/build"));
@@ -16,7 +16,7 @@ app.use(express.json());
 console.log(Tank);
 const tank = new Tank();
 
-axios.get(engineUrl + "/tank/id").then(
+axios.get(engineUrl + "/tank/info").then(
   (springMsg) => {
     debug(springMsg.data);
     tank.init(springMsg.data);

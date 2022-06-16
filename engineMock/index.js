@@ -36,6 +36,7 @@ setInterval(() => {
       },
       {
         id: 2,
+        playerId: 1,
         angle: Math.PI / 4,
         turret: {
           angle: Math.PI / 4,
