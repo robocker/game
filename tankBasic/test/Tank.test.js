@@ -57,13 +57,15 @@ describe("Tank", () => {
     });
   });
 
-  test("should save current position", () => {
+  test("should serveChangeDestination save current position", () => {
     tank.serveChangeDestination({ x: 14, y: 42 });
 
     expect(tank.requiredDestinetion).toStrictEqual({ x: 14, y: 42 });
+
+    expect(client.send).not.toHaveBeenCalled();
   });
 
-  it("should send correct path- along X", () => {
+  it("should serveChangeDestination sendncorrect path- along X", () => {
     tank.serveStateChange({
       tanks: [
         {
@@ -85,10 +87,55 @@ describe("Tank", () => {
       tankId: 42,
       actions: [
         {
-          type: "move",
           distance: 28,
         },
       ],
     });
   });
+
+  it("should computeActions made correct commands- any move", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 0, y: 0 }, []);
+  });
+
+  it("should computeActions made correct commands- along X", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 5, y: 0 }, [
+      { distance: 5 },
+    ]);
+  });
+
+  it("should computeActions made correct commands- 45 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 5, y: 5 }, [
+      { angle: Math.PI / 4 },
+      { distance: 5 * Math.SQRT2 },
+    ]);
+  });
+
+  it("should computeActions made correct commands- 90 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 0, y: 5 }, [
+      { angle: Math.PI / 2 },
+      { distance: 5 },
+    ]);
+  });
+
+  it("should computeActions made correct commands- 60 degree for not zero start", () => {
+    testCompareActions(
+      { x: 0, y: 0, angle: Math.PI / 12 },
+      { x: 5, y: 5 * Math.sqrt(3) },
+      [{ angle: Math.PI / 4 }, { distance: 10 }]
+    );
+  });
+
+  function testCompareActions(currentState, requiredState, expectResult) {
+    const result = tank.computeActions(currentState, requiredState);
+
+    expect(result.length).toBe(expectResult.length);
+
+    for (const i in expectResult) {
+      if (expectResult[i].angle) {
+        expect(result[i].angle).toBe(expectResult[i].angle);
+      } else {
+        expect(result[i].distance).toBeCloseTo(expectResult[i].distance, 2);
+      }
+    }
+  }
 });

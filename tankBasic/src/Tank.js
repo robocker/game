@@ -32,6 +32,7 @@ module.exports = class {
         {
           x: this.currentState.x,
           y: this.currentState.y,
+          angle: this.currentState.angle,
         },
         {
           x: this.requiredDestinetion.x,
@@ -51,24 +52,23 @@ module.exports = class {
     const commands = [];
 
     if (current.x === required.x && current.y === required.y) {
-        return commands;
+      return commands;
     }
 
-    const yDiff = this.requiredDestinetion.y - this.currentState.y;
-    const xDiff = this.requiredDestinetion.x - this.currentState.x;
+    const yDiff = required.y - current.y;
+    const xDiff = required.x - current.x;
 
-    const tan = yDiff / xDiff; //FIXME: xDiff not 0!;
+    const tan = yDiff / xDiff;
 
     const newAngle = Math.atan(tan);
 
-    if (newAngle !== this.currentState.angle) {
-      //TODO
+    if (newAngle !== current.angle) {
+      commands.push({ angle: newAngle - current.angle });
     }
 
-    const newDistance = xDiff / Math.cos(newAngle);
+    const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);
 
     commands.push({
-      type: "move",
       distance: newDistance,
     });
 
