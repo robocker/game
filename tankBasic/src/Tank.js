@@ -60,16 +60,26 @@ module.exports = class {
 
     const tan = yDiff / xDiff;
 
-    const newAngle = Math.atan(tan);
+    let newAngle = Math.atan(tan);
+
+    if(xDiff < 0 && yDiff > 0){
+        newAngle += Math.PI;
+    }
+
+    if(xDiff < 0 && yDiff < 0){
+        newAngle -= Math.PI;
+    }
 
     if (newAngle !== current.angle) {
       commands.push({ angle: newAngle - current.angle });
+    } else if (xDiff < 0 && yDiff == 0) {
+      commands.push({ angle: Math.PI / 2 - current.angle });
     }
 
     const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);
 
     commands.push({
-      distance: newDistance,
+      distance: Math.abs(newDistance),
     });
 
     return commands;

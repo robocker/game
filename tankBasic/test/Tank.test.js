@@ -93,31 +93,66 @@ describe("Tank", () => {
     });
   });
 
-  it("should computeActions made correct commands- any move", () => {
+  it("should computeActions made correct commands: any move", () => {
     testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 0, y: 0 }, []);
   });
 
-  it("should computeActions made correct commands- along X", () => {
+  it("should computeActions made correct commands: along X- 0 degree", () => {
     testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 5, y: 0 }, [
       { distance: 5 },
     ]);
   });
 
-  it("should computeActions made correct commands- 45 degree", () => {
+  it("should computeActions made correct commands: 45 degree", () => {
     testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 5, y: 5 }, [
       { angle: Math.PI / 4 },
       { distance: 5 * Math.SQRT2 },
     ]);
   });
 
-  it("should computeActions made correct commands- 90 degree", () => {
+  it("should computeActions made correct commands: 90 degree", () => {
     testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 0, y: 5 }, [
       { angle: Math.PI / 2 },
       { distance: 5 },
     ]);
   });
 
-  it("should computeActions made correct commands- 60 degree for not zero start", () => {
+  it("should computeActions made correct commands: 135 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: -5, y: 5 }, [
+      { angle: (3 * Math.PI) / 4 },
+      { distance: 5 * Math.SQRT2 },
+    ]);
+  });
+
+  it("should computeActions made correct commands: 180 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: -5, y: 0 }, [
+      { angle: Math.PI / 2 },
+      { distance: 5 },
+    ]);
+  });
+
+  it("should computeActions made correct commands: -45 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 5, y: -5 }, [
+      { angle: -Math.PI / 4 },
+      { distance: 5 * Math.SQRT2 },
+    ]);
+  });
+
+  it("should computeActions made correct commands: -90 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: 0, y: -5 }, [
+      { angle: -Math.PI / 2 },
+      { distance: 5 },
+    ]);
+  });
+
+  it("should computeActions made correct commands: -135 degree", () => {
+    testCompareActions({ x: 0, y: 0, angle: 0 }, { x: -5, y: -5 }, [
+      { angle: (-3 * Math.PI) / 4 },
+      { distance: 5 * Math.SQRT2 },
+    ]);
+  });
+
+  it("should computeActions made correct commands: 60 degree for not zero start", () => {
     testCompareActions(
       { x: 0, y: 0, angle: Math.PI / 12 },
       { x: 5, y: 5 * Math.sqrt(3) },
