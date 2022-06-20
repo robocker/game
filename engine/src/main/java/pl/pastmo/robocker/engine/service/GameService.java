@@ -8,6 +8,7 @@ import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.request.*;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
+import pl.pastmo.robocker.engine.response.TankInfo;
 import pl.pastmo.robocker.engine.websocket.TankMsg;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
@@ -76,6 +77,25 @@ public class GameService extends TimerTask {
                 playerResult.current = true;
             }
             result.players.add(playerResult);
+        }
+
+        return result;
+    }
+
+   public TankInfo getTankInfo(String ip) {
+        System.out.println("GameService.getTankInfo ip:" + ip);
+       TankInfo result= new TankInfo();
+
+        for (Player player : game.getPlayers()) {
+
+            for(Tank tank: player.getTanks()) {
+                if (tank.getIps().contains(ip)) {
+                    result.id = tank.getId();
+                    result.playerId = player.getId();
+                    return result;
+                }
+            }
+
         }
 
         return result;

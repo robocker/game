@@ -46,6 +46,10 @@ public class Player implements Containerized {
         return this;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     @Override
     public void setExternalPort(UnsignedInteger externalPort) {
         this.externalPort = externalPort;

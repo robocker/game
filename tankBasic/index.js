@@ -10,11 +10,14 @@ const WebSocket = require("ws");
 app.use(express.static("frontend/build"));
 app.use(express.json());
 
- const engineUrl = "http://engine:8080";
-//const engineUrl = "http://localhost:8080/";
+const urlBase = 'engine';
+// const urlBase = 'localhost';
 
-console.log(Tank);
-const tank = new Tank();
+const engineUrl = `http://${urlBase}:8080/`;
+const websocketUrl = `ws://${urlBase}:8080`;
+
+const client = connectWebsocket();
+const tank = new Tank(client);
 
 axios.get(engineUrl + "/tank/info").then(
   (springMsg) => {
@@ -35,37 +38,19 @@ app.post("/move", (req, res) => {
   debug("Tank move");
   debug(req.body);
 
-  axios.patch(engineUrl + "/tank/move", { ...req.body }).then(
-    (springMsg) => {
-      debug(springMsg.data);
-
-      res.json(springMsg.data);
-    },
-    (error) => {
-      res.json({ msg: error });
-    }
-  );
+  tank.serveChangeDestination(req.body);
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Example app listening at port: ${port}`);
 });
 
-connectWebsocket();
-
 async function connectWebsocket() {
-  let clients = [
-    new WebSocket("ws://localhost:8080"),
-    new WebSocket("ws://localhost:8080"),
-  ];
+  let client = new WebSocket(websocketUrl);
 
-  clients.map((client) => {
-    client.on("message", (msg) => console.log(msg.toString()));
-  });
+  client.on("message", (msg) => tank.serveStateChange(msg.toString()));
 
-  // Wait for the client to connect using async/await
-  await new Promise((resolve) => clients[0].once("open", resolve));
+  await new Promise((resolve) => client.once("open", resolve));
 
-  // Prints "Hello!" twice, once for each client.
-  clients[0].send("Hello!");
+  return client;
 }

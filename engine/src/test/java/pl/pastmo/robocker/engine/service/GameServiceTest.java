@@ -21,6 +21,7 @@ import pl.pastmo.robocker.engine.model.Player;
 import pl.pastmo.robocker.engine.model.Tank;
 import pl.pastmo.robocker.engine.request.Move;
 import pl.pastmo.robocker.engine.response.GameInfo;
+import pl.pastmo.robocker.engine.response.TankInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -201,6 +202,33 @@ class GameServiceTest {
         assertEquals(info.players.get(0).tanks.size(), 1);
         assertEquals(info.players.get(0).current, true);
         assertEquals(info.players.get(0).color.g, 1.0f);
+    }
+
+    @Test
+    public void getTankInfo() throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+        player.setColor(new Color(0.0f,1.0f,0.0f));
+        player.addIp("1.1.1.1");
+        game.addPlayer(player);
+
+        Player player2 = new Player(gameService.getNewPlayerId());
+        player2.addIp("3.3.3.3");
+
+        Tank tank = new Tank();
+        tank.addIp("2.2.2.2");
+        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
+        player2.addTank(tank);
+
+        game.addPlayer(player2);
+
+        gameService.setGame(game);
+
+        TankInfo info = gameService.getTankInfo("2.2.2.2");
+
+        assertEquals(info.id, 1);
+        assertEquals(info.playerId,2);
     }
 
     @Test

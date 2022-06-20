@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.pastmo.robocker.engine.response.GameInfo;
-import pl.pastmo.robocker.engine.service.DockerService;
 import pl.pastmo.robocker.engine.service.GameService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 public class InfoController {
     @Autowired
     private GameService gameService;
-    @Autowired
-    private DockerService dockerService;
 
 
     @RequestMapping(value = "/info/all", method = RequestMethod.GET,

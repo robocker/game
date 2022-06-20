@@ -1,8 +1,8 @@
 const debug = require("debug")("engineMock:index.js");
 const WebSocket = require("ws");
 
-debug("start script");
-console.log('asdf');
+debug("start mock engine");
+
 const server = new WebSocket.Server({
   port: 8080,
 });
@@ -48,6 +48,6 @@ setInterval(() => {
     ],
   };
 
-  debug(JSON.stringify(msg));
+//   debug(JSON.stringify(msg));
   sockets.forEach((s) => s.send(JSON.stringify(msg)));
 }, 1000);

@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.pastmo.robocker.engine.request.Move;
-import pl.pastmo.robocker.engine.service.DockerService;
+import pl.pastmo.robocker.engine.response.TankInfo;
 import pl.pastmo.robocker.engine.service.GameService;
-import pl.pastmo.robocker.engine.service.MessageService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,10 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 public class TankController {
     @Autowired
     private GameService gameService;
-    @Autowired
-    private DockerService dockerService;
-    @Autowired
-    private MessageService messageService;
 
 
     @RequestMapping(value = "/tank/move", method = RequestMethod.PATCH,
@@ -33,12 +28,11 @@ public class TankController {
         gameService.move(request.getRemoteAddr(), move);
     }
 
-    @RequestMapping(value = "/tank/id", method = RequestMethod.GET,
+    @RequestMapping(value = "/tank/info", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Integer getId() {
+    public TankInfo getInfo(HttpServletRequest request) {
 
-
-       return 42;
+        return gameService.getTankInfo(request.getRemoteAddr());
     }
 
 }
