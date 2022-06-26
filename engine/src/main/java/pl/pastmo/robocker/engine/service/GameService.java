@@ -12,6 +12,7 @@ import pl.pastmo.robocker.engine.response.TankInfo;
 import pl.pastmo.robocker.engine.websocket.TankMsg;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
+import javax.annotation.PostConstruct;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,9 +35,13 @@ public class GameService extends TimerTask {
     }
 
     public GameService(DockerService ds, MessageService messageService) {
-
         this.dockerService = ds;
         this.messageService = messageService;
+    }
+
+    @PostConstruct
+    public void init() {
+        this.messageService.setGameService(this);
     }
 
 

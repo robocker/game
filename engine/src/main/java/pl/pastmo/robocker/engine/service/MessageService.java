@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import pl.pastmo.robocker.engine.websocket.TankRequest;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import java.io.IOException;
@@ -17,17 +18,27 @@ public class MessageService extends TextWebSocketHandler {
 
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
+    private GameService gameService;
+
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws InterruptedException, IOException {
         System.out.println(session.getRemoteAddress());
         System.out.println(message.getPayload());
 
+        TankRequest request = new Gson().fromJson(message.getPayload(), TankRequest.class);
+
+
+
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
+    }
+
+    public void setGameService(GameService gameService){
+        this.gameService = gameService;
     }
 
     public void sendMessage(TankStateMsg tankStateMsg) {
