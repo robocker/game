@@ -16,10 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
-import pl.pastmo.robocker.engine.model.Color;
-import pl.pastmo.robocker.engine.model.Game;
-import pl.pastmo.robocker.engine.model.Player;
-import pl.pastmo.robocker.engine.model.Tank;
+import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.request.Move;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.TankInfo;
@@ -270,7 +267,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(x).setY(y).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(x).setY(y).setWidthX(5).setWidthY(10).setHeight(5).setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 

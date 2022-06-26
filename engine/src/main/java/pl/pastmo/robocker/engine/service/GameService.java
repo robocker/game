@@ -139,7 +139,7 @@ public class GameService extends TimerTask {
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {
                 tank.updatePosition();
-                tanksMsgs.add(TankMsg.fromTank(tank));
+                tanksMsgs.add(TankMsg.fromTank(tank, player));
             }
         }
         this.messageService.sendMessage(tanksMsgs);

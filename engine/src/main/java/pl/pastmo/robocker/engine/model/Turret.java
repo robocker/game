@@ -8,15 +8,17 @@ public class Turret {
         return angle;
     }
 
-    public void setAngle(Double angle) {
+    public Turret setAngle(Double angle) {
         this.angle = angle;
+        return this;
     }
 
     public Double getAngleVertical() {
         return angleVertical;
     }
 
-    public void setAngleVertical(Double angleVertical) {
+    public Turret setAngleVertical(Double angleVertical) {
         this.angleVertical = angleVertical;
+        return this;
     }
 }

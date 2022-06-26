@@ -41,6 +41,8 @@ app.post("/move", (req, res) => {
   debug(req.body);
 
   tank.serveChangeDestination(req.body);
+
+  res.json({msg:'ok'});
 });
 
 app.listen(port, () => {
