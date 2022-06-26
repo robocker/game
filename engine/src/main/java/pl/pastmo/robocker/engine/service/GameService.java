@@ -86,6 +86,10 @@ public class GameService extends TimerTask {
         System.out.println("GameService.getTankInfo ip:" + ip);
        TankInfo result= new TankInfo();
 
+       if(game == null){
+           return result;
+       }
+
         for (Player player : game.getPlayers()) {
 
             for(Tank tank: player.getTanks()) {

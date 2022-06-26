@@ -10,14 +10,16 @@ const WebSocket = require("ws");
 app.use(express.static("frontend/build"));
 app.use(express.json());
 
-const urlBase = 'engine';
+const urlBase = "engine";
 // const urlBase = 'localhost';
 
 const engineUrl = `http://${urlBase}:8080/`;
-const websocketUrl = `ws://${urlBase}:8080`;
+const websocketUrl = `ws://${urlBase}:8080/state`;
 
-const client = connectWebsocket();
-const tank = new Tank(client);
+const tank = new Tank();
+connectWebsocket();
+
+debug('Tank basic start');
 
 axios.get(engineUrl + "/tank/info").then(
   (springMsg) => {
@@ -45,12 +47,15 @@ app.listen(port, () => {
   console.log(`Example app listening at port: ${port}`);
 });
 
-async function connectWebsocket() {
+function connectWebsocket() {
   let client = new WebSocket(websocketUrl);
 
   client.on("message", (msg) => tank.serveStateChange(msg.toString()));
 
-  await new Promise((resolve) => client.once("open", resolve));
+  client.on('open', function open() {
+      tank.setWebsocketClient(client);
+  });
+
 
   return client;
 }

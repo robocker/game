@@ -26,6 +26,10 @@ public class Tank implements MapItem, Containerized {
         idCounter++;
     }
 
+     static public void resetCounter(){
+        idCounter = 1;
+    }
+
     @Override
     public Double getX() {
         return x;

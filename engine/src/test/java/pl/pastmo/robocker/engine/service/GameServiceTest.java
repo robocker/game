@@ -2,6 +2,7 @@ package pl.pastmo.robocker.engine.service;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.google.common.primitives.UnsignedInteger;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +48,11 @@ class GameServiceTest {
     void setUp() {
         gameService = new GameService(dockerServiceMock, messageService);
 
+    }
+
+    @AfterEach
+    void reset(){
+        Tank.resetCounter();
     }
 
     @Captor

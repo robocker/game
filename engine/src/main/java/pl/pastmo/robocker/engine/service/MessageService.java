@@ -20,7 +20,7 @@ public class MessageService extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws InterruptedException, IOException {
-
+        System.out.println(session.getRemoteAddress());
         System.out.println(message.getPayload());
 
     }

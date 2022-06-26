@@ -1,3 +1,5 @@
+const debug = require("debug")("tankBasic:Tank.js");
+
 module.exports = class {
   id;
   playerId;
@@ -5,18 +7,20 @@ module.exports = class {
   requiredDestinetion;
   websoketClient;
 
-  constructor(client) {
-    this.websoketClient = client;
-  }
-
   init(infoData) {
     this.id = infoData.id;
     this.playerId = infoData.playerId;
     console.log(this.id);
   }
 
+  setWebsocketClient(client) {
+    this.websoketClient = client;
+  }
+
   serveStateChange(data) {
-    for (const tank of data.tanks) {
+    const dataObj = JSON.parse(data);
+
+    for (const tank of dataObj.tanks) {
       if (tank.id == this.id) {
         this.currentState = tank;
         break;
@@ -41,10 +45,16 @@ module.exports = class {
       );
 
       //test when commands = [];
-      this.websoketClient.send({
-        tankId: this.id,
-        actions: commands,
-      });
+      debug(this.websoketClient);
+      debug(commands);
+      if (this.websoketClient) {
+        this.websoketClient.send(
+          JSON.stringify({
+            tankId: this.id,
+            actions: commands,
+          })
+        );
+      }
     }
   }
 
@@ -62,12 +72,12 @@ module.exports = class {
 
     let newAngle = Math.atan(tan);
 
-    if(xDiff < 0 && yDiff > 0){
-        newAngle += Math.PI;
+    if (xDiff < 0 && yDiff > 0) {
+      newAngle += Math.PI;
     }
 
-    if(xDiff < 0 && yDiff < 0){
-        newAngle -= Math.PI;
+    if (xDiff < 0 && yDiff < 0) {
+      newAngle -= Math.PI;
     }
 
     if (newAngle !== current.angle) {
