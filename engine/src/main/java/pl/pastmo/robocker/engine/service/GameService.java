@@ -4,12 +4,15 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.google.common.primitives.UnsignedInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.pastmo.robocker.engine.model.*;
-import pl.pastmo.robocker.engine.request.*;
+import pl.pastmo.robocker.engine.model.Containerized;
+import pl.pastmo.robocker.engine.model.Game;
+import pl.pastmo.robocker.engine.model.Player;
+import pl.pastmo.robocker.engine.model.Tank;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
 import pl.pastmo.robocker.engine.response.TankInfo;
 import pl.pastmo.robocker.engine.websocket.TankMsg;
+import pl.pastmo.robocker.engine.websocket.TankRequest;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import javax.annotation.PostConstruct;
@@ -110,20 +113,13 @@ public class GameService extends TimerTask {
         return result;
     }
 
-    public void move(String ip, Move destination) {
+    public void move(String ip, TankRequest request) {
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {
-                if (tank.getIps().contains(ip)) {
-                    tank.setDestination(destination);
+                if (tank.getId() == request.getTankId()) {
+                    System.out.println(tank.getIps());
+                    tank.setTankRequest(request);
                 }
-            }
-        }
-    }
-
-    public void moveAll(Move destination) {
-        for (Player player : game.getPlayers()) {
-            for (Tank tank : player.getTanks()) {
-                tank.setDestination(destination);
             }
         }
     }

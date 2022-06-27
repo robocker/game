@@ -5,21 +5,23 @@ import java.util.List;
 public class TankRequest {
 
     Integer tankId;
-    List<Actions> actions;
+    List<Action> actions;
 
     public Integer getTankId() {
         return tankId;
     }
 
-    public void setTankId(Integer tankId) {
+    public TankRequest setTankId(Integer tankId) {
         this.tankId = tankId;
+        return this;
     }
 
-    public List<Actions> getActions() {
+    public List<Action> getActions() {
         return actions;
     }
 
-    public void setActions(List<Actions> actions) {
+    public TankRequest setActions(List<Action> actions) {
         this.actions = actions;
+        return this;
     }
 }

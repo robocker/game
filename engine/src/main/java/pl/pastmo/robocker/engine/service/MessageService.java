@@ -28,7 +28,7 @@ public class MessageService extends TextWebSocketHandler {
 
         TankRequest request = new Gson().fromJson(message.getPayload(), TankRequest.class);
 
-
+        gameService.move(session.getRemoteAddress().toString(), request);
 
     }
 
@@ -37,7 +37,7 @@ public class MessageService extends TextWebSocketHandler {
         sessions.add(session);
     }
 
-    public void setGameService(GameService gameService){
+    public void setGameService(GameService gameService) {
         this.gameService = gameService;
     }
 

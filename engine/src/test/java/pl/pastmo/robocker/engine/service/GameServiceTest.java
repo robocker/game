@@ -17,11 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
 import pl.pastmo.robocker.engine.model.*;
-import pl.pastmo.robocker.engine.request.Move;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.TankInfo;
+import pl.pastmo.robocker.engine.websocket.Action;
+import pl.pastmo.robocker.engine.websocket.TankRequest;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -48,7 +50,7 @@ class GameServiceTest {
     }
 
     @AfterEach
-    void reset(){
+    void reset() {
         Tank.resetCounter();
     }
 
@@ -185,7 +187,7 @@ class GameServiceTest {
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
-        player.setColor(new Color(0.0f,1.0f,0.0f));
+        player.setColor(new Color(0.0f, 1.0f, 0.0f));
         player.addIp("1.1.1.1");
 
         Tank tank = new Tank();
@@ -212,7 +214,7 @@ class GameServiceTest {
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
-        player.setColor(new Color(0.0f,1.0f,0.0f));
+        player.setColor(new Color(0.0f, 1.0f, 0.0f));
         player.addIp("1.1.1.1");
         game.addPlayer(player);
 
@@ -231,7 +233,7 @@ class GameServiceTest {
         TankInfo info = gameService.getTankInfo("2.2.2.2");
 
         assertEquals(info.id, 1);
-        assertEquals(info.playerId,2);
+        assertEquals(info.playerId, 2);
     }
 
     @Test
@@ -249,57 +251,99 @@ class GameServiceTest {
 
         gameService.setGame(game);
 
-        Move move = new Move(100.0, 200.0);
-        gameService.move("2.2.2.2", move);
+        TankRequest request= new TankRequest().setTankId(1).setActions(List.of((new Action()).setDistance(1)));
+        gameService.move("2.2.2.2", request);
 
-        assertEquals(tank.getDestination().getX(), 100.0);
-        assertEquals(tank.getDestination().getY(), 200.0);
+        assertEquals(tank.getSteps().size(), 1);
 
     }
 
     @ParameterizedTest
-    @MethodSource("stringIntAndListProvider")
-    public void doTick(double x, double y, double destinationX, double destinationY,
-                       double resultX, double resultY) throws ConfigurationException {
+    @MethodSource("actionsProvider")
+    public void setAction(List<Action> actions, Tank tank, Double[][] expected) throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        gameService.setGame(game);
+
+        TankRequest request = new TankRequest();
+        request.setActions(actions);
+
+        tank.setTankRequest(request);
+
+        LinkedList<Step> steps = tank.getSteps();
+
+        for (int i = 0; i < expected.length; i++) {
+            Double[] expect = expected[i];
+
+            Step step = steps.get(i);
+
+            assertEquals(expect[0], step.x, Tank.distanceTolerance);
+            assertEquals(expect[1], step.y, Tank.distanceTolerance);
+            assertEquals(expect[2], step.angle);
+            assertEquals(expect[3], step.howManyTimes);
+
+        }
+
+    }
+
+    static Stream<Arguments> actionsProvider() {
+        return Stream.of(
+                Arguments.arguments(List.of((new Action()).setDistance(1)), (new Tank()), new Double[][]{{0.1, 0.0, 0d, 10d}}),
+                Arguments.arguments(List.of((new Action()).setDistance(1.05)), (new Tank()), new Double[][]{{0.1, 0.0, 0d, 10d}, {0.05, 0.0, 0d, 1d}}),
+                Arguments.arguments(List.of((new Action()).setDistance(1.05)), (new Tank()), new Double[][]{{0.1, 0.0, 0d, 10d}, {0.05, 0.0, 0d, 1d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)), (new Tank().setAngle(Math.PI / 2)), new Double[][]{{0.0, 0.1, 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)), (new Tank().setAngle(Math.PI)), new Double[][]{{-0.1, 0.0, 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)), (new Tank().setAngle(Math.PI * 1.5)), new Double[][]{{0.0, -0.1, 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)),
+                        (new Tank().setAngle(Math.PI / 4)), new Double[][]{{0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2), 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)),
+                        (new Tank().setAngle(Math.PI * 3 / 4)), new Double[][]{{-0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2), 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)),
+                        (new Tank().setAngle(Math.PI * 5 / 4)), new Double[][]{{-0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2), 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(1.0)),
+                        (new Tank().setAngle(-Math.PI / 4)), new Double[][]{{0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2), 0d, 10d}}),
+                Arguments.arguments(List.of((new Action()).setAngle(Math.PI / 3)), (new Tank()), new Double[][]{{0d, 0d, Math.PI / 24, 8d}}),
+                Arguments.arguments(List.of((new Action()).setAngle(-Math.PI / 3)), (new Tank()), new Double[][]{{0d, 0d, -Math.PI / 24, 8d}}),
+                Arguments.arguments(List.of((new Action()).setAngle(0.1)), (new Tank()), new Double[][]{{0d, 0d, 0.1, 1d}}),
+                Arguments.arguments(List.of((new Action()).setAngle(-0.1)), (new Tank()), new Double[][]{{0d, 0d, -0.1, 1d}})
+        );
+    }
+
+    @Test
+    public void doTick() throws ConfigurationException {
         Game game = new Game();
 
         Player player = new Player(gameService.getNewPlayerId());
 
         Tank tank = new Tank();
 
-        tank.setX(x).setY(y).setWidthX(5).setWidthY(10).setHeight(5).setTurret(new Turret());
+        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5).setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 
         gameService.setGame(game);
 
-        tank.setDestination(new Move(destinationX, destinationY));
+        tank.getSteps().add(new Step().setX(0.1).setHowManyTimes(2));
+        tank.getSteps().add(new Step().setAngle(0.1).setHowManyTimes(1));
 
         gameService.doTick();
+        assertEquals(0.1, tank.getX(), 0.001);
 
-        assertEquals(resultX, tank.getX(), 0.001);
-        assertEquals(resultY, tank.getY(), 0.001);
+        gameService.doTick();
+        assertEquals(0.2, tank.getX(), 0.001);
+
+        gameService.doTick();
+        assertEquals(0.1, tank.getAngle(), 0.001);
+
+        assertEquals(0, tank.getSteps().size());
+
 
     }
 
-    static Stream<Arguments> stringIntAndListProvider() {
-        return Stream.of(
-                Arguments.arguments(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
-                Arguments.arguments(0.0, 0.0, 10.0, 0.0, 0.1, 0.0),
-                Arguments.arguments(0.0, 0.0, -10.0, 0.0, -0.1, 0.0),
-                Arguments.arguments(0.0, 0.0, 0.0, 10.0, 0.0, 0.1),
-                Arguments.arguments(0.0, 0.0, 0.0, -10.0, 0.0, -0.1),
-                Arguments.arguments(0.0, 0.0, 10.0, 10.0, 0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2)),
-                Arguments.arguments(0.0, 0.0, -10.0, 10.0, -0.1 / Math.sqrt(2), 0.1 / Math.sqrt(2)),
-                Arguments.arguments(0.0, 0.0, -10.0, -10.0, -0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
-                Arguments.arguments(0.0, 0.0, 10.0, -10.0, 0.1 / Math.sqrt(2), -0.1 / Math.sqrt(2)),
-                Arguments.arguments(4.5, -2.0, 10.0, 10.0, 4.541, -1.909),
-                Arguments.arguments(0.104, 0.104, 0.109, 0.109, 0.109, 0.109),
-                Arguments.arguments(-0.104, -0.104, -0.109, -0.109, -0.109, -0.109),
-                Arguments.arguments(0.104, 0.104, 0.101, 0.101, 0.101, 0.101),
-                Arguments.arguments(-0.104, -0.104, -0.101, -0.101, -0.101, -0.101)
-        );
-    }
 
     private void mockCreateContainer() {
         when(dockerServiceMock.createCotnainer(any(), any(), any(), any()))

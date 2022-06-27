@@ -1,7 +1,8 @@
 package pl.pastmo.robocker.engine.model;
 
 import com.google.common.primitives.UnsignedInteger;
-import pl.pastmo.robocker.engine.request.Move;
+import pl.pastmo.robocker.engine.websocket.Action;
+import pl.pastmo.robocker.engine.websocket.TankRequest;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,15 +19,19 @@ public class Tank implements MapItem, Containerized {
     private Integer widthY = 15;
     private Integer height = 10;
     private List<String> ips = new LinkedList<>();
-    private Move destination;
-    private static final double tankFast = 0.1;
+    private TankRequest actions;
+    private LinkedList<Step> steps = new LinkedList<Step>();
+    public static final double tankSpeed = 0.1;
+    public static final double distanceTolerance = 0.001;
+    public static final double rotationTolerance = Math.PI / 180;
+    public static final double rotationSpeed = Math.PI / 24;
 
     public Tank() {
         this.id = idCounter;
         idCounter++;
     }
 
-     static public void resetCounter(){
+    static public void resetCounter() {
         idCounter = 1;
     }
 
@@ -151,52 +156,74 @@ public class Tank implements MapItem, Containerized {
                 '}';
     }
 
-    public Move getDestination() {
-        return destination;
+    public TankRequest getActions() {
+        return actions;
     }
 
     public void updatePosition() {
-        if (destination != null && (!x.equals(destination.getX()) || !y.equals(destination.getY()))) {
 
-            double xDiff = destination.getX() - x;
-            double yDiff = destination.getY() - y;
+        for (Step step : steps) {
 
-            double arc = 0.0;
+            if (step.howManyTimes > 0) {
+                x += step.x;
+                y += step.y;
+                angle += step.angle;
+                step.howManyTimes--;
 
-            if (xDiff == 0.0 && yDiff == 0) {
-                return;
-            } else if (xDiff == 0.0 && yDiff > 0) {
-                arc = Math.PI / 2;
-            } else if (xDiff == 0.0 && yDiff < 0) {
-                arc = -Math.PI / 2;
-            } else {
-                arc = Math.atan(yDiff / xDiff);
+                if (step.howManyTimes == 0) {
+                    steps.remove(step);
+                }
+                break;
             }
 
-            if (xDiff < 0) {
-                arc = arc + Math.PI;
-            }
 
-            double changeX = Math.cos(arc) * tankFast;
-            double changeY = Math.sin(arc) * tankFast;
-
-            if (this.isExceededDestination(changeX, xDiff)) {
-                x = destination.getX();
-            } else {
-                x += changeX;
-            }
-            if (this.isExceededDestination(changeY, yDiff)) {
-                y = destination.getY();
-            } else {
-                y += changeY;
-            }
-
-//            System.out.println("tank:" + id + " x:" + x + " y:" + y);
         }
+
     }
 
-    public void setDestination(Move destination) {
-        this.destination = destination;
+    public LinkedList<Step> getSteps() {
+        return steps;
+    }
+
+    public void setTankRequest(TankRequest requests) {
+        this.actions = actions;
+
+        this.steps = new LinkedList<>();
+
+        for (Action action : requests.getActions()) {
+            double newAngle = action.getAngle();
+            double distance = action.getDistance();
+            if (newAngle != 0) {
+
+                int howMany = (int) Math.abs(newAngle / rotationSpeed);
+
+                if (howMany > 0) {
+                    if (newAngle > 0)
+                        this.steps.add(new Step().setAngle(rotationSpeed).setHowManyTimes(howMany));
+                    else {
+                        this.steps.add(new Step().setAngle(-rotationSpeed).setHowManyTimes(howMany));
+                    }
+                }
+
+                double rest = newAngle - (howMany * rotationSpeed);
+
+                if (Math.abs(rest) > rotationTolerance) {
+                    this.steps.add(new Step().setAngle(rest).setHowManyTimes(1));
+                }
+
+            } else if (distance != 0) {
+                double changeX = Math.cos(angle) * tankSpeed;
+                double changeY = Math.sin(angle) * tankSpeed;
+                int howMany = (int) (distance / tankSpeed);
+
+                this.steps.add(new Step().setX(changeX).setY(changeY).setHowManyTimes(howMany));
+
+                double rest = distance - (howMany * tankSpeed);
+                if (Math.abs(rest) > distanceTolerance) {
+                    this.steps.add(new Step().setX(Math.cos(angle) * rest).setY(Math.sin(angle) * rest).setHowManyTimes(1));
+                }
+            }
+        }
     }
 
     private boolean isExceededDestination(double computedChange, double rawDiff) {

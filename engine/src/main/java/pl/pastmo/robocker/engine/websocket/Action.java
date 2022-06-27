@@ -1,6 +1,6 @@
 package pl.pastmo.robocker.engine.websocket;
 
-public class Actions {
+public class Action {
     double angle = 0d;
     double distance = 0d;
 
@@ -8,15 +8,17 @@ public class Actions {
         return angle;
     }
 
-    public void setAngle(double angle) {
+    public Action setAngle(double angle) {
         this.angle = angle;
+        return this;
     }
 
     public double getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public Action setDistance(double distance) {
         this.distance = distance;
+        return this;
     }
 }
