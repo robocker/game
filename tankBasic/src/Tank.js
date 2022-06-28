@@ -45,7 +45,6 @@ module.exports = class {
       );
 
       //test when commands = [];
-      debug(this.websoketClient);
       debug(commands);
       if (this.websoketClient) {
         this.websoketClient.send(
@@ -59,6 +58,7 @@ module.exports = class {
   }
 
   computeActions(current, required) {
+    debug(current, required);
     const commands = [];
 
     if (current.x === required.x && current.y === required.y) {
@@ -68,9 +68,12 @@ module.exports = class {
     const yDiff = required.y - current.y;
     const xDiff = required.x - current.x;
 
+    debug('dif:',xDiff,yDiff);
+
     const tan = yDiff / xDiff;
 
     let newAngle = Math.atan(tan);
+    debug('newAngle:',newAngle);
 
     if (xDiff < 0 && yDiff > 0) {
       newAngle += Math.PI;
@@ -80,10 +83,14 @@ module.exports = class {
       newAngle -= Math.PI;
     }
 
+
     if (newAngle !== current.angle) {
+        debug({newAngle, currentAngle:current.angle});
       commands.push({ angle: newAngle - current.angle });
     } else if (xDiff < 0 && yDiff == 0) {
+        debug({currentAngle:current.angle});
       commands.push({ angle: Math.PI / 2 - current.angle });
+
     }
 
     const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);

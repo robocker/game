@@ -19,7 +19,7 @@ export class AxiosManager {
                         id: "1",
                         imageName: "robocker/tankbasic",
                         insidePortNumber: 80,
-                        angle: Math.PI / 4,
+                        angle: 0,
                         turret: {
                           angle: 0,
                           angleVertical: Math.PI / 8,

@@ -48,7 +48,7 @@ export class GameManager {
       if (tankData) {
         SPS.mesh.position.z = tankData.y;
         SPS.mesh.position.x = tankData.x;
-        SPS.mesh.rotation.y = tankData.angle;
+        SPS.mesh.rotation.y = -tankData.angle;
         SPS.setParticles();
       }
 
@@ -109,7 +109,8 @@ export class GameManager {
         tank.mesh.position.z = tankData.y;
         tank.mesh.position.x = tankData.x;
 
-        tank.particles[1].rotation.y -= Math.PI / 180;
+        tank.mesh.rotation.y = -tankData.angle;
+        // tank.particles[1].rotation.y -= Math.PI / 180;
         tank.setParticles();
       }
     }

@@ -7,6 +7,7 @@ describe("Tank", () => {
   beforeEach(() => {
     client = { send: jest.fn() };
     tank = new Tank(client);
+    tank.setWebsocketClient(client);
 
     tank.init({ id: 42, playerId: 1024 });
   });
@@ -17,7 +18,7 @@ describe("Tank", () => {
   });
 
   test("should save current position", () => {
-    tank.serveStateChange({
+    tank.serveStateChange(JSON.stringify({
       tanks: [
         {
           id: 1,
@@ -42,7 +43,7 @@ describe("Tank", () => {
           y: 54.2,
         },
       ],
-    });
+    }));
 
     expect(tank.currentState).toStrictEqual({
       id: 42,
@@ -66,7 +67,8 @@ describe("Tank", () => {
   });
 
   it("should serveChangeDestination sendncorrect path- along X", () => {
-    tank.serveStateChange({
+    tank.serveStateChange(
+        JSON.stringify({
       tanks: [
         {
           id: 42,
@@ -80,17 +82,10 @@ describe("Tank", () => {
           y: 5,
         },
       ],
-    });
+    }));
     tank.serveChangeDestination({ x: 30, y: 5 });
 
-    expect(client.send).toHaveBeenCalledWith({
-      tankId: 42,
-      actions: [
-        {
-          distance: 28,
-        },
-      ],
-    });
+    expect(client.send).toHaveBeenCalledWith('{\"tankId\":42,\"actions\":[{\"distance\":28}]}');
   });
 
   it("should computeActions made correct commands: any move", () => {

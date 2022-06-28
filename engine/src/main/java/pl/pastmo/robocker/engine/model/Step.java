@@ -25,4 +25,14 @@ public class Step {
         this.howManyTimes = howManyTimes;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+                "x=" + x +
+                ", y=" + y +
+                ", angle=" + angle +
+                ", howManyTimes=" + howManyTimes +
+                '}';
+    }
 }

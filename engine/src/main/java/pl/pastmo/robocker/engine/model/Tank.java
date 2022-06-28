@@ -170,6 +170,13 @@ public class Tank implements MapItem, Containerized {
                 angle += step.angle;
                 step.howManyTimes--;
 
+                if (angle >= Math.PI * 2) {
+                    angle -= Math.PI * 2;
+                }
+                if (angle < 0) {
+                    angle += Math.PI * 2;
+                }
+
                 if (step.howManyTimes == 0) {
                     steps.remove(step);
                 }
@@ -224,6 +231,7 @@ public class Tank implements MapItem, Containerized {
                 }
             }
         }
+        System.out.println(steps);
     }
 
     private boolean isExceededDestination(double computedChange, double rawDiff) {

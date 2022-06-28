@@ -251,7 +251,7 @@ class GameServiceTest {
 
         gameService.setGame(game);
 
-        TankRequest request= new TankRequest().setTankId(1).setActions(List.of((new Action()).setDistance(1)));
+        TankRequest request = new TankRequest().setTankId(1).setActions(List.of((new Action()).setDistance(1)));
         gameService.move("2.2.2.2", request);
 
         assertEquals(tank.getSteps().size(), 1);
@@ -340,6 +340,33 @@ class GameServiceTest {
         assertEquals(0.1, tank.getAngle(), 0.001);
 
         assertEquals(0, tank.getSteps().size());
+
+
+    }
+
+    @Test
+    public void doTick_passing_2PI() throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+
+        Tank tank = new Tank();
+
+        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(2 * Math.PI - 0.05)
+                .setHeight(5).setTurret(new Turret());
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        gameService.setGame(game);
+
+        tank.getSteps().add(new Step().setAngle(0.1).setHowManyTimes(1));
+        tank.getSteps().add(new Step().setAngle(-0.1).setHowManyTimes(1));
+
+        gameService.doTick();
+        assertEquals(0.05, tank.getAngle(), 0.001);
+
+        gameService.doTick();
+        assertEquals(2 * Math.PI - 0.05, tank.getAngle(), 0.001);
 
 
     }
