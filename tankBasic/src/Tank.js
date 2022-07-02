@@ -89,7 +89,7 @@ module.exports = class {
       commands.push({ angle: newAngle - current.angle });
     } else if (xDiff < 0 && yDiff == 0) {
         debug({currentAngle:current.angle});
-      commands.push({ angle: Math.PI / 2 - current.angle });
+      commands.push({ angle: Math.PI });
 
     }
 

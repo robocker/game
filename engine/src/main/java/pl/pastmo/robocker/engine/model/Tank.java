@@ -193,7 +193,6 @@ public class Tank implements MapItem, Containerized {
     }
 
     public void setTankRequest(TankRequest requests) {
-        this.actions = actions;
 
         this.steps = new LinkedList<>();
 

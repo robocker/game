@@ -22,10 +22,10 @@ export class AxiosManager {
                         angle: 0,
                         turret: {
                           angle: 0,
-                          angleVertical: Math.PI / 8,
+                          angleVertical: 0,
                         },
                         x: -10,
-                        y: 10,
+                        y: 0,
                       },
                       {
                         containerName: "tank-2",
@@ -38,6 +38,19 @@ export class AxiosManager {
                           angleVertical: Math.PI / 4,
                         },
                         x: 0,
+                        y: 0,
+                      },
+                      {
+                        containerName: "tank-4",
+                        id: "4",
+                        imageName: "robocker/tankbasic",
+                        insidePortNumber: 80,
+                        angle: -Math.PI,
+                        turret: {
+                          angle: 0,
+                          angleVertical: Math.PI / 4,
+                        },
+                        x: 10,
                         y: 0,
                       },
                     ],

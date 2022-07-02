@@ -104,7 +104,8 @@ export class GameManager {
 
       if (
         tank.mesh.position.z !== tankData.y ||
-        tank.mesh.position.x !== tankData.x
+        tank.mesh.position.x !== tankData.x ||
+        tank.mesh.rotation.y !== -tankData.angle
       ) {
         tank.mesh.position.z = tankData.y;
         tank.mesh.position.x = tankData.x;

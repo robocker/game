@@ -5,6 +5,7 @@ debug("start mock engine");
 
 const server = new WebSocket.Server({
   port: 8080,
+  path: "/state",
 });
 let sockets = [];
 server.on("connection", function (socket) {
@@ -20,19 +21,25 @@ server.on("connection", function (socket) {
   });
 });
 
+let angle4 = 0;
+
 setInterval(() => {
+  angle4 += Math.PI / 12;
+  if (angle4 > Math.PI * 2) {
+    angle4 = 0;
+  }
   const msg = {
     tanks: [
       {
         id: 1,
         playerId: 1,
-        angle: Math.PI / 4,
+        angle: 0,
         turret: {
           angle: 0,
           angleVertical: Math.PI / 8,
         },
         x: -10,
-        y: 10,
+        y: 0,
       },
       {
         id: 2,
@@ -45,9 +52,20 @@ setInterval(() => {
         x: 0,
         y: 0,
       },
+      {
+        id: 4,
+        playerId: 1,
+        angle: angle4,
+        turret: {
+          angle: Math.PI / 4,
+          angleVertical: Math.PI / 4,
+        },
+        x: 10,
+        y: 0,
+      },
     ],
   };
 
-//   debug(JSON.stringify(msg));
+  //   debug(JSON.stringify(msg));
   sockets.forEach((s) => s.send(JSON.stringify(msg)));
 }, 1000);
