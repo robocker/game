@@ -195,46 +195,57 @@ public class Tank implements MapItem, Containerized {
     public void setTankRequest(TankRequest requests) {
 
         this.steps = new LinkedList<>();
+        double stepAngle = angle;
 
         for (Action action : requests.getActions()) {
             double newAngle = action.getAngle();
             double distance = action.getDistance();
+            stepAngle += newAngle;
+
             if (newAngle != 0) {
 
                 int howMany = (int) Math.abs(newAngle / rotationSpeed);
 
                 if (howMany > 0) {
-                    if (newAngle > 0)
+
+                    if (newAngle > 0) {
                         this.steps.add(new Step().setAngle(rotationSpeed).setHowManyTimes(howMany));
-                    else {
+
+                    } else {
                         this.steps.add(new Step().setAngle(-rotationSpeed).setHowManyTimes(howMany));
                     }
                 }
 
-                double rest = newAngle - (howMany * rotationSpeed);
+                double rest = 0;
+                if (newAngle > 0) {
+                    rest = newAngle - (howMany * rotationSpeed);
+                } else {
+                    rest = newAngle - (howMany * (-rotationSpeed));
+                }
 
                 if (Math.abs(rest) > rotationTolerance) {
                     this.steps.add(new Step().setAngle(rest).setHowManyTimes(1));
                 }
 
+
             } else if (distance != 0) {
-                double changeX = Math.cos(angle) * tankSpeed;
-                double changeY = Math.sin(angle) * tankSpeed;
-                int howMany = (int) (distance / tankSpeed);
+                double currentSpeed = tankSpeed;
+                if (distance < 0) {
+                    currentSpeed = -currentSpeed;
+                }
+                double changeX = Math.cos(stepAngle) * currentSpeed;
+                double changeY = Math.sin(stepAngle) * currentSpeed;
+                int howMany = (int) (distance / currentSpeed);
 
                 this.steps.add(new Step().setX(changeX).setY(changeY).setHowManyTimes(howMany));
 
-                double rest = distance - (howMany * tankSpeed);
+                double rest = distance - (howMany * currentSpeed);
                 if (Math.abs(rest) > distanceTolerance) {
-                    this.steps.add(new Step().setX(Math.cos(angle) * rest).setY(Math.sin(angle) * rest).setHowManyTimes(1));
+                    this.steps.add(new Step().setX(Math.cos(stepAngle) * rest).setY(Math.sin(stepAngle) * rest).setHowManyTimes(1));
                 }
             }
         }
         System.out.println(steps);
-    }
-
-    private boolean isExceededDestination(double computedChange, double rawDiff) {
-        return (computedChange > 0 && computedChange > rawDiff) || (computedChange < 0 && computedChange < rawDiff);
     }
 
 

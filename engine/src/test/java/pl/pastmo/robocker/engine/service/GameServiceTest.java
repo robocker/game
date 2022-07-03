@@ -296,6 +296,7 @@ class GameServiceTest {
                 Arguments.arguments(List.of((new Action()).setDistance(1.05)), (new Tank()), new Double[][]{{0.1, 0.0, 0d, 10d}, {0.05, 0.0, 0d, 1d}}),
                 Arguments.arguments(List.of((new Action()).setDistance(1.05)), (new Tank()), new Double[][]{{0.1, 0.0, 0d, 10d}, {0.05, 0.0, 0d, 1d}}),
                 Arguments.arguments(List.of(new Action().setDistance(1.0)), (new Tank().setAngle(Math.PI / 2)), new Double[][]{{0.0, 0.1, 0d, 10d}}),
+                Arguments.arguments(List.of(new Action().setDistance(-1.0)), (new Tank().setAngle(Math.PI / 2)), new Double[][]{{0.0, -0.1, 0d, 10d}}),
                 Arguments.arguments(List.of(new Action().setDistance(1.0)), (new Tank().setAngle(Math.PI)), new Double[][]{{-0.1, 0.0, 0d, 10d}}),
                 Arguments.arguments(List.of(new Action().setDistance(1.0)), (new Tank().setAngle(Math.PI * 1.5)), new Double[][]{{0.0, -0.1, 0d, 10d}}),
                 Arguments.arguments(List.of(new Action().setDistance(1.0)),
@@ -309,7 +310,10 @@ class GameServiceTest {
                 Arguments.arguments(List.of((new Action()).setAngle(Math.PI / 3)), (new Tank()), new Double[][]{{0d, 0d, Math.PI / 24, 8d}}),
                 Arguments.arguments(List.of((new Action()).setAngle(-Math.PI / 3)), (new Tank()), new Double[][]{{0d, 0d, -Math.PI / 24, 8d}}),
                 Arguments.arguments(List.of((new Action()).setAngle(0.1)), (new Tank()), new Double[][]{{0d, 0d, 0.1, 1d}}),
-                Arguments.arguments(List.of((new Action()).setAngle(-0.1)), (new Tank()), new Double[][]{{0d, 0d, -0.1, 1d}})
+                Arguments.arguments(List.of((new Action()).setAngle(-0.1)), (new Tank()), new Double[][]{{0d, 0d, -0.1, 1d}}),
+                Arguments.arguments(List.of(new Action().setAngle(-Math.PI / 4), new Action().setDistance(5)),
+                        (new Tank().setAngle(Math.PI / 2)),
+                        new Double[][]{{0d, 0d, -Math.PI / 24, 6d}, {0.1d / Math.sqrt(2), 0.1d / Math.sqrt(2), 0d, 50d}})
         );
     }
 
