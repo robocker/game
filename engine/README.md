@@ -1,3 +1,13 @@
+# Creating image #
+There is two options:
+## Compilation during bulding image ##
+
+Creating docker container
+```
+sudo docker build -t robocker/engine .
+```
+
+## Compilation by Intellij ##
 Making package (In IntelliJ Terminal):
 ```
 ./mvnw.cmd package
@@ -5,25 +15,30 @@ Making package (In IntelliJ Terminal):
 ./mvnw.cmd package && java -jar target/engine-0.0.1-SNAPSHOT.jar
 ```
 
-Creating docker container
 ```
-sudo docker build -t robocker/engine .
+sudo docker build -t robocker/engine -f DockerfileDev .
 ```
 
-Simple running
+
+# Simple running #
+## Start engine ##
 ```
 sudo docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
-##in other window:
+## in other terminal window:
 sudo docker network connect --alias engine robocker-net engine
 ```
-/http://localhost:8080/containers/demo create robocker-net network. You can run it first and later connect engine with robocker-net
+You can check if works in browser: http://localhost:8080/
 
-Stopping all containers:
+## Run demo game ##
+
+Go to: http://localhost:8080/containers/demo
+
+# Stopping all containers #
 ```
 sudo docker stop $(sudo docker ps -a -q)
 ```
 
-### Articles: ###
+## Articles ##
 
 Running containers by Java:
   * https://www.baeldung.com/docker-java-api

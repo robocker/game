@@ -67,6 +67,16 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   #   apt-get install -y apache2
   # SHELL
+    config.vm.network "forwarded_port", guest: 8080, host: 8080
+    config.vm.network "forwarded_port", guest: 3000, host: 3000
+    config.vm.network "forwarded_port", guest: 3001, host: 3001
+
+    config.vm.synced_folder ".", "/vagrant", create: true
+
+   config.vagrant.plugins = "vagrant-docker-compose"
+
+   config.vm.provision :docker
+   config.vm.provision :docker_compose
 
    config.vm.define 'vm' do |node|
      node.vm.provider "virtualbox" do |v|
