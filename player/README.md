@@ -1,18 +1,13 @@
-Running localy with debugger
+
+# Creating docker container #
 
 ```
-DEBUG=player:* node index.js
-```
-
-Creating docker container:
-
-```
-# on Windows
-yarn build
-# on docker host- linux
 sudo docker build -t robocker/player .
 ```
 
+# Running #
+
+In normal flow 'engine' is responsible for running other containers but you can run it manually for testing if you wish.
 
 Running docker container:
 ```
@@ -46,4 +41,15 @@ Entering into container
 sudo docker exec -it player-1 /bin/bash
 ```
 
+# Running localy with debugger (e.g. in Git bash) #
+
+Download dependencies and build ui
+```
+yarn
+yarn build
+```
+Running
+```
+DEBUG=player:* node index.js
+```
 Inspiration links: https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
