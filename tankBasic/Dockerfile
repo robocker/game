@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY index.js ./
-COPY src/Tank.js ./src/
+COPY src/* ./src/
 
 EXPOSE 80
 CMD ["node","index.js"]

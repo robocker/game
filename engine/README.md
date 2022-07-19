@@ -22,6 +22,12 @@ sudo docker build -t robocker/engine -f DockerfileDev .
 
 # Simple running #
 ## Start engine ##
+
+First time is required to create network:
+```
+docker network create -d bridge robocker-net
+```
+Later:
 ```
 sudo docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
 ## in other terminal window:
@@ -31,7 +37,9 @@ You can check if works in browser: http://localhost:8080/
 
 ## Run demo game ##
 
-Go to: http://localhost:8080/containers/demo
+Just open: http://localhost:8080/containers/demo
+
+Then you can open players` views using returned ports e.g. for player1 it should be http://localhost:3000/
 
 # Stopping all containers #
 ```
