@@ -28,6 +28,7 @@ public class Tank implements MapItem, Containerized {
 
     public Tank() {
         this.id = idCounter;
+        this.turret = new Turret();
         idCounter++;
     }
 
@@ -198,6 +199,9 @@ public class Tank implements MapItem, Containerized {
         double stepAngle = angle;
 
         for (Action action : requests.getActions()) {
+
+            StepTurret turretStep = turret.computeSteps(action.getTurret());
+
             double newAngle = action.getAngle();
             double distance = action.getDistance();
             stepAngle += newAngle;

@@ -1,10 +1,11 @@
 package pl.pastmo.robocker.engine.model;
 
-public class Step {
+public class Step extends StepTurret {
     public double x;
     public double y;
     public double angle;
     public int howManyTimes;
+
 
     public Step setX(double x) {
         this.x = x;
@@ -32,6 +33,9 @@ public class Step {
                 "x=" + x +
                 ", y=" + y +
                 ", angle=" + angle +
+                ", turretAngle=" + turretAngle +
+                ", turretVerticalAngle=" + turretVerticalAngle +
+                ", shootType=" + shootType +
                 ", howManyTimes=" + howManyTimes +
                 '}';
     }
