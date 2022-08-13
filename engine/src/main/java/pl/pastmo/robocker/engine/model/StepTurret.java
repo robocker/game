@@ -10,6 +10,7 @@ public class StepTurret {
     public double turretVerticalAngle;
     public ShootType shootType = ShootType.FALSE;
     private LinkedList<Step> steps = new LinkedList<Step>();
+    private LinkedList<Step> allSteps = new LinkedList<Step>();
 
     public Step createNewStep() {
         Step step = new Step();
@@ -21,12 +22,15 @@ public class StepTurret {
         return step;
     }
 
-    public void updateShootTypeInCurrentAction(){
+    public void updateShootTypeInCurrentAction() {
 
-        if(this.shootType == ShootType.NOW){
-            this.steps.getFirst().setShootType(ShootType.NOW);
+        if (this.steps.size() == 0) {
+            this.allSteps.add(this.createNewStep());
         }
-        if(this.shootType == ShootType.END_OF_ACTION){
+
+        if (this.shootType == ShootType.NOW) {
+            this.steps.getFirst().setShootType(ShootType.NOW);
+        } else if (this.shootType == ShootType.END_OF_ACTION) {
             this.steps.getLast().setShootType(ShootType.END_OF_ACTION);
         }
 
@@ -47,5 +51,7 @@ public class StepTurret {
         return this;
     }
 
-
+    public void setAllSteps(LinkedList<Step> steps) {
+        this.allSteps = steps;
+    }
 }

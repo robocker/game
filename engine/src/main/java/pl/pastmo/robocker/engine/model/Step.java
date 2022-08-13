@@ -1,5 +1,7 @@
 package pl.pastmo.robocker.engine.model;
 
+import pl.pastmo.robocker.engine.websocket.ShootType;
+
 public class Step extends StepTurret {
     public double x;
     public double y;
@@ -24,6 +26,21 @@ public class Step extends StepTurret {
 
     public Step setHowManyTimes(int howManyTimes) {
         this.howManyTimes = howManyTimes;
+        return this;
+    }
+
+    public Step setTurretAngle(double turretAngle) {
+        this.turretAngle = turretAngle;
+        return this;
+    }
+
+    public Step setTurretVerticalAngle(double turretVerticalAngle) {
+        this.turretVerticalAngle = turretVerticalAngle;
+        return this;
+    }
+
+    public Step setShootType(ShootType shootType) {
+        this.shootType = shootType;
         return this;
     }
 

@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.websocket.ShootType;
 
+import java.util.LinkedList;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,5 +63,26 @@ public class StepTurretTest {
                 Arguments.arguments(ShootType.END_OF_ACTION, 2)
         );
     }
+
+    @Test
+    public void updateShootTypeInCurrentAction_without_body_move() {
+        StepTurret stepTurret = new StepTurret()
+                .setTurretAngle(1.0)
+                .setTurretVerticalAngle(3.0)
+                .setShootType(ShootType.NOW);
+
+        LinkedList<Step> steps = new LinkedList<>();
+        stepTurret.setAllSteps(steps);
+
+        stepTurret.updateShootTypeInCurrentAction();
+
+        assertEquals(1, steps.size());
+        Step step = steps.get(0);
+
+        assertEquals(1.0, step.turretAngle);
+        assertEquals(3.0, step.turretVerticalAngle);
+        assertEquals(ShootType.NOW, step.shootType);
+    }
+
 
 }

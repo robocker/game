@@ -171,6 +171,8 @@ public class Tank implements MapItem, Containerized {
                 angle += step.angle;
                 step.howManyTimes--;
 
+
+
                 if (angle >= Math.PI * 2) {
                     angle -= Math.PI * 2;
                 }
@@ -178,9 +180,13 @@ public class Tank implements MapItem, Containerized {
                     angle += Math.PI * 2;
                 }
 
-                if (step.howManyTimes == 0) {
-                    steps.remove(step);
-                }
+            }
+
+            boolean turretDone = this.turret.updatePosition(step, steps.size());
+
+            if (step.howManyTimes == 0 && turretDone) {
+                steps.remove(step);
+            } else {
                 break;
             }
 
@@ -201,6 +207,7 @@ public class Tank implements MapItem, Containerized {
         for (Action action : requests.getActions()) {
 
             StepTurret turretStep = turret.computeSteps(action.getTurret());
+            turretStep.setAllSteps(this.steps);
 
             double newAngle = action.getAngle();
             double distance = action.getDistance();
@@ -213,10 +220,10 @@ public class Tank implements MapItem, Containerized {
                 if (howMany > 0) {
 
                     if (newAngle > 0) {
-                        this.steps.add(new Step().setAngle(rotationSpeed).setHowManyTimes(howMany));
+                        this.steps.add(turretStep.createNewStep().setAngle(rotationSpeed).setHowManyTimes(howMany));
 
                     } else {
-                        this.steps.add(new Step().setAngle(-rotationSpeed).setHowManyTimes(howMany));
+                        this.steps.add(turretStep.createNewStep().setAngle(-rotationSpeed).setHowManyTimes(howMany));
                     }
                 }
 
@@ -228,7 +235,7 @@ public class Tank implements MapItem, Containerized {
                 }
 
                 if (Math.abs(rest) > rotationTolerance) {
-                    this.steps.add(new Step().setAngle(rest).setHowManyTimes(1));
+                    this.steps.add(turretStep.createNewStep().setAngle(rest).setHowManyTimes(1));
                 }
 
 
@@ -241,13 +248,16 @@ public class Tank implements MapItem, Containerized {
                 double changeY = Math.sin(stepAngle) * currentSpeed;
                 int howMany = (int) (distance / currentSpeed);
 
-                this.steps.add(new Step().setX(changeX).setY(changeY).setHowManyTimes(howMany));
+                this.steps.add(turretStep.createNewStep().setX(changeX).setY(changeY).setHowManyTimes(howMany));
 
                 double rest = distance - (howMany * currentSpeed);
                 if (Math.abs(rest) > distanceTolerance) {
-                    this.steps.add(new Step().setX(Math.cos(stepAngle) * rest).setY(Math.sin(stepAngle) * rest).setHowManyTimes(1));
+                    this.steps.add(turretStep.createNewStep().setX(Math.cos(stepAngle) * rest).setY(Math.sin(stepAngle) * rest).setHowManyTimes(1));
                 }
             }
+
+            turretStep.updateShootTypeInCurrentAction();
+
         }
         System.out.println(steps);
     }
