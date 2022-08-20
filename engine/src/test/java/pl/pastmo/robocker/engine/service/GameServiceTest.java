@@ -364,27 +364,28 @@ class GameServiceTest {
         gameService.setGame(game);
 
         tank.getSteps().add(new Step().setX(0.1).setHowManyTimes(2)
-                .setTurretAngle(0.5).setTurretVerticalAngle(-0.5));
+                .setTurretAngle(Turret.rotationSpeed * 2 + 0.2)
+                .setTurretVerticalAngle(-Turret.rotationSpeed * 2 - 0.2));
         tank.getSteps().add(new Step().setAngle(0.1).setHowManyTimes(2));
 
         gameService.doTick();
         assertEquals(0.1, tank.getX(), 0.001);
-        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(), 0.001);
 
         gameService.doTick();
         assertEquals(0.2, tank.getX(), 0.001);
-        assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(), 0.001);
 
         gameService.doTick();
         assertEquals(0.1, tank.getAngle(), 0.001);
-        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(), 0.001);
 
         gameService.doTick();
-        assertEquals(0, tank.getTurret().getAngle(),0.001);
-        assertEquals(0, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(0, tank.getTurret().getAngle(), 0.001);
+        assertEquals(0, tank.getTurret().getAngleVertical(), 0.001);
 
         assertEquals(0, tank.getSteps().size());
 
@@ -410,25 +411,25 @@ class GameServiceTest {
 
         gameService.doTick();
         assertEquals(0.1, tank.getX(), 0.001);
-        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(), 0.001);
 
         gameService.doTick();
         assertEquals(0.2, tank.getX(), 0.001);
-        assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(),0.001);
-
-        gameService.doTick();
-        assertEquals(0.2, tank.getX(), 0.001);
-        assertEquals(0, tank.getAngle(), 0.001);
-        assertEquals(Turret.rotationSpeed * 3, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed * 3, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(), 0.001);
 
         gameService.doTick();
         assertEquals(0.2, tank.getX(), 0.001);
         assertEquals(0, tank.getAngle(), 0.001);
-        assertEquals(Turret.rotationSpeed * 4, tank.getTurret().getAngle(),0.001);
-        assertEquals(-Turret.rotationSpeed * 4, tank.getTurret().getAngleVertical(),0.001);
+        assertEquals(Turret.rotationSpeed * 3, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed * 3, tank.getTurret().getAngleVertical(), 0.001);
+
+        gameService.doTick();
+        assertEquals(0.2, tank.getX(), 0.001);
+        assertEquals(0, tank.getAngle(), 0.001);
+        assertEquals(Turret.rotationSpeed * 4, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed * 4, tank.getTurret().getAngleVertical(), 0.001);
 //        assertEquals();sprawdzić, że strzał poszedł. Jakiś shoot service?
 
         assertEquals(1, tank.getSteps().size());
