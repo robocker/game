@@ -73,7 +73,7 @@ public class GameService extends TimerTask {
 
     public GameInfo getPlayerInfo(String ip) {
         System.out.println("GameService.getPlayerInfo ip:" + ip);
-        GameInfo result= new GameInfo();
+        GameInfo result = new GameInfo();
 
         for (Player player : game.getPlayers()) {
             PlayerInfo playerResult = new PlayerInfo();
@@ -90,17 +90,17 @@ public class GameService extends TimerTask {
         return result;
     }
 
-   public TankInfo getTankInfo(String ip) {
+    public TankInfo getTankInfo(String ip) {
         System.out.println("GameService.getTankInfo ip:" + ip);
-       TankInfo result= new TankInfo();
+        TankInfo result = new TankInfo();
 
-       if(game == null){
-           return result;
-       }
+        if (game == null) {
+            return result;
+        }
 
         for (Player player : game.getPlayers()) {
 
-            for(Tank tank: player.getTanks()) {
+            for (Tank tank : player.getTanks()) {
                 if (tank.getIps().contains(ip)) {
                     result.id = tank.getId();
                     result.playerId = player.getId();

@@ -2,6 +2,7 @@ package pl.pastmo.robocker.engine.model;
 
 import com.google.common.primitives.UnsignedInteger;
 import pl.pastmo.robocker.engine.websocket.Action;
+import pl.pastmo.robocker.engine.websocket.ShootType;
 import pl.pastmo.robocker.engine.websocket.TankRequest;
 
 import java.util.LinkedList;
@@ -184,7 +185,7 @@ public class Tank implements MapItem, Containerized {
 
             boolean turretDone = this.turret.updatePosition(step, steps.size());
 
-            if (step.howManyTimes == 0 && turretDone) {
+            if (step.howManyTimes == 0 && (turretDone  || (steps.size() > 1 && step.shootType != ShootType.END_OF_ACTION))) {
                 steps.remove(step);
             } else {
                 break;

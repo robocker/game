@@ -357,7 +357,8 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5).setTurret(new Turret());
+        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5)
+                .setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -366,7 +367,9 @@ class GameServiceTest {
         tank.getSteps().add(new Step().setX(0.1).setHowManyTimes(2)
                 .setTurretAngle(Turret.rotationSpeed * 2 + 0.2)
                 .setTurretVerticalAngle(-Turret.rotationSpeed * 2 - 0.2));
-        tank.getSteps().add(new Step().setAngle(0.1).setHowManyTimes(2));
+        tank.getSteps().add(new Step().setAngle(0.1).setHowManyTimes(2)
+                .setTurretAngle(-Turret.rotationSpeed * 2)
+                .setTurretVerticalAngle(Turret.rotationSpeed * 2));
 
         gameService.doTick();
         assertEquals(0.1, tank.getX(), 0.001);
@@ -386,6 +389,15 @@ class GameServiceTest {
         gameService.doTick();
         assertEquals(0, tank.getTurret().getAngle(), 0.001);
         assertEquals(0, tank.getTurret().getAngleVertical(), 0.001);
+
+        gameService.doTick();
+        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngle(), 0.001);
+        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngleVertical(), 0.001);
+
+        gameService.doTick();
+        assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngle(), 0.001);
+        assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(), 0.001);
+
 
         assertEquals(0, tank.getSteps().size());
 

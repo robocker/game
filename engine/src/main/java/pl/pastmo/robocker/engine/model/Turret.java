@@ -1,7 +1,6 @@
 package pl.pastmo.robocker.engine.model;
 
 import pl.pastmo.robocker.engine.websocket.ActionTurret;
-import pl.pastmo.robocker.engine.websocket.ShootType;
 
 public class Turret {
     public static final double rotationSpeed = Math.PI / 12;
@@ -46,7 +45,7 @@ public class Turret {
             angleVertical = computeAngleValue(step.turretVerticalAngle, angleVertical);
         }
 
-        if ((angle != step.turretAngle || angleVertical != step.turretVerticalAngle) && step.shootType == ShootType.END_OF_ACTION) {
+        if (angle != step.turretAngle || angleVertical != step.turretVerticalAngle) {
             return false;
         }
         return true;
