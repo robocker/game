@@ -46,7 +46,7 @@ class GameServiceTest {
 
     @BeforeEach
     void setUp() {
-        gameService = new GameService(dockerServiceMock, messageService);
+        gameService = new GameService(dockerServiceMock, messageService, new MoveService());
 
     }
 
