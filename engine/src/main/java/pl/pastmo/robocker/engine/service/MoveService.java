@@ -1,5 +1,6 @@
 package pl.pastmo.robocker.engine.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.pastmo.robocker.engine.model.Step;
 import pl.pastmo.robocker.engine.model.Tank;
@@ -9,15 +10,22 @@ import pl.pastmo.robocker.engine.websocket.ShootType;
 @Component("moveService")
 public class MoveService {
 
+    @Autowired
+    private ShootService shootService;
+
     public void updatePosition(Tank tank) {
         for (Step step : tank.getSteps()) {
+
+            if (step.shootType == ShootType.NOW) {
+                this.shootService.shootOnStart(tank);
+                step.shootType = ShootType.FALSE;
+            }
 
             if (step.howManyTimes > 0) {
                 tank.setX(tank.getX() + step.x);
                 tank.setY(tank.getY() + step.y);
                 tank.setAngle(tank.getAngle() + step.angle);
                 step.howManyTimes--;
-
 
                 if (tank.getAngle() >= Math.PI * 2) {
                     tank.setAngle(tank.getAngle() - Math.PI * 2);
@@ -32,11 +40,11 @@ public class MoveService {
 
             if (step.howManyTimes == 0 && (turretDone || (tank.getSteps().size() > 1 && step.shootType != ShootType.END_OF_ACTION))) {
                 tank.getSteps().remove(step);
-            } else {
-                break;
+                if (step.shootType == ShootType.END_OF_ACTION) {
+                    this.shootService.shootOnEnd(tank);
+                }
             }
-
-
+            break;
         }
     }
 
@@ -81,5 +89,9 @@ public class MoveService {
         }
         return result;
 
+    }
+
+    public void setShootService(ShootService shootService) {
+        this.shootService = shootService;
     }
 }

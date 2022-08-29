@@ -41,12 +41,14 @@ class GameServiceTest {
     DockerService dockerServiceMock;
     @Mock
     MessageService messageService;
-
+    @Mock
+    ShootService shootService;
     private GameService gameService;
 
     @BeforeEach
     void setUp() {
-        gameService = new GameService(dockerServiceMock, messageService, new MoveService());
+        gameService = new GameService(dockerServiceMock, messageService, new MoveService(), shootService);
+        gameService.getMoveService().setShootService(shootService);
 
     }
 
@@ -398,7 +400,7 @@ class GameServiceTest {
         assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngle(), 0.001);
         assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(), 0.001);
 
-
+        verify(shootService, times(6)).processShoots();
         assertEquals(0, tank.getSteps().size());
 
     }
@@ -442,9 +444,42 @@ class GameServiceTest {
         assertEquals(0, tank.getAngle(), 0.001);
         assertEquals(Turret.rotationSpeed * 4, tank.getTurret().getAngle(), 0.001);
         assertEquals(-Turret.rotationSpeed * 4, tank.getTurret().getAngleVertical(), 0.001);
-//        assertEquals();sprawdzić, że strzał poszedł. Jakiś shoot service?
+
+        verify(shootService).shootOnEnd(tank);
 
         assertEquals(1, tank.getSteps().size());
+
+    }
+
+    @Test
+    public void doTick_withShootOnStart() throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+
+        Tank tank = new Tank();
+
+        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5).setTurret(new Turret());
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        gameService.setGame(game);
+
+        tank.getSteps().add(new Step().setX(0.1).setHowManyTimes(2).setTurretAngle(Turret.rotationSpeed * 4)
+                .setTurretVerticalAngle(-Turret.rotationSpeed * 2).setShootType(ShootType.NOW));
+        tank.getSteps().add(new Step().setAngle(0.1).setHowManyTimes(1));
+
+        gameService.doTick();
+        assertEquals(0.1, tank.getX(), 0.001);
+        assertEquals(Turret.rotationSpeed, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed, tank.getTurret().getAngleVertical(), 0.001);
+        verify(shootService).shootOnStart(tank);
+
+        gameService.doTick();
+        assertEquals(0.2, tank.getX(), 0.001);
+        assertEquals(Turret.rotationSpeed * 2, tank.getTurret().getAngle(), 0.001);
+        assertEquals(-Turret.rotationSpeed * 2, tank.getTurret().getAngleVertical(), 0.001);
+        verify(shootService).shootOnStart(tank);
 
     }
 

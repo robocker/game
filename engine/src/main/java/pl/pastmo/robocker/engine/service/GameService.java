@@ -30,6 +30,8 @@ public class GameService extends TimerTask {
     private MessageService messageService;
     @Autowired
     private MoveService moveService;
+    @Autowired
+    private ShootService shootService;
 
     public static final String defaultNetwork = "robocker-net";
     private Set<UnsignedInteger> usedPorts = new TreeSet<>();
@@ -39,10 +41,11 @@ public class GameService extends TimerTask {
     public GameService() {
     }
 
-    public GameService(DockerService ds, MessageService messageService, MoveService moveService) {
+    public GameService(DockerService ds, MessageService messageService, MoveService moveService, ShootService shootService) {
         this.dockerService = ds;
         this.messageService = messageService;
         this.moveService = moveService;
+        this.shootService = shootService;
     }
 
     @PostConstruct
@@ -140,6 +143,8 @@ public class GameService extends TimerTask {
     public void doTick() {
         TankStateMsg tanksMsgs = new TankStateMsg();
 
+        shootService.processShoots();
+
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {
                 moveService.updatePosition(tank);
@@ -173,5 +178,9 @@ public class GameService extends TimerTask {
     public Integer getNewPlayerId() {
         this.currentPlayerId++;
         return this.currentPlayerId;
+    }
+
+    public MoveService getMoveService() {
+        return moveService;
     }
 }
