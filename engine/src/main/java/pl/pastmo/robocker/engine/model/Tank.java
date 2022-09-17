@@ -148,6 +148,10 @@ public class Tank implements MapItem, Containerized {
         return id;
     }
 
+    public static Integer getIdCounter(){
+        return idCounter;
+    }
+
     @Override
     public String toString() {
         return "Tank{" +
