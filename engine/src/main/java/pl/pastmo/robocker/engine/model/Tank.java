@@ -20,7 +20,7 @@ public class Tank implements MapItem, Containerized {
     private Integer height = 10;
     private List<String> ips = new LinkedList<>();
     private TankRequest actions;
-    private LinkedList<Step> steps = new LinkedList<Step>();
+    private LinkedList<Step> steps = new LinkedList<>();
     public static final double tankSpeed = 0.1;
     public static final double distanceTolerance = 0.001;
     public static final double rotationTolerance = Math.PI / 180;
@@ -148,6 +148,11 @@ public class Tank implements MapItem, Containerized {
         return id;
     }
 
+    public Tank setTurretVerticalAngle(double angle){
+        this.getTurret().setAngleVertical(angle);
+        return this;
+    }
+
     public static Integer getIdCounter(){
         return idCounter;
     }
@@ -193,7 +198,7 @@ public class Tank implements MapItem, Containerized {
                     }
                 }
 
-                double rest = 0;
+                double rest;
                 if (newAngle > 0) {
                     rest = newAngle - (howMany * rotationSpeed);
                 } else {

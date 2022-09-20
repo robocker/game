@@ -80,36 +80,61 @@ public class ShootServiceTest {
 
         shootService.processShoots();
 
-//       Bullet bullet = shootService.getBullets().get(0);
-
         assertEquals(bullet.getAngle(), expectedResult.angle);
-//        assertEquals(bullet.getVerticalAngle(), 0);
+        assertEquals(bullet.getVerticalAngle(), expectedResult.verticalAngle);
         assertEquals(bullet.getX(), expectedResult.x, 0.0001);
         assertEquals(bullet.getY(), expectedResult.y, 0.0001);
-//        assertEquals(bullet.getZ(), 20.0 - Bullet.GRAVITY_ACCELERATION);
+        assertEquals(bullet.getZ(), expectedResult.z);
         assertEquals(bullet.getSpeed(), expectedResult.speed);
-//        assertEquals(bullet.getGravitationSpeed(), Bullet.GRAVITY_ACCELERATION);
+        assertEquals(bullet.getGravitationSpeed(), expectedResult.gravitySpeed);
 
     }
 
     static Stream<Arguments> shootsProvider() {
         return Stream.of(
-                Arguments.arguments(new Bullet()
+                Arguments.arguments(Bullet.fromTank(new Tank()
                                 .setAngle(0.0)
-                                .setVerticalAngle(0.0)
-                                .setTankId(Tank.getIdCounter())
+                                .setTurretVerticalAngle(0.0)
                                 .setX(0.0)
-                                .setY(0.0)
-                                .setZ(20.0),
-                        new ExpectedResult().setAngle(0).setX(Bullet.SPEED).setY(0).setSpeed(Bullet.SPEED)),
-                Arguments.arguments(new Bullet()
-                                .setAngle(Math.PI/2)
-                                .setVerticalAngle(0.0)
-                                .setTankId(Tank.getIdCounter())
+                                .setY(0.0)),
+                        new ExpectedResult().setAngle(0).setVerticalAngle(0)
+                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setX(Bullet.SPEED).setY(0)
+                                .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
+                                .setSpeed(Bullet.SPEED)),
+                Arguments.arguments(Bullet.fromTank(new Tank()
+                                .setAngle(Math.PI / 2)
+                                .setTurretVerticalAngle(0.0)
                                 .setX(0.0)
-                                .setY(0.0)
-                                .setZ(20.0),
-                        new ExpectedResult().setAngle(Math.PI/2).setX(0).setY(Bullet.SPEED).setSpeed(Bullet.SPEED))
+                                .setY(0.0)),
+                        new ExpectedResult().setAngle(Math.PI / 2)
+                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setX(0)
+                                .setY(Bullet.SPEED)
+                                .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
+                                .setSpeed(Bullet.SPEED)),
+                Arguments.arguments(Bullet.fromTank(new Tank()
+                                .setAngle(Math.PI)
+                                .setTurretVerticalAngle(0.0)
+                                .setX(0.0)
+                                .setY(0.0)),
+                        new ExpectedResult().setAngle(Math.PI)
+                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setX(-Bullet.SPEED)
+                                .setY(0)
+                                .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
+                                .setSpeed(Bullet.SPEED)),
+                Arguments.arguments(Bullet.fromTank(new Tank()
+                                .setAngle(Math.PI * 3 / 2)
+                                .setTurretVerticalAngle(0.0)
+                                .setX(0.0)
+                                .setY(0.0)),
+                        new ExpectedResult().setAngle(Math.PI * 3 / 2)
+                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setX(0)
+                                .setY(-Bullet.SPEED)
+                                .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
+                                .setSpeed(Bullet.SPEED))
         );
     }
 }

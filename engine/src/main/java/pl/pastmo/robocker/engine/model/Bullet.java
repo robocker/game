@@ -19,6 +19,7 @@ public class Bullet {
                 .setTankId(tank.getId())
                 .setX(tank.getX())
                 .setY(tank.getY())
+                .setGravitationSpeed(0.0)
                 .setZ((double) tank.getHeight());
 
     }

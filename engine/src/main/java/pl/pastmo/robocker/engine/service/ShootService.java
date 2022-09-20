@@ -20,12 +20,14 @@ public class ShootService {
     }
 
     public void processShoots() {
-        for(Bullet bullet: bullets){
+        for (Bullet bullet : bullets) {
             double newX = bullet.getX() + Bullet.SPEED * Math.cos(bullet.getAngle());
             double newY = bullet.getY() + Bullet.SPEED * Math.sin(bullet.getAngle());
 
+            bullet.setGravitationSpeed(bullet.getGravitationSpeed() - Bullet.GRAVITY_ACCELERATION);
             bullet.setX(newX);
             bullet.setY(newY);
+            bullet.setZ(bullet.getZ() + bullet.getGravitationSpeed());
             bullet.setSpeed(Bullet.SPEED);
         }
     }
