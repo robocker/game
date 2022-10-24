@@ -144,6 +144,7 @@ public class GameService extends TimerTask {
         TankStateMsg tanksMsgs = new TankStateMsg();
 
         shootService.processShoots();
+        tanksMsgs.setBullets(shootService.getBullets());
 
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {

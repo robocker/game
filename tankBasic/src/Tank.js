@@ -68,12 +68,12 @@ module.exports = class {
     const yDiff = required.y - current.y;
     const xDiff = required.x - current.x;
 
-    debug('dif:',xDiff,yDiff);
+    debug("dif:", xDiff, yDiff);
 
     const tan = yDiff / xDiff;
 
     let newAngle = Math.atan(tan);
-    debug('newAngle:',newAngle);
+    debug("newAngle:", newAngle);
 
     if (xDiff < 0 && yDiff > 0) {
       newAngle += Math.PI;
@@ -83,20 +83,25 @@ module.exports = class {
       newAngle -= Math.PI;
     }
 
-
     if (newAngle !== current.angle) {
-        debug({newAngle, currentAngle:current.angle});
+      debug({ newAngle, currentAngle: current.angle });
       commands.push({ angle: newAngle - current.angle });
     } else if (xDiff < 0 && yDiff == 0) {
-        debug({currentAngle:current.angle});
+      debug({ currentAngle: current.angle });
       commands.push({ angle: Math.PI });
-
     }
 
     const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);
 
+    const actionTurret = {
+      angle: Math.random() * 2 * Math.PI,
+      verticalAngle: (Math.random() * Math.PI) / 2 - Math.PI / 6,
+      shoot: Math.random() > 0.5 ? "NOW" : "END_OF_ACTION",
+    };
+
     commands.push({
       distance: Math.abs(newDistance),
+      turret: actionTurret
     });
 
     return commands;

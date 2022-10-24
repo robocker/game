@@ -62,13 +62,12 @@ export class TanksManager {
           bottom.color = player.color;
 
           const turret = sps.particles[1];
-          turret.rotation.y = tankData.turret.angle;
           turret.color = player.color;
 
           const barrel = sps.particles[2];
-          barrel.rotation.z = tankData.turret.angleVertical;
-          barrel.rotation.y = tankData.turret.angle;
           barrel.color = player.color;
+
+          this.updateTankPosition(sps,tankData);
         };
 
         sps.vars.tankData = tankData;
@@ -80,5 +79,18 @@ export class TanksManager {
         resolve(sps);
       });
     });
+  }
+
+  updateTankPosition(sps, tankData){
+    sps.mesh.position.z = tankData.y;
+    sps.mesh.position.x = tankData.x;
+    sps.mesh.rotation.y = -tankData.angle;
+
+    const turret = sps.particles[1];
+    turret.rotation.y = tankData.turret.angle;
+
+    const barrel = sps.particles[2];
+    barrel.rotation.z = tankData.turret.angleVertical;
+    barrel.rotation.y = tankData.turret.angle;
   }
 }

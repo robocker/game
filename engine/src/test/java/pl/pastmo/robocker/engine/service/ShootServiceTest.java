@@ -1,5 +1,6 @@
 package pl.pastmo.robocker.engine.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,11 @@ public class ShootServiceTest {
     Tank tank;
     Turret turret;
 
+    @AfterEach
+    public void clean() {
+        Tank.resetCounter();
+    }
+
     @BeforeEach
     void setUp() {
         shootService = new ShootService();
@@ -31,7 +37,7 @@ public class ShootServiceTest {
         turret = new Turret().setAngleVertical(Math.PI / 3).setAngleVertical(Math.PI / 4);
 
         tank = new Tank();
-        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5)
+        tank.setX(148.0).setY(31.0).setWidthX(5.0).setWidthYFront(8.0).setWidthYBack(8.0).setHeight(5.0)
                 .setTurret(turret);
 
     }
@@ -80,61 +86,69 @@ public class ShootServiceTest {
 
         shootService.processShoots();
 
-        assertEquals(bullet.getAngle(), expectedResult.angle);
-        assertEquals(bullet.getVerticalAngle(), expectedResult.verticalAngle);
-        assertEquals(bullet.getX(), expectedResult.x, 0.0001);
-        assertEquals(bullet.getY(), expectedResult.y, 0.0001);
-        assertEquals(bullet.getZ(), expectedResult.z);
-        assertEquals(bullet.getSpeed(), expectedResult.speed);
-        assertEquals(bullet.getGravitationSpeed(), expectedResult.gravitySpeed);
+        assertEquals(expectedResult.angle, bullet.getAngle());
+        assertEquals(expectedResult.verticalAngle, bullet.getVerticalAngle());
+        assertEquals(expectedResult.x, bullet.getX(), 0.0001);
+        assertEquals(expectedResult.y, bullet.getY(), 0.0001);
+        assertEquals(expectedResult.z, bullet.getZ(), 0.0001);
+        assertEquals(expectedResult.speed, bullet.getSpeed());
+        assertEquals(expectedResult.gravitySpeed, bullet.getGravitationSpeed());
 
     }
 
     static Stream<Arguments> shootsProvider() {
+        Double Z= 10.0;
+
         return Stream.of(
                 Arguments.arguments(Bullet.fromTank(new Tank()
                                 .setAngle(0.0)
                                 .setTurretVerticalAngle(0.0)
                                 .setX(0.0)
+                                .setHeight(Z)
                                 .setY(0.0)),
                         new ExpectedResult().setAngle(0).setVerticalAngle(0)
-                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setZ(Z- Bullet.GRAVITY_ACCELERATION)
                                 .setX(Bullet.SPEED).setY(0)
                                 .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
                                 .setSpeed(Bullet.SPEED)),
                 Arguments.arguments(Bullet.fromTank(new Tank()
                                 .setAngle(Math.PI / 2)
-                                .setTurretVerticalAngle(0.0)
+                                .setTurretVerticalAngle(Math.PI / 4)
                                 .setX(0.0)
-                                .setY(0.0)),
+                                .setY(0.0)
+                                .setHeight(Z)),
                         new ExpectedResult().setAngle(Math.PI / 2)
-                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setZ(Z + (Bullet.SPEED / Math.sqrt(2.0)) - Bullet.GRAVITY_ACCELERATION)
                                 .setX(0)
                                 .setY(Bullet.SPEED)
-                                .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
+                                .setVerticalAngle(Math.PI / 4)
+                                .setGravitySpeed((Bullet.SPEED / Math.sqrt(2.0)) - Bullet.GRAVITY_ACCELERATION)
                                 .setSpeed(Bullet.SPEED)),
                 Arguments.arguments(Bullet.fromTank(new Tank()
                                 .setAngle(Math.PI)
                                 .setTurretVerticalAngle(0.0)
                                 .setX(0.0)
-                                .setY(0.0)),
+                                .setY(0.0)
+                                .setHeight(Z)),
                         new ExpectedResult().setAngle(Math.PI)
-                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setZ(Z - Bullet.GRAVITY_ACCELERATION)
                                 .setX(-Bullet.SPEED)
                                 .setY(0)
                                 .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
                                 .setSpeed(Bullet.SPEED)),
                 Arguments.arguments(Bullet.fromTank(new Tank()
                                 .setAngle(Math.PI * 3 / 2)
-                                .setTurretVerticalAngle(0.0)
+                                .setTurretVerticalAngle(-Math.PI / 4)
                                 .setX(0.0)
-                                .setY(0.0)),
+                                .setY(0.0)
+                                .setHeight(0.9)),
                         new ExpectedResult().setAngle(Math.PI * 3 / 2)
-                                .setZ(10 - Bullet.GRAVITY_ACCELERATION)
+                                .setVerticalAngle(-Math.PI / 4)
+                                .setZ(0)
                                 .setX(0)
-                                .setY(-Bullet.SPEED)
-                                .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
-                                .setSpeed(Bullet.SPEED))
+                                .setY(-1.115)
+                                .setGravitySpeed(0)
+                                .setSpeed(0))
         );
     }
 }

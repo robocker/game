@@ -1,8 +1,8 @@
 package pl.pastmo.robocker.engine.model;
 
 public class Bullet {
-    public static Double SPEED = 40.0;
-    public static Double GRAVITY_ACCELERATION = 8.0;
+    public static Double SPEED = 10.0;
+    public static Double GRAVITY_ACCELERATION = 1.0;
     private Integer tankId;
     private Double x;
     private Double y;
@@ -19,8 +19,8 @@ public class Bullet {
                 .setTankId(tank.getId())
                 .setX(tank.getX())
                 .setY(tank.getY())
-                .setGravitationSpeed(0.0)
-                .setZ((double) tank.getHeight());
+                .setGravitationSpeed(SPEED * Math.sin(tank.getTurret().getAngleVertical()))
+                .setZ(tank.getHeight());
 
     }
 
@@ -94,5 +94,19 @@ public class Bullet {
     public Bullet setGravitationSpeed(Double gravitationSpeed) {
         this.gravitationSpeed = gravitationSpeed;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Bullet{" +
+                "tankId=" + tankId +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", angle=" + angle +
+                ", verticalAngle=" + verticalAngle +
+                ", speed=" + speed +
+                ", gravitationSpeed=" + gravitationSpeed +
+                '}';
     }
 }

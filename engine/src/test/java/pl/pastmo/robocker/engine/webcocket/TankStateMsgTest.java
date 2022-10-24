@@ -3,6 +3,7 @@ package pl.pastmo.robocker.engine.webcocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class TankStateMsgTest {
+
+    @BeforeAll
+    public static void cleanBefore() {
+        Tank.resetCounter();
+    }
 
     @AfterEach
     public void clean() {
@@ -55,9 +61,9 @@ public class TankStateMsgTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        TankMsg tankStateMsg = TankMsg.fromTank(player.getTanks().get(0),player);
+        TankMsg tankStateMsg = TankMsg.fromTank(player.getTanks().get(0), player);
 
         String result = mapper.writeValueAsString(tankStateMsg);
-        assertEquals("{\"x\":105.0,\"y\":41.1,\"id\":1,\"playerId\":3,\"angle\":0.3,\"turret\":{\"angle\":0.5,\"angleVertical\":0.6}}",result);
+        assertEquals("{\"x\":105.0,\"y\":41.1,\"id\":1,\"playerId\":3,\"angle\":0.3,\"turret\":{\"angle\":0.5,\"angleVertical\":0.6}}", result);
     }
 }

@@ -83,6 +83,15 @@ public class TankMsg {
         return this;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "TankMsg{" +
+                "x=" + x +
+                ", y=" + y +
+                ", id=" + id +
+                ", playerId=" + playerId +
+                ", angle=" + angle +
+                ", turret=" + turret +
+                '}';
+    }
 }

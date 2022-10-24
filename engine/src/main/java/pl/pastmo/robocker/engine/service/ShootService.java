@@ -21,15 +21,40 @@ public class ShootService {
 
     public void processShoots() {
         for (Bullet bullet : bullets) {
-            double newX = bullet.getX() + Bullet.SPEED * Math.cos(bullet.getAngle());
-            double newY = bullet.getY() + Bullet.SPEED * Math.sin(bullet.getAngle());
+            double newX = Bullet.SPEED * Math.cos(bullet.getAngle());
+            double newY = Bullet.SPEED * Math.sin(bullet.getAngle());
 
             bullet.setGravitationSpeed(bullet.getGravitationSpeed() - Bullet.GRAVITY_ACCELERATION);
-            bullet.setX(newX);
-            bullet.setY(newY);
-            bullet.setZ(bullet.getZ() + bullet.getGravitationSpeed());
-            bullet.setSpeed(Bullet.SPEED);
+
+            double newZ = bullet.getZ() + bullet.getGravitationSpeed();
+
+            if (newZ > 0) {
+
+                bullet.setX(bullet.getX() + newX);
+                bullet.setY(bullet.getY() + newY);
+                bullet.setZ(newZ);
+                bullet.setSpeed(Bullet.SPEED);
+
+            } else {
+
+                double proportion = bullet.getZ() / (bullet.getZ() - newZ);
+
+                bullet.setX(bullet.getX() + newX * proportion);
+                bullet.setY(bullet.getY() + newY * proportion);
+                bullet.setZ(0.0);
+                bullet.setSpeed(0.0);
+                bullet.setGravitationSpeed(0.0);
+                
+                explode(bullet);
+                
+
+            }
+
         }
+    }
+
+    private void explode(Bullet bullet) {
+        bullets.remove(bullet);
     }
 
     public LinkedList<Bullet> getBullets() {

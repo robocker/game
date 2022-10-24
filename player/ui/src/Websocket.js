@@ -1,16 +1,18 @@
+import { LogManager } from "./LogManager";
+
 export class Websocket {
   static ws;
   static gameManager;
 
   static setConnected(isConnected) {
-    console.log(isConnected);
+    LogManager.instance.debug(isConnected);
   }
 
   static connect() {
     this.ws = new WebSocket("ws://localhost:8080/state");
     this.ws.onmessage = (response) => {
-      console.log(JSON.parse(response.data));
-      this.gameManager.updateTanks(JSON.parse(response.data));
+        LogManager.instance.debug(JSON.parse(response.data));
+      this.gameManager.updateGameState(JSON.parse(response.data));
     };
     this.ws.onclose = async (event) => {
       console.error(event);
@@ -24,7 +26,7 @@ export class Websocket {
       this.ws.close();
     }
     this.setConnected(false);
-    console.log("Disconnected");
+    LogManager.instance.error("Disconnected");
   }
 
   static run(gameManager) {

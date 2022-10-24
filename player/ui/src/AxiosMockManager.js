@@ -1,8 +1,8 @@
-import axios from "axios";
+import { LogManager } from "./LogManager";
 
 export class AxiosManager {
   static get(url, parameters) {
-    console.log(`Mocked server response for: ${url}`);
+    LogManager.instance.debug(`Mocked server response for: ${url}`);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         switch (url) {
@@ -64,10 +64,10 @@ export class AxiosManager {
                         id: "3",
                         imageName: "robocker/tankbasic",
                         insidePortNumber: 80,
-                        angle: Math.PI,
+                        angle: -Math.PI*3/4,
                         turret: {
                           angle: -Math.PI / 4,
-                          angleVertical: Math.PI / 4,
+                          angleVertical: Math.PI / 6,
                         },
                         x: -10,
                         y: 100,
@@ -87,7 +87,7 @@ export class AxiosManager {
   }
 
   static post(url, parameters) {
-    console.log(`Mocked server response: ${url}`);
+    LogManager.instance.debug(`Mocked server response: ${url}`);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         switch (url) {

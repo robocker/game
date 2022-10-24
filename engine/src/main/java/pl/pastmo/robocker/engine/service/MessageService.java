@@ -28,6 +28,7 @@ public class MessageService extends TextWebSocketHandler {
 
         TankRequest request = new Gson().fromJson(message.getPayload(), TankRequest.class);
 
+        System.out.println(request);
         gameService.move(session.getRemoteAddress().toString(), request);
 
     }

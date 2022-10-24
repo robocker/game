@@ -5,13 +5,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.model.Step;
+import pl.pastmo.robocker.engine.model.Tank;
 import pl.pastmo.robocker.engine.model.Turret;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.AfterEach;
+
+
+
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class MoveServiceTest {
+
+    @AfterEach
+    public void clean() {
+        Tank.resetCounter();
+    }
 
     MoveService moveService = new MoveService();
     @Test

@@ -2,10 +2,12 @@ import { TanksManager } from "./TanksManager";
 import { AxiosManager } from "./AxiosRealManager";
 import { Websocket } from "./Websocket";
 import { Utils } from "./Utils";
+import { LogManager } from "./LogManager";
 
 export class GameManager {
   SPSs = {};
   players = [];
+  bullets = [];
 
   sceneCreator;
   tanksManager;
@@ -17,10 +19,9 @@ export class GameManager {
 
   initGame = () => {
 
-
     AxiosManager.get("/api/info", {})
       .then((response) => {
-        console.log(response);
+        LogManager.instance.debug(response);
         this.players = this.players;
 
         for (let player of response.data.players) {
@@ -39,16 +40,14 @@ export class GameManager {
         }
       })
       .catch(function (error) {
-        console.log(error);
+        LogManager.instance.error(error);
       });
   };
 
   addTank(tankData, player) {
     this.tanksManager.createTank(tankData, player).then((SPS) => {
       if (tankData) {
-        SPS.mesh.position.z = tankData.y;
-        SPS.mesh.position.x = tankData.x;
-        SPS.mesh.rotation.y = -tankData.angle;
+
         SPS.setParticles();
       }
 
@@ -63,8 +62,8 @@ export class GameManager {
 
             if (pointerInfo.pickInfo.pickedMesh === SPS.mesh) {
               SPS.vars.selected = true;
-              console.log(tankData);
-              console.log(SPS.vars);
+              LogManager.instance.debug(tankData);
+              LogManager.instance.debug(SPS.vars);
             } else if (
               pointerInfo.pickInfo.pickedMesh.name == "gdhm" &&
               SPS.vars.selected
@@ -79,10 +78,10 @@ export class GameManager {
                 },
               })
                 .then(function (response) {
-                  console.log(response);
+                    LogManager.instance.debug(response);
                 })
                 .catch(function (error) {
-                  console.log(error);
+                    LogManager.instance.error(error);
                 });
             }
 
@@ -98,7 +97,7 @@ export class GameManager {
     return this.SPSs.length;
   }
 
-  updateTanks(data) {
+  updateGameState(data) {
     for (let tankData of data.tanks) {
       const tank = this.SPSs[tankData.id];
 
@@ -107,13 +106,19 @@ export class GameManager {
         tank.mesh.position.x !== tankData.x ||
         tank.mesh.rotation.y !== -tankData.angle
       ) {
-        tank.mesh.position.z = tankData.y;
-        tank.mesh.position.x = tankData.x;
 
-        tank.mesh.rotation.y = -tankData.angle;
-        // tank.particles[1].rotation.y -= Math.PI / 180;
+        this.tanksManager.updateTankPosition(tank, tankData);
         tank.setParticles();
       }
+    }
+
+    for (let bullet of data.bullets){
+        const capsule = new BABYLON.MeshBuilder.CreateSphere("bullet", {diameter:0.3}, this.sceneCreator.scene);
+        capsule.position.x = bullet.x;
+        capsule.position.z = bullet.y;
+        capsule.position.y = bullet.z;
+
+        this.bullets.push(capsule);
     }
   }
 
@@ -141,10 +146,10 @@ export class GameManager {
       destination: { x: 33, y: 98 },
     })
       .then(function (response) {
-        console.log(response);
+        LogManager.instance.debug(response);
       })
       .catch(function (error) {
-        console.log(error);
+        LogManager.instance.error(error);
       });
   }
 }

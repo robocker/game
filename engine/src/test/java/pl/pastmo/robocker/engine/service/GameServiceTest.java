@@ -128,7 +128,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0);
 
         player.addTank(tank);
 
@@ -164,7 +164,7 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
         Tank tank = new Tank();
-        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -195,7 +195,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -226,7 +226,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0);
         player2.addTank(tank);
 
         game.addPlayer(player2);
@@ -248,7 +248,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148.0).setY(31.0).setWidthX(5).setWidthY(10).setHeight(5);
+        tank.setX(148.0).setY(31.0);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -359,7 +359,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5)
+        tank.setX(0d).setY(0d).setAngle(0d)
                 .setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
@@ -413,7 +413,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5).setTurret(new Turret());
+        tank.setX(0d).setY(0d).setAngle(0d).setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -459,7 +459,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(0d).setHeight(5).setTurret(new Turret());
+        tank.setX(0d).setY(0d).setAngle(0d).setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -491,8 +491,8 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setWidthX(5).setWidthY(10).setAngle(2 * Math.PI - 0.05)
-                .setHeight(5).setTurret(new Turret());
+        tank.setX(0d).setY(0d).setAngle(2 * Math.PI - 0.05)
+                .setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 

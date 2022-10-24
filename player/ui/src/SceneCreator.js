@@ -1,3 +1,5 @@
+import { LogManager } from "./LogManager";
+
 export class SceneCreator {
   canvas;
   engine;
@@ -38,7 +40,7 @@ export class SceneCreator {
       try {
         return this.createDefaultEngine();
       } catch (e) {
-        console.log(
+        LogManager.instance.console.error(
           "the available createEngine function failed. Creating the default engine instead"
         );
         return this.createDefaultEngine();

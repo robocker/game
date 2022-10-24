@@ -11,3 +11,4 @@ player/node_modules/
 engine/Running
 engine/Using
 engineMock/node_modules/
+.vscode/

@@ -28,4 +28,11 @@ public class TurretMsg {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "TurretMsg{" +
+                "angle=" + angle +
+                ", angleVertical=" + angleVertical +
+                '}';
+    }
 }

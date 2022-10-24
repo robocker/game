@@ -9,17 +9,19 @@ import java.util.List;
 
 public class Tank implements MapItem, Containerized {
 
+    public static double DEFAULT_HEIGHT = 1.1;
+
     private static Integer idCounter = 1;
     private Integer id;
     private Double x;
     private Double y;
     private Double angle = 0d;
     private Turret turret;
-    private Integer widthX = 5;
-    private Integer widthY = 15;
-    private Integer height = 10;
+    private Double widthX = 1.3;
+    private Double widthYBack = 0.9;
+    private Double widthYFront = 1.1;
+    private Double height = DEFAULT_HEIGHT;
     private List<String> ips = new LinkedList<>();
-    private TankRequest actions;
     private LinkedList<Step> steps = new LinkedList<>();
     public static final double tankSpeed = 0.1;
     public static final double distanceTolerance = 0.001;
@@ -47,21 +49,6 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
-    public Integer getWidthX() {
-        return widthX;
-    }
-
-    @Override
-    public Integer getWidthY() {
-        return widthY;
-    }
-
-    @Override
-    public Integer getHeight() {
-        return height;
-    }
-
-    @Override
     public Tank setX(Double x) {
         this.x = x;
         return this;
@@ -70,6 +57,42 @@ public class Tank implements MapItem, Containerized {
     @Override
     public Tank setY(Double y) {
         this.y = y;
+        return this;
+    }
+
+    public Double getWidthX() {
+        return widthX;
+    }
+
+    public Double getWidthYBack() {
+        return widthYBack;
+    }
+
+    public Double getWidthYFront() {
+        return widthYFront;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public Tank setWidthX(Double widthX) {
+        this.widthX = widthX;
+        return this;
+    }
+
+    public Tank setWidthYBack(Double widthYBack) {
+        this.widthYBack = widthYBack;
+        return this;
+    }
+
+    public Tank setWidthYFront(Double widthYFront) {
+        this.widthYFront = widthYFront;
+        return this;
+    }
+
+    public Tank setHeight(Double height) {
+        this.height = height;
         return this;
     }
 
@@ -88,24 +111,6 @@ public class Tank implements MapItem, Containerized {
 
     public Tank setTurret(Turret turret) {
         this.turret = turret;
-        return this;
-    }
-
-    @Override
-    public Tank setWidthX(Integer widthX) {
-        this.widthX = widthX;
-        return this;
-    }
-
-    @Override
-    public Tank setWidthY(Integer widthY) {
-        this.widthY = widthY;
-        return this;
-    }
-
-    @Override
-    public Tank setHeight(Integer height) {
-        this.height = height;
         return this;
     }
 
