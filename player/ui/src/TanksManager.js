@@ -87,10 +87,10 @@ export class TanksManager {
     sps.mesh.rotation.y = -tankData.angle;
 
     const turret = sps.particles[1];
-    turret.rotation.y = tankData.turret.angle;
+    turret.rotation.y = -tankData.turret.angle;
 
     const barrel = sps.particles[2];
     barrel.rotation.z = tankData.turret.angleVertical;
-    barrel.rotation.y = tankData.turret.angle;
+    barrel.rotation.y = -tankData.turret.angle;
   }
 }

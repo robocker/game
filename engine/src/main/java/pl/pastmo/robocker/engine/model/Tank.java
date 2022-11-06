@@ -158,6 +158,11 @@ public class Tank implements MapItem, Containerized {
         return this;
     }
 
+    public Tank setTurretAngle(double angle){
+        this.getTurret().setAngle(angle);
+        return this;
+    }
+
     public static Integer getIdCounter(){
         return idCounter;
     }

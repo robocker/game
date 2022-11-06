@@ -11,8 +11,11 @@ export class Websocket {
   static connect() {
     this.ws = new WebSocket("ws://localhost:8080/state");
     this.ws.onmessage = (response) => {
-        LogManager.instance.debug(JSON.parse(response.data));
-      this.gameManager.updateGameState(JSON.parse(response.data));
+        const data = JSON.parse(response.data);
+        if(data.bullets.length > 0){
+            LogManager.instance.debug(data);
+        }
+      this.gameManager.updateGameState(data);
     };
     this.ws.onclose = async (event) => {
       console.error(event);

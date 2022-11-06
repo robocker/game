@@ -36,7 +36,7 @@ setInterval(() => {
         angle: 0,
         turret: {
           angle: 0,
-          angleVertical: Math.PI / 8,
+          angleVertical: 0,
         },
         x: -10,
         y: 0,
@@ -62,6 +62,17 @@ setInterval(() => {
         },
         x: 10,
         y: 0,
+      },
+    ],
+    bullets: [
+      {
+        angle: angle4,
+        gravitationSpeed: 7.071067811865475,
+        tankId: 4,
+        verticalAngle: 0.7853981633974483,
+        x: 15,
+        y: 5,
+        z: 1.1,
       },
     ],
   };

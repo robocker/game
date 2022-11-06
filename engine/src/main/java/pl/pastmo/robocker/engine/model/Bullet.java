@@ -14,7 +14,7 @@ public class Bullet {
 
     public static Bullet fromTank(Tank tank) {
         return new Bullet()
-                .setAngle(tank.getAngle())
+                .setAngle(tank.getAngle() + tank.getTurret().getAngle())
                 .setVerticalAngle(tank.getTurret().getAngleVertical())
                 .setTankId(tank.getId())
                 .setX(tank.getX())

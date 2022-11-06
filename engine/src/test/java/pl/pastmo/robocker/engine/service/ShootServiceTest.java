@@ -97,7 +97,7 @@ public class ShootServiceTest {
     }
 
     static Stream<Arguments> shootsProvider() {
-        Double Z= 10.0;
+        Double Z = 10.0;
 
         return Stream.of(
                 Arguments.arguments(Bullet.fromTank(new Tank()
@@ -107,7 +107,7 @@ public class ShootServiceTest {
                                 .setHeight(Z)
                                 .setY(0.0)),
                         new ExpectedResult().setAngle(0).setVerticalAngle(0)
-                                .setZ(Z- Bullet.GRAVITY_ACCELERATION)
+                                .setZ(Z - Bullet.GRAVITY_ACCELERATION)
                                 .setX(Bullet.SPEED).setY(0)
                                 .setGravitySpeed(-Bullet.GRAVITY_ACCELERATION)
                                 .setSpeed(Bullet.SPEED)),
@@ -148,7 +148,21 @@ public class ShootServiceTest {
                                 .setX(0)
                                 .setY(-1.115)
                                 .setGravitySpeed(0)
-                                .setSpeed(0))
+                                .setSpeed(0)),
+                Arguments.arguments(Bullet.fromTank(new Tank()
+                                .setAngle(Math.PI / 4)
+                                .setTurretVerticalAngle(Math.PI / 4)
+                                .setTurretAngle(Math.PI / 4)
+                                .setX(10.0)
+                                .setY(3.0)
+                                .setHeight(0.9)),
+                        new ExpectedResult().setAngle(Math.PI / 2)
+                                .setVerticalAngle(Math.PI / 4)
+                                .setZ(6.971)
+                                .setX(10.0)
+                                .setY(13.0)
+                                .setGravitySpeed(Bullet.SPEED/ Math.sqrt(2) - Bullet.GRAVITY_ACCELERATION)
+                                .setSpeed(Bullet.SPEED))
         );
     }
 }
