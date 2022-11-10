@@ -4,12 +4,12 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 COPY yarn.lock ./
-COPY index.js ./
-COPY ui/ ./ui
 
 RUN npm install -g yarn
-
 RUN yarn
+
+COPY index.js ./
+COPY ui/ ./ui
 
 RUN yarn build
 
