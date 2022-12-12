@@ -4,10 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.google.common.primitives.UnsignedInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.pastmo.robocker.engine.model.Containerized;
-import pl.pastmo.robocker.engine.model.Game;
-import pl.pastmo.robocker.engine.model.Player;
-import pl.pastmo.robocker.engine.model.Tank;
+import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.PlayerInfo;
 import pl.pastmo.robocker.engine.response.TankInfo;
@@ -16,10 +13,7 @@ import pl.pastmo.robocker.engine.websocket.TankRequest;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import javax.annotation.PostConstruct;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.TreeSet;
+import java.util.*;
 
 @Component("gameService")
 public class GameService extends TimerTask {
@@ -144,12 +138,25 @@ public class GameService extends TimerTask {
         TankStateMsg tanksMsgs = new TankStateMsg();
 
         shootService.processShoots();
+        List<Explosion> explosions = shootService.getExplosions();
+
+        tanksMsgs.setExplosions(explosions);
         tanksMsgs.setBullets(shootService.getBullets());
 
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {
-                moveService.updatePosition(tank);
-                tanksMsgs.add(TankMsg.fromTank(tank, player));
+
+                int hits = shootService.checkDemage(tank, explosions);
+                tank.decreaseLiveLevel(hits);
+
+                if (tank.getLiveLevel() > 0) {
+                    moveService.updatePosition(tank);
+                    tanksMsgs.add(TankMsg.fromTank(tank, player));
+
+                } else {
+                    dockerService.remove(tank.getContainerName());
+                    player.getTanks().remove(tank);
+                }
             }
         }
         this.messageService.sendMessage(tanksMsgs);

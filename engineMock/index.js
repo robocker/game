@@ -22,6 +22,7 @@ server.on("connection", function (socket) {
 });
 
 let angle4 = 0;
+let explosionTimer = 0;
 
 setInterval(() => {
   angle4 += Math.PI / 12;
@@ -75,7 +76,10 @@ setInterval(() => {
         z: 1.1,
       },
     ],
+    explosions: [{ x: 17, y: 10, tankId: 1, timer: explosionTimer, id: 0 }],
   };
+
+  explosionTimer++;
 
   //   debug(JSON.stringify(msg));
   sockets.forEach((s) => s.send(JSON.stringify(msg)));

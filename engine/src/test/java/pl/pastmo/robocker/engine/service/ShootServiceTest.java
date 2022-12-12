@@ -10,9 +10,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.model.Bullet;
+import pl.pastmo.robocker.engine.model.Explosion;
 import pl.pastmo.robocker.engine.model.Tank;
 import pl.pastmo.robocker.engine.model.Turret;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -74,6 +77,20 @@ public class ShootServiceTest {
         assertEquals(bullet.getX(), tank.getX());
         assertEquals(bullet.getY(), tank.getY());
         assertEquals(bullet.getZ(), (double) tank.getHeight());
+    }
+
+    @Test
+    public void explode() {
+
+        shootService.shootOnEnd(tank);
+
+        shootService.explode(shootService.getBullets().get(0));
+
+        assertEquals(shootService.getBullets().size(), 0);
+
+        Explosion explosion = shootService.getExplosions().get(0);
+        assertEquals(tank.getX(), explosion.getX());
+        assertEquals(tank.getY(), explosion.getY());
     }
 
     @ParameterizedTest
@@ -161,8 +178,36 @@ public class ShootServiceTest {
                                 .setZ(6.971)
                                 .setX(10.0)
                                 .setY(13.0)
-                                .setGravitySpeed(Bullet.SPEED/ Math.sqrt(2) - Bullet.GRAVITY_ACCELERATION)
+                                .setGravitySpeed(Bullet.SPEED / Math.sqrt(2) - Bullet.GRAVITY_ACCELERATION)
                                 .setSpeed(Bullet.SPEED))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("checkDemageProvider")
+    public void checkDemage(Tank tank, Explosion explosion, int expectedResult) {
+
+        List<Explosion> explosions = new LinkedList<>();
+        explosions.add(explosion);
+
+        int result = shootService.checkDemage(tank, explosions);
+
+        assertEquals(expectedResult, result);
+    }
+
+    static Stream<Arguments> checkDemageProvider() {
+        Double Z = 10.0;
+
+        return Stream.of(
+                Arguments.arguments(new Tank()
+                                .setX(1.1)
+                                .setY(2.0),
+                        new Explosion().setX(1.1).setY(2.0), 1),
+                Arguments.arguments(new Tank()
+                                .setX(1.1)
+                                .setY(2.0),
+                        new Explosion().setX(2.1).setY(2.0), 0)
+
         );
     }
 }

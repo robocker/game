@@ -25,7 +25,7 @@ sudo docker build -t robocker/engine -f DockerfileDev .
 
 First time is required to create network:
 ```
-docker network create -d bridge robocker-net
+sudo docker network create -d bridge robocker-net
 ```
 Later:
 ```

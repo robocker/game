@@ -18,36 +18,36 @@ public class DockerService {
     private Network currentNetwork;
 
 
-    public DockerService(){
+    public DockerService() {
         dockerClient = DockerClientBuilder.getInstance().build();
     }
 
-    public String getContainers(){
+    public String getContainers() {
 
         List<Container> containers = dockerClient.listContainersCmd().exec();
 
         String result = "";
 
-        for (Container container: containers) {
+        for (Container container : containers) {
 
-            result+= "Image: "+ container.getImage();
+            result += "Image: " + container.getImage();
 
-            Map<String, ContainerNetwork> network =  container.getNetworkSettings().getNetworks();
+            Map<String, ContainerNetwork> network = container.getNetworkSettings().getNetworks();
 
             String[] names = container.getNames();
 
-            for(String name: names){
+            for (String name : names) {
                 result += name;
             }
 
             System.out.println(network.keySet());
 
-            for (String key: network.keySet()){
+            for (String key : network.keySet()) {
                 ContainerNetwork containerNetwork = network.get(key);
                 System.out.println(containerNetwork.getAliases());
                 System.out.println(containerNetwork.getIpAddress());
 
-                result +=" ip:"+containerNetwork.getIpAddress();
+                result += " ip:" + containerNetwork.getIpAddress();
 
             }
         }
@@ -55,66 +55,71 @@ public class DockerService {
         return result;
     }
 
-    public void fillContainerInfo(String id, Containerized containerized){
+    public void fillContainerInfo(String id, Containerized containerized) {
         InspectContainerResponse container = dockerClient.inspectContainerCmd(id).exec();
 
         Map<String, ContainerNetwork> networks = container.getNetworkSettings().getNetworks();
 
-        for (String key: networks.keySet()){
+        for (String key : networks.keySet()) {
             ContainerNetwork containerNetwork = networks.get(key);
 
             containerized.addIp(containerNetwork.getIpAddress());
         }
     }
 
-   public CreateContainerResponse createCotnainer(String imageName, String networkName, String containerName, String port){
+
+    public CreateContainerResponse createCotnainer(String imageName, String networkName, String containerName, String port) {
 
         PortBinding portBinding = PortBinding.parse(port);
 
         HostConfig hostConfig = HostConfig
-               .newHostConfig()
-               .withAutoRemove(true)
-               .withPortBindings(portBinding);
+                .newHostConfig()
+                .withAutoRemove(true)
+                .withPortBindings(portBinding);
 
-         CreateContainerResponse containerResponse = dockerClient.createContainerCmd(imageName)
+        CreateContainerResponse containerResponse = dockerClient.createContainerCmd(imageName)
                 .withPortSpecs(port)
                 .withName(containerName)
                 .withHostConfig(hostConfig)
                 .exec();
 
 
-       this.createNetworkIfNotExist(networkName);
+        this.createNetworkIfNotExist(networkName);
 
-       dockerClient.connectToNetworkCmd().withNetworkId(this.currentNetwork.getId()).withContainerId(containerResponse.getId()).exec();
+        dockerClient.connectToNetworkCmd().withNetworkId(this.currentNetwork.getId()).withContainerId(containerResponse.getId()).exec();
 
-       dockerClient.startContainerCmd(containerResponse.getId()).exec();
+        dockerClient.startContainerCmd(containerResponse.getId()).exec();
 
-       return containerResponse;
-
-    }
-
-   public void createNetworkIfNotExist(String name){
-
-       Network exist = this.getNetwork(name);
-
-       if(exist == null){
-
-           dockerClient.createNetworkCmd()
-                   .withName(name)
-                   .withDriver("bridge").exec();
-
-           exist = this.getNetwork(name);
-
-       }
-
-       this.currentNetwork = exist;
+        return containerResponse;
 
     }
 
-    public Network getNetwork(String name){
+    public void remove(String containerName) {
+
+    }
+
+    public void createNetworkIfNotExist(String name) {
+
+        Network exist = this.getNetwork(name);
+
+        if (exist == null) {
+
+            dockerClient.createNetworkCmd()
+                    .withName(name)
+                    .withDriver("bridge").exec();
+
+            exist = this.getNetwork(name);
+
+        }
+
+        this.currentNetwork = exist;
+
+    }
+
+    public Network getNetwork(String name) {
         List<Network> networks = dockerClient.listNetworksCmd().withNameFilter(name).exec();
 
-        if(networks.size() > 0){
+        if (networks.size() > 0) {
             return networks.get(0);
         }
 

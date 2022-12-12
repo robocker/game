@@ -95,8 +95,8 @@ module.exports = class {
 
     const actionTurret = {
       angle: Math.random() * 2 * Math.PI,
-      verticalAngle: (Math.random() * Math.PI) / 2 - Math.PI / 6,
-      shoot: Math.random() > 0.5 ? "NOW" : "END_OF_ACTION",
+      verticalAngle: Math.PI / 4,//(Math.random() * Math.PI) / 2 - Math.PI / 6,
+      shoot: Math.random() > 0.9 ? "NOW" : "END_OF_ACTION",
     };
 
     commands.push({

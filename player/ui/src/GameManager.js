@@ -8,6 +8,7 @@ export class GameManager {
   SPSs = {};
   players = [];
   bullets = [];
+  explosions = {};
 
   sceneCreator;
   tanksManager;
@@ -18,19 +19,21 @@ export class GameManager {
   }
 
   initGame = () => {
-
     AxiosManager.get("/api/info", {})
       .then((response) => {
         LogManager.instance.debug(response);
         this.players = this.players;
 
         for (let player of response.data.players) {
-
-            if(player.current){
-                const wrapper = document.getElementById("wrapper");
-                const color = `rgb(${Utils.getColor(player.color.r)},${Utils.getColor(player.color.g)},${Utils.getColor(player.color.b)})`;
-                wrapper.style.backgroundColor = color;
-            }
+          if (player.current) {
+            const wrapper = document.getElementById("wrapper");
+            const color = `rgb(${Utils.getColor(
+              player.color.r
+            )},${Utils.getColor(player.color.g)},${Utils.getColor(
+              player.color.b
+            )})`;
+            wrapper.style.backgroundColor = color;
+          }
 
           for (let tank of player.tanks) {
             this.addTank(tank, player);
@@ -47,7 +50,6 @@ export class GameManager {
   addTank(tankData, player) {
     this.tanksManager.createTank(tankData, player).then((SPS) => {
       if (tankData) {
-
         SPS.setParticles();
       }
 
@@ -78,10 +80,10 @@ export class GameManager {
                 },
               })
                 .then(function (response) {
-                    LogManager.instance.debug(response);
+                  LogManager.instance.debug(response);
                 })
                 .catch(function (error) {
-                    LogManager.instance.error(error);
+                  LogManager.instance.error(error);
                 });
             }
 
@@ -106,19 +108,49 @@ export class GameManager {
         tank.mesh.position.x !== tankData.x ||
         tank.mesh.rotation.y !== -tankData.angle
       ) {
-
         this.tanksManager.updateTankPosition(tank, tankData);
         tank.setParticles();
       }
     }
 
-    for (let bullet of data.bullets){
-        const capsule = new BABYLON.MeshBuilder.CreateSphere("bullet", {diameter:0.3}, this.sceneCreator.scene);
-        capsule.position.x = bullet.x;
-        capsule.position.z = bullet.y;
-        capsule.position.y = bullet.z;
+    for(let oldBullet of this.bullets){
+        oldBullet.dispose();
+    }
+    this.bullets = [];
 
-        this.bullets.push(capsule);
+    for (let bullet of data.bullets) {
+      const capsule = new BABYLON.MeshBuilder.CreateSphere(
+        "bullet",
+        { diameter: 0.3 },
+        this.sceneCreator.scene
+      );
+      capsule.position.x = bullet.x;
+      capsule.position.z = bullet.y;
+      capsule.position.y = bullet.z;
+
+      this.bullets.push(capsule);
+    }
+
+    for (let explosion of data.explosions) {
+      if (!!this.explosions[explosion.id]) {
+        continue;
+      }
+
+      this.explosions[explosion.id] = explosion;
+
+      BABYLON.ParticleHelper.CreateAsync(
+        "explosion",
+        this.sceneCreator.scene
+      ).then((set) => {
+        set.systems.forEach((s) => {
+          s.disposeOnStop = true;
+          s.maxScaleX = 0.01;
+          s.maxScaleY = 0.01;
+        });
+        set.start({ x: explosion.x, z: explosion.y, y: 0 });
+      });
+
+
     }
   }
 
@@ -128,16 +160,6 @@ export class GameManager {
     tank.particles[1].rotation.y -= Math.PI / 180;
     tank.particles[2].rotation.y -= Math.PI / 180;
     tank.particles[2].rotation.z -= Math.PI / 180;
-    // tank.mesh.rotation.y += Math.PI / 180;
-
-    // if (tryb == "prawo") {
-    //   tank.mesh.position.z += 2;
-    // }
-    // if (tryb == "lewo") {
-    //   tank.mesh.position.z -= 2;
-    // } else {
-    //   tank.mesh.position.x += 2;
-    // }
 
     tank.setParticles();
 

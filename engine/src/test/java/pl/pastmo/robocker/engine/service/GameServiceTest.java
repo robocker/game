@@ -357,6 +357,8 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
 
+        when(shootService.checkDemage(any(), any())).thenReturn(0);
+
         Tank tank = new Tank();
 
         tank.setX(0d).setY(0d).setAngle(0d)
@@ -411,6 +413,8 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
 
+        when(shootService.checkDemage(any(), any())).thenReturn(0);
+
         Tank tank = new Tank();
 
         tank.setX(0d).setY(0d).setAngle(0d).setTurret(new Turret());
@@ -457,6 +461,8 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
 
+        when(shootService.checkDemage(any(), any())).thenReturn(0);
+
         Tank tank = new Tank();
 
         tank.setX(0d).setY(0d).setAngle(0d).setTurret(new Turret());
@@ -489,6 +495,8 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
 
+        when(shootService.checkDemage(any(), any())).thenReturn(0);
+
         Tank tank = new Tank();
 
         tank.setX(0d).setY(0d).setAngle(2 * Math.PI - 0.05)
@@ -507,6 +515,36 @@ class GameServiceTest {
         gameService.doTick();
         assertEquals(2 * Math.PI - 0.05, tank.getAngle(), 0.001);
 
+
+    }
+
+    @Test
+    public void doTick_removing_tank() throws ConfigurationException {
+        Game game = new Game();
+
+        Player player = new Player(gameService.getNewPlayerId());
+
+        Tank tank = new Tank().setX(0d).setY(0d).setAngle(2 * Math.PI - 0.05)
+                .setTurret(new Turret());
+
+        when(shootService.checkDemage(any(), any())).thenReturn(0);
+
+        player.addTank(tank);
+        game.addPlayer(player);
+
+        gameService.setGame(game);
+        assertEquals(3, tank.getLiveLevel());
+
+        gameService.doTick();
+        assertEquals(2, tank.getLiveLevel());
+
+        gameService.doTick();
+        assertEquals(1, tank.getLiveLevel());
+
+        gameService.doTick();
+        assertEquals(0, tank.getLiveLevel());
+        verify(dockerServiceMock).remove("tank-1");
+        assertEquals(0, player.getTanks().size());
 
     }
 

@@ -10,6 +10,11 @@ import java.util.List;
 public class Tank implements MapItem, Containerized {
 
     public static double DEFAULT_HEIGHT = 1.1;
+    public static double SENSITIVE_DAMAGE_DISTANCE = 0.65;
+    public static final double tankSpeed = 0.1;
+    public static final double distanceTolerance = 0.001;
+    public static final double rotationTolerance = Math.PI / 180;
+    public static final double rotationSpeed = Math.PI / 24;
 
     private static Integer idCounter = 1;
     private Integer id;
@@ -23,10 +28,7 @@ public class Tank implements MapItem, Containerized {
     private Double height = DEFAULT_HEIGHT;
     private List<String> ips = new LinkedList<>();
     private LinkedList<Step> steps = new LinkedList<>();
-    public static final double tankSpeed = 0.1;
-    public static final double distanceTolerance = 0.001;
-    public static final double rotationTolerance = Math.PI / 180;
-    public static final double rotationSpeed = Math.PI / 24;
+    private Integer liveLevel = 3;
 
     public Tank() {
         this.id = idCounter;
@@ -153,18 +155,36 @@ public class Tank implements MapItem, Containerized {
         return id;
     }
 
-    public Tank setTurretVerticalAngle(double angle){
+    public Tank setTurretVerticalAngle(double angle) {
         this.getTurret().setAngleVertical(angle);
         return this;
     }
 
-    public Tank setTurretAngle(double angle){
+    public Tank setTurretAngle(double angle) {
         this.getTurret().setAngle(angle);
         return this;
     }
 
-    public static Integer getIdCounter(){
+    public Tank setSteps(LinkedList<Step> steps) {
+        this.steps = steps;
+        return this;
+    }
+
+    public static Integer getIdCounter() {
         return idCounter;
+    }
+
+    public Integer getLiveLevel() {
+        return liveLevel;
+    }
+
+    public Tank setLiveLevel(Integer liveLevel) {
+        this.liveLevel = liveLevel;
+        return this;
+    }
+
+    public void decreaseLiveLevel(int hints) {
+        liveLevel-= hints;
     }
 
     @Override
