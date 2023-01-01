@@ -111,10 +111,18 @@ export class GameManager {
         this.tanksManager.updateTankPosition(tank, tankData);
         tank.setParticles();
       }
+
+      if (tankData.lifeLevel <= 0) {
+        if (!tank.vars.destroyed) {
+          tank.vars.destroyedStep = 0;
+        }
+        tank.vars.destroyed = true;
+        tank.setParticles();
+      }
     }
 
-    for(let oldBullet of this.bullets){
-        oldBullet.dispose();
+    for (let oldBullet of this.bullets) {
+      oldBullet.dispose();
     }
     this.bullets = [];
 
@@ -149,8 +157,6 @@ export class GameManager {
         });
         set.start({ x: explosion.x, z: explosion.y, y: 0 });
       });
-
-
     }
   }
 

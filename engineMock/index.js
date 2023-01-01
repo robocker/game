@@ -23,12 +23,18 @@ server.on("connection", function (socket) {
 
 let angle4 = 0;
 let explosionTimer = 0;
+let lifeLevel = 4;
 
 setInterval(() => {
   angle4 += Math.PI / 12;
   if (angle4 > Math.PI * 2) {
     angle4 = 0;
   }
+
+  if (lifeLevel > 0) {
+    lifeLevel--;
+  }
+
   const msg = {
     tanks: [
       {
@@ -41,6 +47,7 @@ setInterval(() => {
         },
         x: -10,
         y: 0,
+        lifeLevel,
       },
       {
         id: 2,
@@ -52,6 +59,18 @@ setInterval(() => {
         },
         x: 0,
         y: 0,
+        lifeLevel: 2,
+      },
+      {
+        id: "3",
+        angle: -Math.PI*3/4,
+        turret: {
+          angle: -Math.PI / 4,
+          angleVertical: Math.PI / 6,
+        },
+        x: -10,
+        y: 20,
+        lifeLevel,
       },
       {
         id: 4,
@@ -63,6 +82,7 @@ setInterval(() => {
         },
         x: 10,
         y: 0,
+        lifeLevel: 3,
       },
     ],
     bullets: [

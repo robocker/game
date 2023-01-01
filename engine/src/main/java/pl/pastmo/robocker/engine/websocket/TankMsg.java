@@ -9,6 +9,7 @@ public class TankMsg {
     Integer id;
     Integer playerId;
     Double angle;
+    Integer lifeLevel;
     TurretMsg turret;
 
     public TankMsg() {
@@ -24,6 +25,7 @@ public class TankMsg {
         return new TankMsg(tank.getX(), tank.getY())
                 .setId(tank.getId())
                 .setAngle(tank.getAngle())
+                .setLifeLevel(tank.getLifeLevel())
                 .setPlayerId(player.getId())
                 .setTurret(TurretMsg.fromTank(tank.getTurret()));
 
@@ -71,6 +73,15 @@ public class TankMsg {
 
     public TankMsg setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public Integer getLifeLevel() {
+        return lifeLevel;
+    }
+
+    public TankMsg setLifeLevel(Integer lifeLevel) {
+        this.lifeLevel = lifeLevel;
         return this;
     }
 

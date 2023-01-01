@@ -26,6 +26,7 @@ export class AxiosManager {
                         },
                         x: -10,
                         y: 0,
+                        lifeLevel: 3,
                       },
                       {
                         containerName: "tank-2",
@@ -39,6 +40,7 @@ export class AxiosManager {
                         },
                         x: 0,
                         y: 0,
+                        lifeLevel: 3,
                       },
                       {
                         containerName: "tank-4",
@@ -52,6 +54,7 @@ export class AxiosManager {
                         },
                         x: 10,
                         y: 0,
+                        lifeLevel: 3,
                       },
                     ],
                   },
@@ -70,7 +73,8 @@ export class AxiosManager {
                           angleVertical: Math.PI / 6,
                         },
                         x: -10,
-                        y: 100,
+                        y: 20,
+                        lifeLevel: 3,
                       },
                     ],
                   },

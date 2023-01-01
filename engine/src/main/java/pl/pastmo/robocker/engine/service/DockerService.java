@@ -95,6 +95,11 @@ public class DockerService {
     }
 
     public void remove(String containerName) {
+        Runnable r1 = () -> {
+            dockerClient.stopContainerCmd(containerName).exec();
+        };
+
+        new Thread(r1).start();
 
     }
 

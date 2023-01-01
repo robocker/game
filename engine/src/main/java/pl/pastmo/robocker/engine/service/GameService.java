@@ -149,7 +149,7 @@ public class GameService extends TimerTask {
                 int hits = shootService.checkDemage(tank, explosions);
                 tank.decreaseLiveLevel(hits);
 
-                if (tank.getLiveLevel() > 0) {
+                if (tank.getLifeLevel() > 0) {
                     moveService.updatePosition(tank);
                     tanksMsgs.add(TankMsg.fromTank(tank, player));
 

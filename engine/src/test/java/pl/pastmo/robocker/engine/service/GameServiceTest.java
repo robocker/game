@@ -527,22 +527,22 @@ class GameServiceTest {
         Tank tank = new Tank().setX(0d).setY(0d).setAngle(2 * Math.PI - 0.05)
                 .setTurret(new Turret());
 
-        when(shootService.checkDemage(any(), any())).thenReturn(0);
+        when(shootService.checkDemage(any(), any())).thenReturn(1);
 
         player.addTank(tank);
         game.addPlayer(player);
 
         gameService.setGame(game);
-        assertEquals(3, tank.getLiveLevel());
+        assertEquals(3, tank.getLifeLevel());
 
         gameService.doTick();
-        assertEquals(2, tank.getLiveLevel());
+        assertEquals(2, tank.getLifeLevel());
 
         gameService.doTick();
-        assertEquals(1, tank.getLiveLevel());
+        assertEquals(1, tank.getLifeLevel());
 
         gameService.doTick();
-        assertEquals(0, tank.getLiveLevel());
+        assertEquals(0, tank.getLifeLevel());
         verify(dockerServiceMock).remove("tank-1");
         assertEquals(0, player.getTanks().size());
 

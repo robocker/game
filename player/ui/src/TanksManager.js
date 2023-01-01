@@ -56,6 +56,8 @@ export class TanksManager {
         top.dispose();
         barrel.dispose();
 
+        sps.vars.destroyed = false;
+
         const mesh = sps.buildMesh();
         sps.initParticles = () => {
           const bottom = sps.particles[0];
@@ -67,7 +69,33 @@ export class TanksManager {
           const barrel = sps.particles[2];
           barrel.color = player.color;
 
-          this.updateTankPosition(sps,tankData);
+          this.updateTankPosition(sps, tankData);
+        };
+
+        sps.updateParticle = function (p) {
+          if (sps.vars.destroyed && sps.vars.destroyedStep <= 5) {
+            p.rotation.x = (sps.vars.destroyedStep * Math.PI) / 2 / 5;
+
+            if (sps.vars.destroyed && sps.vars.destroyedStep == 5) {
+              const bottom = sps.particles[0];
+              const turret = sps.particles[1];
+              const barrel = sps.particles[2];
+
+              const newColor = {
+                r: bottom.color.r * 0.5,
+                g: bottom.color.g * 0.5,
+                b: bottom.color.b * 0.5,
+              };
+
+              bottom.color = newColor;
+              turret.color = newColor;
+              barrel.color = newColor;
+
+              p.alive = false;
+            }
+            sps.vars.destroyedStep++;
+          }
+
         };
 
         sps.vars.tankData = tankData;
@@ -81,7 +109,7 @@ export class TanksManager {
     });
   }
 
-  updateTankPosition(sps, tankData){
+  updateTankPosition(sps, tankData) {
     sps.mesh.position.z = tankData.y;
     sps.mesh.position.x = tankData.x;
     sps.mesh.rotation.y = -tankData.angle;
@@ -92,5 +120,6 @@ export class TanksManager {
     const barrel = sps.particles[2];
     barrel.rotation.z = tankData.turret.angleVertical;
     barrel.rotation.y = -tankData.turret.angle;
+
   }
 }

@@ -28,7 +28,7 @@ public class Tank implements MapItem, Containerized {
     private Double height = DEFAULT_HEIGHT;
     private List<String> ips = new LinkedList<>();
     private LinkedList<Step> steps = new LinkedList<>();
-    private Integer liveLevel = 3;
+    private Integer lifeLevel = 3;
 
     public Tank() {
         this.id = idCounter;
@@ -174,17 +174,17 @@ public class Tank implements MapItem, Containerized {
         return idCounter;
     }
 
-    public Integer getLiveLevel() {
-        return liveLevel;
+    public Integer getLifeLevel() {
+        return lifeLevel;
     }
 
-    public Tank setLiveLevel(Integer liveLevel) {
-        this.liveLevel = liveLevel;
+    public Tank setLifeLevel(Integer lifeLevel) {
+        this.lifeLevel = lifeLevel;
         return this;
     }
 
     public void decreaseLiveLevel(int hints) {
-        liveLevel-= hints;
+        lifeLevel -= hints;
     }
 
     @Override
