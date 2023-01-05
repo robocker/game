@@ -89,7 +89,7 @@ describe("Tank", () => {
     tank.serveChangeDestination({ x: 30, y: 5 });
 
     expect(client.send).toHaveBeenCalledWith(
-      '{"tankId":42,"actions":[{"distance":28}]}'
+      '{\"tankId\":42,\"actions\":[{\"distance\":28,\"turret\":{\"angle\":0,\"verticalAngle\":0.7853981633974483,\"shoot\":\"END_OF_ACTION\"}}]}'
     );
   });
 

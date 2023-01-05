@@ -11,6 +11,7 @@ public class Tank implements MapItem, Containerized {
 
     public static double DEFAULT_HEIGHT = 1.1;
     public static double SENSITIVE_DAMAGE_DISTANCE = 0.65;
+    public static Integer START_LIFE_LEVEL = 3;
     public static final double tankSpeed = 0.1;
     public static final double distanceTolerance = 0.001;
     public static final double rotationTolerance = Math.PI / 180;
@@ -28,7 +29,7 @@ public class Tank implements MapItem, Containerized {
     private Double height = DEFAULT_HEIGHT;
     private List<String> ips = new LinkedList<>();
     private LinkedList<Step> steps = new LinkedList<>();
-    private Integer lifeLevel = 3;
+    private Integer lifeLevel = START_LIFE_LEVEL;
 
     public Tank() {
         this.id = idCounter;

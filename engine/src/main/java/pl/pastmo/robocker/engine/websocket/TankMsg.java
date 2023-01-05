@@ -13,6 +13,7 @@ public class TankMsg {
     TurretMsg turret;
 
     public TankMsg() {
+        this.lifeLevel = Tank.START_LIFE_LEVEL;
     }
 
     public TankMsg(double x, double y) {

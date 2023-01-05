@@ -94,9 +94,9 @@ module.exports = class {
     const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);
 
     const actionTurret = {
-      angle: Math.random() * 2 * Math.PI,
-      verticalAngle: Math.PI / 4,//(Math.random() * Math.PI) / 2 - Math.PI / 6,
-      shoot: Math.random() > 0.9 ? "NOW" : "END_OF_ACTION",
+      angle: 0,
+      verticalAngle: Math.PI / 4,
+      shoot: "END_OF_ACTION",
     };
 
     commands.push({
