@@ -46,28 +46,13 @@ public class RegisterController {
         Player player = new Player(this.gameService.getNewPlayerId()).setColor(new Color(1.0f, 0.0f, 0.0f));
         player.addTank((new Tank()).setX(105.0).setY(41.0).setAngle(Math.PI / 2).setTurret(new Turret()));
         player.addTank((new Tank()).setX(115.0).setY(41.0).setTurret(new Turret()));
-//        player.addTank((new Tank()).setX(125.0).setY(41.0));
-//        player.addTank((new Tank()).setX(135.0).setY(41.0));
-//        player.addTank((new Tank()).setX(145.0).setY(41.0));
-//        player.addTank((new Tank()).setX(155.0).setY(41.0));
-//        player.addTank((new Tank()).setX(165.0).setY(41.0));
-//        player.addTank((new Tank()).setX(175.0).setY(41.0));
-//        player.addTank((new Tank()).setX(185.0).setY(41.0));
-//        player.addTank((new Tank()).setX(105.0).setY(35.0));
-//        player.addTank((new Tank()).setX(115.0).setY(35.0));
-//        player.addTank((new Tank()).setX(125.0).setY(35.0));
-//        player.addTank((new Tank()).setX(135.0).setY(35.0));
-//        player.addTank((new Tank()).setX(145.0).setY(35.0));
-//        player.addTank((new Tank()).setX(155.0).setY(35.0));
-//        player.addTank((new Tank()).setX(165.0).setY(35.0));
-//        player.addTank((new Tank()).setX(175.0).setY(35.0));
-//        player.addTank((new Tank()).setX(185.0).setY(35.0));
+//        player.addTank((new Tank()).setX(125.0).setY(41.0).setTurret(new Turret()));
         game.addPlayer(player);
 
         Player player2 = new Player(this.gameService.getNewPlayerId()).setColor(new Color(0.0f, 0.0f, 1.0f));
-        Tank tank2 = new Tank();
-        tank2.setX(120.0).setY(55.0).setAngle(Math.PI / 4).setTurret(new Turret());
-        player.addTank(tank2);
+        player2.addTank((new Tank()).setX(105.0).setY(51.0).setAngle(Math.PI).setTurret(new Turret()));
+//        player2.addTank((new Tank()).setX(115.0).setY(81.0).setAngle(Math.PI).setTurret(new Turret()));
+//        player2.addTank((new Tank()).setX(125.0).setY(81.0).setAngle(Math.PI).setTurret(new Turret()));
         game.addPlayer(player2);
 
         gameService.runGame(game);

@@ -95,7 +95,7 @@ module.exports = class {
 
     const actionTurret = {
       angle: 0,
-      verticalAngle: Math.PI / 4,
+      verticalAngle: 0,
       shoot: "END_OF_ACTION",
     };
 

@@ -58,4 +58,12 @@ public class Explosion {
         this.timer++;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Explosion{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

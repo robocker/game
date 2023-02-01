@@ -9,19 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
 import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.TankInfo;
-import pl.pastmo.robocker.engine.websocket.Action;
-import pl.pastmo.robocker.engine.websocket.ShootType;
-import pl.pastmo.robocker.engine.websocket.TankRequest;
+import pl.pastmo.robocker.engine.websocket.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -44,6 +39,8 @@ class GameServiceTest {
     @Mock
     ShootService shootService;
     private GameService gameService;
+    @Captor
+    ArgumentCaptor<TankStateMsg> tankMsgCaptor;
 
     @BeforeEach
     void setUp() {
@@ -532,20 +529,28 @@ class GameServiceTest {
         player.addTank(tank);
         game.addPlayer(player);
 
+
         gameService.setGame(game);
         assertEquals(3, tank.getLifeLevel());
 
         gameService.doTick();
+
         assertEquals(2, tank.getLifeLevel());
 
         gameService.doTick();
         assertEquals(1, tank.getLifeLevel());
 
         gameService.doTick();
+
+        verify(messageService, times(3)).sendMessage(tankMsgCaptor.capture());
+        TankStateMsg tankMsg = tankMsgCaptor.getAllValues().get(2);
+
+        assertEquals(1,tankMsg.getTanks().size());
+        assertEquals(0,tankMsg.getTanks().get(0).getLifeLevel());
+
         assertEquals(0, tank.getLifeLevel());
         verify(dockerServiceMock).remove("tank-1");
         assertEquals(0, player.getTanks().size());
-
     }
 
 

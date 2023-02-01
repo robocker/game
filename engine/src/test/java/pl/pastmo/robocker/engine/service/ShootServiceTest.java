@@ -206,7 +206,17 @@ public class ShootServiceTest {
                 Arguments.arguments(new Tank()
                                 .setX(1.1)
                                 .setY(2.0),
-                        new Explosion().setX(2.1).setY(2.0), 0)
+                        new Explosion().setX(2.1).setY(2.0), 0),
+                Arguments.arguments(new Tank()
+                                .setX(109.48934996867631)
+                                .setY(69.84252848323732 ),
+                        new Explosion().setX(108.68703496531755)
+                                .setY(80.31183078259735), 0),
+                Arguments.arguments(new Tank()
+                                .setX(108.4)
+                                .setY(55.0 ),
+                        new Explosion().setX(108.0)
+                                .setY(55.4), 1)
 
         );
     }

@@ -143,23 +143,34 @@ public class GameService extends TimerTask {
         tanksMsgs.setExplosions(explosions);
         tanksMsgs.setBullets(shootService.getBullets());
 
+        List<Tank> tanksToRemove = new LinkedList<>();
+
         for (Player player : game.getPlayers()) {
             for (Tank tank : player.getTanks()) {
+                boolean toRemove = false;
 
                 int hits = shootService.checkDemage(tank, explosions);
                 tank.decreaseLiveLevel(hits);
 
                 if (tank.getLifeLevel() > 0) {
                     moveService.updatePosition(tank);
-                    tanksMsgs.add(TankMsg.fromTank(tank, player));
-
                 } else {
                     dockerService.remove(tank.getContainerName());
+                    tanksToRemove.add(tank);
+                    toRemove = true;
+                }
+
+                tanksMsgs.add(TankMsg.fromTank(tank, player));
+                if (toRemove) {
                     player.getTanks().remove(tank);
                 }
             }
         }
+
+
         this.messageService.sendMessage(tanksMsgs);
+
+        shootService.removeExplosions(explosions);
     }
 
     public String calculatePorts(Containerized item) {

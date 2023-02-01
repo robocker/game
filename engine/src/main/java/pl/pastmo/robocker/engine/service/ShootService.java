@@ -69,6 +69,13 @@ public class ShootService {
         explosions.push(Explosion.fromBullet(bullet));
     }
 
+    public void removeExplosions(List<Explosion> explosions) {
+
+        for (Explosion explosion : explosions) {
+            explosions.remove(explosion);
+        }
+    }
+
     public LinkedList<Bullet> getBullets() {
         return bullets;
     }
@@ -81,11 +88,16 @@ public class ShootService {
         int result = 0;
 
         for (Explosion explosion : explosions) {
-            double distance = Math.sqrt(Math.sqrt(explosion.getX() - tank.getX())
-                    + Math.sqrt(explosion.getY() - tank.getY()));
+            double distance = Math.sqrt(Math.pow(explosion.getX() - tank.getX(), 2)
+                    + Math.pow(explosion.getY() - tank.getY(), 2));
 
             if (distance <= Tank.SENSITIVE_DAMAGE_DISTANCE) {
                 result++;
+            }
+
+            if (distance <= 5) {
+            System.out.println("\ndistance:" + distance + " Tank:" + tank.getId() + "x:"
+                    + tank.getX() + " y:" + tank.getY() + " explosion:" + explosion);
             }
         }
         return result;
