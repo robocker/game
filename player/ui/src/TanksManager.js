@@ -99,6 +99,7 @@ export class TanksManager {
         };
 
         sps.vars.tankData = tankData;
+        sps.vars.playerId = player.id;
 
         sps.initParticles();
 

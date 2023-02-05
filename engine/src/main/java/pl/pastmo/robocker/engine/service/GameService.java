@@ -80,6 +80,7 @@ public class GameService extends TimerTask {
 
             playerResult.color = player.getColor();
             playerResult.tanks = player.getTanks();
+            playerResult.id = player.getId();
 
             if (player.getIps().contains(ip)) {
                 playerResult.current = true;

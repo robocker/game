@@ -9,6 +9,7 @@ export class GameManager {
   players = [];
   bullets = [];
   explosions = {};
+  currentPlayerId;
 
   sceneCreator;
   tanksManager;
@@ -33,6 +34,7 @@ export class GameManager {
               player.color.b
             )})`;
             wrapper.style.backgroundColor = color;
+            this.currentPlayerId = player.id;
           }
 
           for (let tank of player.tanks) {
@@ -62,12 +64,12 @@ export class GameManager {
               return;
             }
 
-            if (pointerInfo.pickInfo.pickedMesh === SPS.mesh) {
+            if (pointerInfo.pickInfo.pickedMesh === SPS.mesh &&
+                SPS.vars.playerId == this.currentPlayerId) {
               SPS.vars.selected = true;
               LogManager.instance.debug(tankData);
               LogManager.instance.debug(SPS.vars);
             } else if (
-              pointerInfo.pickInfo.pickedMesh.name == "gdhm" &&
               SPS.vars.selected
             ) {
               SPS.vars.selected = false;

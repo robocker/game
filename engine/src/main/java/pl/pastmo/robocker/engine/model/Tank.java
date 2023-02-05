@@ -261,7 +261,6 @@ public class Tank implements MapItem, Containerized {
             turretStep.updateShootTypeInCurrentAction();
 
         }
-        System.out.println(steps);
     }
 
 

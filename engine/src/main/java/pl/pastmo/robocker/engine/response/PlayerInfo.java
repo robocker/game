@@ -6,6 +6,7 @@ import pl.pastmo.robocker.engine.model.Tank;
 import java.util.List;
 
 public class PlayerInfo {
+    public Integer id;
     public List<Tank> tanks;
     public Color color;
     public boolean current = false;
