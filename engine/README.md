@@ -37,7 +37,7 @@ You can check if works in browser: http://localhost:8080/
 
 ## Run demo game ##
 
-Just open: http://localhost:8080/containers/demo
+Just open: http://localhost:8080/containers/demo?tanks=robocker/tankbasic,robocker/tankbasic
 
 Then you can open players` views using returned ports e.g. for player1 it should be http://localhost:3000/
 

@@ -30,11 +30,17 @@ public class Tank implements MapItem, Containerized {
     private List<String> ips = new LinkedList<>();
     private LinkedList<Step> steps = new LinkedList<>();
     private Integer lifeLevel = START_LIFE_LEVEL;
+    private String image = "robocker/tankbasic";
 
     public Tank() {
         this.id = idCounter;
         this.turret = new Turret();
         idCounter++;
+    }
+
+    public Tank(String imageName) {
+        this();
+        this.image = imageName;
     }
 
     static public void resetCounter() {
@@ -119,7 +125,7 @@ public class Tank implements MapItem, Containerized {
 
     @Override
     public String getImageName() {
-        return "robocker/tankbasic";
+        return image;
     }
 
     @Override

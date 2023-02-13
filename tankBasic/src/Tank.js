@@ -94,7 +94,7 @@ module.exports = class {
     const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);
 
     const actionTurret = {
-      angle: 0,
+      angle: Math.PI/4,
       verticalAngle: 0,
       shoot: "END_OF_ACTION",
     };

@@ -13,6 +13,7 @@ export class AxiosManager {
                   {
                     current: true,
                     color: { r: 0, g: 0, b: 1 },
+                    id: 1,
                     tanks: [
                       {
                         containerName: "tank-1",
@@ -61,13 +62,14 @@ export class AxiosManager {
                   {
                     current: false,
                     color: { r: 1, g: 0, b: 0 },
+                    id: 2,
                     tanks: [
                       {
                         containerName: "tank-3",
                         id: "3",
                         imageName: "robocker/tankbasic",
                         insidePortNumber: 80,
-                        angle: -Math.PI*3/4,
+                        angle: (-Math.PI * 3) / 4,
                         turret: {
                           angle: -Math.PI / 4,
                           angleVertical: Math.PI / 6,

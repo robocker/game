@@ -16,11 +16,11 @@ export class SceneCreator {
 
     var camera = new BABYLON.FreeCamera(
       "camera1",
-      new BABYLON.Vector3(0, 20, -1),
+      new BABYLON.Vector3(0, 50, -10),
       scene
     );
 
-    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.setTarget(new BABYLON.Vector3(50, 0, 50));
 
     camera.attachControl(this.canvas, true);
 
