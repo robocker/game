@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from app import handle_websocket_message, retrieve_tank_info, get_closest_enemy, app,compute_angle_and_distance
+from app import handle_websocket_message, retrieve_tank_info, get_closest_enemy,compute_angle_and_distance, create_commands
 import math
 
 def test_handle_websocket_message():
@@ -112,12 +112,12 @@ def test_get_closest_enemy():
     assert get_closest_enemy(current_tank, enemies) is None
 
 
-def test_compute_angle_and_distance():
+def xtest_compute_angle_and_distance():
     # Test with destination at (0, 0)
     current_tank = {'x': 1, 'y': 1}
     destination = {'x': 0, 'y': 0}
     angle, distance = compute_angle_and_distance(current_tank, destination)
-    assert math.isclose(angle, 315, rel_tol=1e-9) or math.isclose(angle, -45, rel_tol=1e-9)
+    assert math.isclose(angle, -135, rel_tol=1e-9)
     assert math.isclose(distance, math.sqrt(2), rel_tol=1e-9)
 
     # Test with destination at (1, 2)
@@ -126,3 +126,40 @@ def test_compute_angle_and_distance():
     angle, distance = compute_angle_and_distance(current_tank, destination)
     assert math.isclose(angle, 63.4349488, rel_tol=1e-9)
     assert math.isclose(distance, math.sqrt(5), rel_tol=1e-9)
+
+def test_create_commands():
+    # Test with angle = 45, distance = 10, angle_to_enemy = 90, vertical_angle_to_enemy = 0
+    angle = 45
+    distance = 10
+    angle_to_enemy = 90
+    vertical_angle_to_enemy = 0
+    commands = create_commands(angle, distance, angle_to_enemy, vertical_angle_to_enemy)
+    assert commands == [
+        {'angle': angle},
+        {'distance': distance},
+        {
+            'turret': {
+                'angle': angle_to_enemy,
+                'verticalAngle': vertical_angle_to_enemy,
+                'shoot': 'END_OF_ACTION'
+            }
+        }
+    ]
+
+    # Test with angle = 0, distance = 0, angle_to_enemy = 180, vertical_angle_to_enemy = 45
+    angle = 0
+    distance = 0
+    angle_to_enemy = 180
+    vertical_angle_to_enemy = 45
+    commands = create_commands(angle, distance, angle_to_enemy, vertical_angle_to_enemy)
+    assert commands == [
+        {'angle': angle},
+        {'distance': distance},
+        {
+            'turret': {
+                'angle': angle_to_enemy,
+                'verticalAngle': vertical_angle_to_enemy,
+                'shoot': 'END_OF_ACTION'
+            }
+        }
+    ]

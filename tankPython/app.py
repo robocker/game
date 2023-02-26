@@ -30,8 +30,17 @@ def compute_angle_and_distance(current_tank, destination):
     dy = destination['y'] - current_tank['y']
     distance = math.sqrt(dx**2 + dy**2)
     angle = math.degrees(math.atan2(dy, dx))
-    if angle < 0:
-        angle = 360 - abs(angle)
+
+    # Adjust angle based on quadrant of destination point
+    if dx >= 0 and dy >= 0:
+        angle -= 90
+    elif dx >= 0 and dy < 0:
+        angle = 90 - angle
+    elif dx < 0 and dy < 0:
+        angle += 90
+    elif dx < 0 and dy >= 0:
+        angle += 90
+
     return angle, distance
 
 
@@ -49,7 +58,9 @@ def compute_aim(current_tank, closest_enemy, distance):
 def create_commands(angle, distance, angle_to_enemy, vertical_angle_to_enemy):
     commands = [
         {
-            'angle': angle,
+            'angle': angle
+        },
+        {
             'distance': distance
         },
         {
