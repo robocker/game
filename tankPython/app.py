@@ -45,13 +45,15 @@ def compute_angle_and_distance(current_tank, destination):
 
 
 def compute_aim(current_tank, closest_enemy, distance):
-    dt = distance / 10
-    ex = closest_enemy['x'] + closest_enemy['speedX'] * dt
-    ey = closest_enemy['y'] + closest_enemy['speedY'] * dt
-    etx = ex - current_tank['x']
-    ety = ey - current_tank['y']
-    angle_to_enemy = math.degrees(math.atan2(ety, etx))
-    vertical_angle_to_enemy = math.degrees(math.atan2(closest_enemy['z'] - current_tank['z'], distance))
+    bullet_speed = 10
+    bullet_gravity = 1
+    required_angle = math.degrees(math.atan2(closest_enemy['y'] - current_tank['y'], closest_enemy['x'] - current_tank['x']))
+    horizontal_distance = distance * math.cos(math.radians(current_tank['angle'] - required_angle))
+    time_to_target = horizontal_distance / bullet_speed
+    vertical_distance = (distance * math.sin(math.radians(current_tank['angle'] - required_angle))
+                         - 0.5 * bullet_gravity * time_to_target**2)
+    vertical_angle_to_enemy = math.degrees(math.atan2(vertical_distance, horizontal_distance))
+    angle_to_enemy = required_angle - current_tank['angle']
     return angle_to_enemy, vertical_angle_to_enemy
 
 

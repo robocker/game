@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from app import handle_websocket_message, retrieve_tank_info, get_closest_enemy,compute_angle_and_distance, create_commands
+from app import handle_websocket_message, retrieve_tank_info, get_closest_enemy,compute_angle_and_distance, create_commands, compute_aim
 import math
 
 def test_handle_websocket_message():
@@ -163,3 +163,36 @@ def test_create_commands():
             }
         }
     ]
+
+def xtest_compute_aim():
+    # Test with closest enemy at (3, 0) and distance 3
+    current_tank = {'x': 0, 'y': 0, 'angle': 0}
+    closest_enemy = {'x': 3, 'y': 0, 'z': 0}
+    distance = 3
+    angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
+    assert math.isclose(angle_to_enemy, 90, rel_tol=1e-9)
+    assert math.isclose(vertical_angle_to_enemy, 0, rel_tol=1e-9)
+
+    # Test with closest enemy at (0, 3) and distance 3
+    current_tank = {'x': 0, 'y': 0, 'angle': 0}
+    closest_enemy = {'x': 0, 'y': 3, 'z': 0}
+    distance = 3
+    angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
+    assert math.isclose(angle_to_enemy, 0, rel_tol=1e-9)
+    assert math.isclose(vertical_angle_to_enemy, 45, rel_tol=1e-9)
+
+    # Test with closest enemy at (-3, 0) and distance 3
+    current_tank = {'x': 0, 'y': 0, 'angle': 0}
+    closest_enemy = {'x': -3, 'y': 0, 'z': 0}
+    distance = 3
+    angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
+    assert math.isclose(angle_to_enemy, -90, rel_tol=1e-9)
+    assert math.isclose(vertical_angle_to_enemy, 0, rel_tol=1e-9)
+
+    # Test with closest enemy at (0, -3) and distance 3
+    current_tank = {'x': 0, 'y': 0, 'angle': 0}
+    closest_enemy = {'x': 0, 'y': -3, 'z': 0}
+    distance = 3
+    angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
+    assert math.isclose(angle_to_enemy, 0, rel_tol=1e-9)
+    assert math.isclose(vertical_angle_to_enemy, -45, rel_tol=1e-9)
