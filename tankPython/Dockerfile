@@ -1,17 +1,17 @@
-# Używamy obrazu bazowego z Pythona
+# Use Python 3.8 slim image as the base image
 FROM python:3.8-slim
 
-# Ustawiamy katalog roboczy
+# Set the working directory
 WORKDIR /app
 
-# Kopiujemy plik requirements.txt
+# Copy the requirements file
 COPY requirements.txt .
 
-# Instalujemy potrzebne pakiety
-RUN pip install -r requirements.txt
+# Install required packages
+RUN pip install -r requirements.txt && pip install Jinja2==3.0
 
-# Kopiujemy kod aplikacji
+# Copy the application code
 COPY app.py .
 
-# Uruchamiamy aplikację
+# Start the application
 CMD [ "python", "app.py" ]
