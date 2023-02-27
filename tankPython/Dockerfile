@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install required packages
-RUN pip install -r requirements.txt && pip install Jinja2==3.0
+RUN pip install -r requirements.txt
 
 # Copy the application code
 COPY app.py .
