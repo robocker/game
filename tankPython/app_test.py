@@ -1,19 +1,38 @@
 from unittest.mock import patch
-from app import handle_websocket_message, retrieve_tank_info, get_closest_enemy,compute_angle_and_distance, create_commands, compute_aim
+from app import handle_websocket_message, retrieve_tank_info, get_closest_enemy,compute_angle_and_distance, create_commands, compute_aim,  get_allies, get_enemies, get_current_tank, set_current_tank
 import math
 
 def test_handle_websocket_message():
-    message = '{"tanks": [{"id": 1, "x": 10, "y": 20, "angle": 0, "playerId": 1, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}]}'
+    message = '{"tanks": [{"id": 1, "x": 10, "y": 20, "angle": 0, "playerId": 1, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}, \
+                          {"id": 2, "x": 30, "y": 40, "angle": 90, "playerId": 1, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}, \
+                          {"id": 3, "x": 50, "y": 60, "angle": 180, "playerId": 2, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}]}'
     current_tank = {'id': 1, 'playerId': 1}
-    allies = []
-    enemies = []
+    set_current_tank(current_tank)
+
+    # Check initial state
+    assert get_current_tank() == current_tank
+    assert get_allies() == []
+    assert get_enemies() == []
 
     handle_websocket_message(message, current_tank)
 
-    assert current_tank['x'] == 10
-    assert current_tank['y'] == 20
-    assert allies == []
-    assert enemies == []
+    # Check updated state after first message
+    assert get_current_tank()['x'] == 10
+    assert get_current_tank()['y'] == 20
+    assert get_allies() == [{'id': 2, 'x': 30, 'y': 40, 'angle': 90, 'playerId': 1, 'lifeLevel': 100, 'turret': {'angle': 0, 'verticalAngle': 0}}]
+    assert get_enemies() == [{'id': 3, 'x': 50, 'y': 60, 'angle': 180, 'playerId': 2, 'lifeLevel': 100, 'turret': {'angle': 0, 'verticalAngle': 0}}]
+
+    # Send second message
+    message = '{"tanks": [{"id": 1, "x": 25, "y": 35, "angle": 0, "playerId": 1, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}, \
+                          {"id": 2, "x": 35, "y": 45, "angle": 90, "playerId": 1, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}, \
+                          {"id": 3, "x": 55, "y": 65, "angle": 180, "playerId": 2, "lifeLevel": 100, "turret": {"angle": 0, "verticalAngle": 0}}]}'
+
+    handle_websocket_message(message, current_tank)
+    # Check updated state after second message
+    assert get_current_tank()['x'] == 25
+    assert get_current_tank()['y'] == 35
+    assert get_allies() == [{'id': 2, 'x': 35, 'y': 45, 'angle': 90, 'playerId': 1, 'lifeLevel': 100, 'turret': {'angle': 0, 'verticalAngle': 0}}]
+    assert get_enemies() == [{'id': 3, 'x': 55, 'y': 65, 'angle': 180, 'playerId': 2, 'lifeLevel': 100, 'turret': {'angle': 0, 'verticalAngle': 0}}]
 
 
 def test_retrieve_tank_info(requests_mock):

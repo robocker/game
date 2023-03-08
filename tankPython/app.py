@@ -19,6 +19,10 @@ def move():
     angle, distance = compute_angle_and_distance(current_tank, destination)
     angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
 
+    print(f"Received move request to destination {destination}")
+    print(f"Closest enemy is {closest_enemy} at a distance of {distance}")
+    print(f"Aiming at enemy with angle {angle_to_enemy} and vertical angle {vertical_angle_to_enemy}")
+
     commands = create_commands(angle, distance, angle_to_enemy, vertical_angle_to_enemy)
     send_message(ws, current_tank, commands)
 
@@ -109,12 +113,30 @@ def handle_websocket_message(message, current_tank):
 
     # Update information about current tank and other tanks
     for tank in tanks:
-        if tank['id'] == current_tank['id']:
-            current_tank.update(tank)
-        elif tank['playerId'] == current_tank['playerId']:
-            allies.append(tank)
+        tank_id = tank['id']
+        player_id = tank['playerId']
+
+        if tank_id == current_tank['id']:
+            if tank != current_tank:
+                #print(f"Updated information about current tank: {current_tank} -> {tank}")
+                current_tank.update(tank)
+        elif any(tank_id == t['id'] for t in allies):
+            index = next((i for i, t in enumerate(allies) if t['id'] == tank_id), None)
+            if tank != allies[index]:
+                #print(f"Updated information about ally tank {tank_id}: {allies[index]} -> {tank}")
+                allies[index].update(tank)
+        elif any(tank_id == t['id'] for t in enemies):
+            index = next((i for i, t in enumerate(enemies) if t['id'] == tank_id), None)
+            if tank != enemies[index]:
+                #print(f"Updated information about enemy tank {tank_id}: {enemies[index]} -> {tank}")
+                enemies[index].update(tank)
         else:
-            enemies.append(tank)
+            if player_id == current_tank['playerId']:
+                allies.append(tank)
+                print(f"Found ally tank: {tank}")
+            else:
+                enemies.append(tank)
+                print(f"Found enemy tank: {tank}")
 
 def on_message(ws, message):
     global current_tank
@@ -134,6 +156,22 @@ def on_open(ws):
     # Connect to the websocket
     ws.send(json.dumps({'id': current_tank['id']}))
     print("WebSocket opened")
+
+def set_current_tank(tank):
+    global current_tank
+    current_tank = tank
+
+def get_allies():
+    global allies
+    return allies
+
+def get_enemies():
+    global enemies
+    return enemies
+
+def get_current_tank():
+    global current_tank
+    return current_tank
 
 if __name__ == '__main__':
     # Connect to the websocket
