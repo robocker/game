@@ -3,28 +3,44 @@ import requests
 import json
 import websocket
 import math
+import threading
+import logging
 
+print('Tank python- very first line v.1')
 app = Flask(__name__)
 
 current_tank = None
 allies = []
 enemies = []
+lock = threading.Lock()
+
+@app.route("/")
+def hello():
+    return "Tank Python"
 
 @app.route('/move', methods=['POST'])
 def move():
-    global current_tank, enemies
-    destination = request.get_json()
+    global current_tank, enemies, lock
 
-    closest_enemy = get_closest_enemy(current_tank, enemies)
-    angle, distance = compute_angle_and_distance(current_tank, destination)
-    angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
+    # acquire lock before entering critical section
+    lock.acquire()
 
-    print(f"Received move request to destination {destination}")
-    print(f"Closest enemy is {closest_enemy} at a distance of {distance}")
-    print(f"Aiming at enemy with angle {angle_to_enemy} and vertical angle {vertical_angle_to_enemy}")
+    try:
+        destination = request.get_json()
 
-    commands = create_commands(angle, distance, angle_to_enemy, vertical_angle_to_enemy)
-    send_message(ws, current_tank, commands)
+        closest_enemy = get_closest_enemy(current_tank, enemies)
+        angle, distance = compute_angle_and_distance(current_tank, destination)
+        angle_to_enemy, vertical_angle_to_enemy = compute_aim(current_tank, closest_enemy, distance)
+
+        print(f"Received move request to destination {destination}")
+        print(f"Closest enemy is {closest_enemy} at a distance of {distance}")
+        print(f"Aiming at enemy with angle {angle_to_enemy} and vertical angle {vertical_angle_to_enemy}")
+
+        commands = create_commands(angle, distance, angle_to_enemy, vertical_angle_to_enemy)
+        send_message(ws, current_tank, commands)
+    finally:
+        # release lock when done with critical section
+        lock.release()
 
     return '', 204
 
@@ -101,7 +117,9 @@ def get_closest_enemy(current_tank, enemies):
     return closest_enemy
 
 def retrieve_tank_info():
+    print(f"Request for tank info")
     response = requests.get('http://engine:8080/tank/info')
+    print(f"Received tank info: {response.text}")
     tank_info = json.loads(response.text)
     return tank_info
 
@@ -174,13 +192,23 @@ def get_current_tank():
     return current_tank
 
 if __name__ == '__main__':
+
+    # Retrieve tank information
+    try:
+        current_tank = retrieve_tank_info()
+    except Exception:
+        logging.exception("info error")
+
     # Connect to the websocket
     ws = websocket.WebSocketApp("ws://engine:8080/state",
                                 on_message=on_message,
                                 on_error=on_error,
+                                on_open = on_open,
                                 on_close=on_close)
-    ws.on_open = on_open
-    ws.run_forever()
+
+    # Start the WebSocket connection in a separate thread
+    websocket_thread = threading.Thread(target=ws.run_forever)
+    websocket_thread.start()
 
     # Start the Flask application
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=80)

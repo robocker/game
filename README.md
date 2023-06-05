@@ -7,12 +7,33 @@ Robocker is inspired by 'Z' game- fighting tanks, capturing flags etc.
 
 Currently game is tested on Windows 10(home), 11(home) and Ubuntu.
 
-## Virtualbox ##
+It's possible to run
+
+## WSL2 ##
+
+  * Installing wsl2:
+    * https://learn.microsoft.com/pl-pl/windows/wsl/install
+    * or: https://www.youtube.com/watch?v=F9Rg3CCuaEo
+  * Installing docker for windows: https://docs.docker.com/desktop/install/windows-install
+
+More advanced example how to play with it:
+https://www.youtube.com/watch?v=A0eqZujVfYU
+
+
+
+## Run Robocker ##
+
+To run game you need to build docker images of projects: engine, tankBasic and player. ~~Project folder is mounted in /vagrant folder To go there in terminal you can just type `cd /vagrant`~~ (only for Virtualbox approach). To make it by wsl2 just open terminal (powershell/command prompt) in folder where you clonned robocker (eg. C:/projects/robocker).
+
+Details about creating particular images you can find in projecs READMEs: [engine](./engine/README.md), [player](./player/README.md), [tankBasic](./tankBasic/README.md), [tankPython](./tankPython/README.md).
+
+
+## Virtualbox- old aproach- not recommended ##
 Home editons of Windows not support docker natively so it's neccesary to run Docker in Virtual Machine: https://www.virtualbox.org/
 Oracle VM VirtualBox Extension Pack
 https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html#extpack
 
-## Running Virutal Machine ##
+## Run Virutal Machine ##
 
 Tip: Before creating Virtual Machine you can open VirtualBox setting (file/global setting) and check if default folder is for you ok.
 
@@ -43,10 +64,3 @@ sudo apt-get install virtualbox-guest-dkms
 sudo dpkg-reconfigure virtualbox-guest-dkms
 ```
 * Enabling sharing clipboard: https://scribles.net/sharing-files-and-clipboard-between-host-and-guest-in-virtualbox/
-
-
-## Running Robocker ##
-
-To run game you need to build docker images of projects: engine, tankBasic and player. Project folder is mounted in /vagrant folder. To go there in terminal you can just type `cd /vagrant`
-
-Details about creating particular images you can find in projecs READMEs: [engine](./engine/README.md), [player](./player/README.md), [tankBasic](./tankBasic/README.md).

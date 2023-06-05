@@ -3,12 +3,20 @@ python -m pytest
 
 # Build docker container
 
-sudo docker build -t robocker/tankpython .
+docker build -t robocker/tankpython .
 
 # Running standalone by docker:
 
-sudo docker run -p 49155:80 -d --rm --name tank-3 robocker/tankpython:latest
+docker run -p 49155:80 -d --rm --name tank-3 robocker/tankpython:latest
 
-# Entering into container
+# Watching logs
 
-sudo docker exec -it tank-3 'python app.py'
+docker logs tank-3 --follow
+
+# Running locally
+
+## virtual env:
+python -m venv ./env
+
+### activating:
+.\env\Scripts\activate

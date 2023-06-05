@@ -4,7 +4,7 @@ There is two options:
 
 Creating docker container
 ```
-sudo docker build -t robocker/engine .
+docker build -t robocker/engine .
 ```
 
 ## Compilation by Intellij ##
@@ -16,7 +16,7 @@ Making package (In IntelliJ Terminal):
 ```
 
 ```
-sudo docker build -t robocker/engine -f DockerfileDev .
+docker build -t robocker/engine -f DockerfileDev .
 ```
 
 
@@ -25,13 +25,13 @@ sudo docker build -t robocker/engine -f DockerfileDev .
 
 First time is required to create network:
 ```
-sudo docker network create -d bridge robocker-net
+docker network create -d bridge robocker-net
 ```
 Later:
 ```
-sudo docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
+docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
 ## in other terminal window:
-sudo docker network connect --alias engine robocker-net engine
+docker network connect --alias engine robocker-net engine
 ```
 You can check if works in browser: http://localhost:8080/
 
@@ -39,11 +39,13 @@ You can check if works in browser: http://localhost:8080/
 
 Just open: http://localhost:8080/containers/demo?tanks=robocker/tankbasic,robocker/tankpython
 
+Where robocker/tankbasic,robocker/tankpython is tank container which will be created for player 1 (tankbasic) and player2 (tankpython). You can adjust it to run your image.
+
 Then you can open players` views using returned ports e.g. for player1 it should be http://localhost:3000/
 
 # Stopping all containers #
 ```
-sudo docker stop $(sudo docker ps -a -q)
+docker stop $(docker ps -a -q)
 ```
 
 ## Articles ##

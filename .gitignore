@@ -12,3 +12,5 @@ engine/Running
 engine/Using
 engineMock/node_modules/
 .vscode/
+tankPython/env/Scripts/
+tankPython/env/pyvenv.cfg
