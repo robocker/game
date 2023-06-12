@@ -50,6 +50,9 @@ public class GameService extends TimerTask {
 
     public void runGame(Game newGame) {
         setGame(newGame);
+
+        dockerService.connectToNetwork(defaultNetwork,"engine");
+
         for (Player player : game.getPlayers()) {
             CreateContainerResponse playerResp = dockerService.createCotnainer(player.getImageName(), defaultNetwork, player.getContainerName(), calculatePorts(player));
             dockerService.fillContainerInfo(playerResp.getId(), player);

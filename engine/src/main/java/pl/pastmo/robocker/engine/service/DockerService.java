@@ -17,7 +17,6 @@ public class DockerService {
     private DockerClient dockerClient;
     private Network currentNetwork;
 
-
     public DockerService() {
         dockerClient = DockerClientBuilder.getInstance().build();
     }
@@ -67,8 +66,8 @@ public class DockerService {
         }
     }
 
-
-    public CreateContainerResponse createCotnainer(String imageName, String networkName, String containerName, String port) {
+    public CreateContainerResponse createCotnainer(String imageName, String networkName, String containerName,
+            String port) {
 
         PortBinding portBinding = PortBinding.parse(port);
 
@@ -83,15 +82,18 @@ public class DockerService {
                 .withHostConfig(hostConfig)
                 .exec();
 
-
-        this.createNetworkIfNotExist(networkName);
-
-        dockerClient.connectToNetworkCmd().withNetworkId(this.currentNetwork.getId()).withContainerId(containerResponse.getId()).exec();
+        connectToNetwork(networkName, containerResponse.getId());
 
         dockerClient.startContainerCmd(containerResponse.getId()).exec();
 
         return containerResponse;
 
+    }
+
+    public void connectToNetwork(String networkName, String containerId) {
+        this.createNetworkIfNotExist(networkName);
+        dockerClient.connectToNetworkCmd().withNetworkId(this.currentNetwork.getId()).withContainerId(containerId)
+                .exec();
     }
 
     public void remove(String containerName) {
@@ -130,6 +132,5 @@ public class DockerService {
 
         return null;
     }
-
 
 }

@@ -23,15 +23,8 @@ docker build -t robocker/engine -f DockerfileDev .
 # Simple running #
 ## Start engine ##
 
-First time is required to create network:
-```
-docker network create -d bridge robocker-net
-```
-Later:
 ```
 docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
-## in other terminal window:
-docker network connect --alias engine robocker-net engine
 ```
 You can check if works in browser: http://localhost:8080/
 
