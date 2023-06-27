@@ -34,7 +34,7 @@ public class RegisterController {
     public String create() {
 
         String randNumber = Math.round(Math.random() * 30) + "";
-        CreateContainerResponse result = dockerService.createCotnainer("robocker/player:latest", "robocker_net", "play" + randNumber, ":3000");
+        CreateContainerResponse result = dockerService.createCotnainer("robockergame/player:latest", "robocker_net", "play" + randNumber, ":3000");
 
         return result.getId();
     }
@@ -45,7 +45,7 @@ public class RegisterController {
         Game game = new Game();
 
         if (parameters.length == 0) {
-            parameters = new String[]{"robocker/tankbasic", "robocker/tankbasic"};
+            parameters = new String[]{"robockergame/tankbasic", "robockergame/tankbasic"};
         }
 
         for (String tankImage : parameters) {

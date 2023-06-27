@@ -14,7 +14,17 @@ export class SceneCreator {
   createScene(engine) {
     var scene = new BABYLON.Scene(engine);
 
-    this.createCamera(scene);
+    // this.createCamera(scene);
+
+    var camera = new BABYLON.FreeCamera(
+        "camera1",
+        new BABYLON.Vector3(0, 50, -10),
+        scene
+      );
+
+      camera.setTarget(new BABYLON.Vector3(50, 0, 50));
+
+      camera.attachControl(this.canvas, true);
 
     var light = new BABYLON.HemisphericLight(
       "light",
@@ -64,6 +74,9 @@ export class SceneCreator {
     });
   };
 
+  //TODO: Fix it- this camera settings caused:
+  //- it's hard to select tank
+  //- sometimes keys are blocked- it's hard to stop camera
   createCamera = function (scene) {
     var camera = new BABYLON.UniversalCamera(
       "MyCamera",
@@ -103,7 +116,6 @@ FreeCameraKeyboardWalkInput.prototype.attachControl = function (
   if (!this._onKeyDown) {
     element.tabIndex = 1;
     this._onKeyDown = function (evt) {
-      console.log(evt.keyCode);
       if (
         _this.keysUp.indexOf(evt.keyCode) !== -1 ||
         _this.keysDown.indexOf(evt.keyCode) !== -1 ||

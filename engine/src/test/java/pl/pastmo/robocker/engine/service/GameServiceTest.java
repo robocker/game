@@ -77,7 +77,7 @@ class GameServiceTest {
 
         verify(dockerServiceMock)
                 .createCotnainer(
-                        ArgumentMatchers.eq("robocker/player"),
+                        ArgumentMatchers.eq("robockergame/player"),
                         ArgumentMatchers.eq("robocker-net"),
                         ArgumentMatchers.eq("player-1"),
                         ArgumentMatchers.eq("3000:3000"));
@@ -106,7 +106,7 @@ class GameServiceTest {
         List<String> containers = containerNameCaptor.getAllValues();
         List<String> ports = portCaptor.getAllValues();
 
-        assertEquals(Arrays.asList("robocker/player", "robocker/player"), images);
+        assertEquals(Arrays.asList("robockergame/player", "robockergame/player"), images);
         assertEquals(Arrays.asList("robocker-net", "robocker-net"), networks);
         assertEquals(Arrays.asList("player-1", "player-2"), containers);
         assertEquals(Arrays.asList("3000:3000", "3001:3000"), ports);
@@ -145,7 +145,7 @@ class GameServiceTest {
         List<String> containers = containerNameCaptor.getAllValues();
         List<String> ports = portCaptor.getAllValues();
 
-        assertEquals(Arrays.asList("robocker/player", "robocker/tankbasic"), images);
+        assertEquals(Arrays.asList("robockergame/player", "robockergame/tankbasic"), images);
         assertEquals(Arrays.asList("robocker-net", "robocker-net"), networks);
         assertEquals(Arrays.asList("player-1", "tank-1"), containers);
         assertEquals(Arrays.asList("3000:3000", ":80"), ports);
@@ -177,7 +177,7 @@ class GameServiceTest {
         assertThat(result, containsString("externalPort=3000"));
         assertThat(result, containsString("externalPort=3001"));
         assertThat(result, containsString("containerName=player-1"));
-        assertThat(result, containsString("robocker/tankbasic"));
+        assertThat(result, containsString("robockergame/tankbasic"));
 
 
     }

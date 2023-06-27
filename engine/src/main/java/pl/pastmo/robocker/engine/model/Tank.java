@@ -30,7 +30,7 @@ public class Tank implements MapItem, Containerized {
     private List<String> ips = new LinkedList<>();
     private LinkedList<Step> steps = new LinkedList<>();
     private Integer lifeLevel = START_LIFE_LEVEL;
-    private String image = "robocker/tankbasic";
+    private String image = "robockergame/tankbasic";
 
     public Tank() {
         this.id = idCounter;

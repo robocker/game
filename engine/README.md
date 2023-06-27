@@ -4,7 +4,7 @@ There is two options:
 
 Creating docker container
 ```
-docker build -t robocker/engine .
+docker build -t robockergame/engine .
 ```
 
 ## Compilation by Intellij ##
@@ -16,23 +16,31 @@ Making package (In IntelliJ Terminal):
 ```
 
 ```
-docker build -t robocker/engine -f DockerfileDev .
+docker build -t robockergame/engine -f DockerfileDev .
 ```
 
 
 # Simple running #
 ## Start engine ##
 
+Unfortunately java library which we use not pull images from docker (or I don't know how to configure it for now :))so unless you not created images locally you should pull it from docker repo:
 ```
-docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robocker/engine
+docker pull robockergame/tankpython
+docker pull robockergame/tankbasic
+docker pull robockergame/player
+
+```
+running game:
+```
+docker run --rm --name engine -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock robockergame/engine
 ```
 You can check if works in browser: http://localhost:8080/
 
 ## Run demo game ##
 
-Just open: http://localhost:8080/containers/demo?tanks=robocker/tankbasic,robocker/tankpython
+Just open: http://localhost:8080/containers/demo?tanks=robockergame/tankbasic,robockergame/tankpython
 
-Where robocker/tankbasic,robocker/tankpython is tank container which will be created for player 1 (tankbasic) and player2 (tankpython). You can adjust it to run your image.
+Where robockergame/tankbasic,robockergame/tankpython is tank container which will be created for player 1 (tankbasic) and player2 (tankpython). You can adjust it to run your image.
 
 Then you can open players` views using returned ports e.g. for player1 it should be http://localhost:3000/
 

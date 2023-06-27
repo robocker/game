@@ -1,14 +1,14 @@
 # Working on Docker #
 ## Creating docker container ##
 ```
-docker build -t robocker/tankbasic .
+docker build -t robockergame/tankbasic .
 ```
 
 ## Running docker container##
 In normal flow 'engine' is responsible for running other containers but you can run it manually for testing if you wish.
 
 ```
-docker run -p 49153:80 -d --rm --name tank-1 robocker/tankbasic:latest
+docker run -p 49153:80 -d --rm --name tank-1 robockergame/tankbasic:latest
 docker network connect robocker-net tank-1
 ```
 ## Entering into container ##
@@ -21,8 +21,8 @@ docker exec -it tank-1 /bin/bash
 To be able to see changes without creating new container. Only restart node server is currently required.
 
 ```
-docker build -t robocker/tankbasic-dev -f DockerfileDev .
-docker run -p 49153:80 -d --rm --name tank-1 -v "$PWD":/usr/src/app robocker/tankbasic-dev:latest  tail -F /dev/null
+docker build -t robockergame/tankbasic-dev -f DockerfileDev .
+docker run -p 49153:80 -d --rm --name tank-1 -v "$PWD":/usr/src/app robockergame/tankbasic-dev:latest  tail -F /dev/null
 docker network connect robocker-net tank-1
 docker exec -ti tank-1 bash
 DEBUG=tankBasic:* node index.js

@@ -57,7 +57,7 @@ public class Player implements Containerized {
 
     @Override
     public String getImageName() {
-        return "robocker/player";
+        return "robockergame/player";
     }
 
     @Override

@@ -3,11 +3,11 @@ python -m pytest
 
 # Build docker container
 
-docker build -t robocker/tankpython .
+docker build -t robockergame/tankpython .
 
 # Running standalone by docker:
 
-docker run -p 49155:80 -d --rm --name tank-3 robocker/tankpython:latest
+docker run -p 49155:80 -d --rm --name tank-3 robockergame/tankpython:latest
 
 # Watching logs
 
