@@ -15,15 +15,6 @@ public class TankController {
     @Autowired
     private GameService gameService;
 
-
-//    @RequestMapping(value = "/tank/move", method = RequestMethod.PATCH,
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    public void move(HttpServletRequest request, @RequestBody TankRequest move) {
-//        System.out.println(request.getRemoteAddr());
-//
-//        gameService.move(request.getRemoteAddr(), move);
-//    }
-
     @RequestMapping(value = "/tank/info", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public TankInfo getInfo(HttpServletRequest request) {

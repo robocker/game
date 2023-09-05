@@ -5,8 +5,8 @@ public class Bullet {
     public static Double GRAVITY_ACCELERATION = 1.0;
     private Integer tankId;
     private Double x;
-    private Double y;
     private Double z;
+    private Double y;
     private Double angle;
     private Double verticalAngle;
     private Double speed;
@@ -18,9 +18,9 @@ public class Bullet {
                 .setVerticalAngle(tank.getTurret().getAngleVertical())
                 .setTankId(tank.getId())
                 .setX(tank.getX())
-                .setY(tank.getY())
+                .setZ(tank.getZ())
                 .setGravitationSpeed(SPEED * Math.sin(tank.getTurret().getAngleVertical()))
-                .setZ(tank.getHeight());
+                .setY(tank.getHeight());
 
     }
 
@@ -42,21 +42,21 @@ public class Bullet {
         return this;
     }
 
-    public Double getY() {
-        return y;
-    }
-
-    public Bullet setY(Double y) {
-        this.y = y;
-        return this;
-    }
-
     public Double getZ() {
         return z;
     }
 
     public Bullet setZ(Double z) {
         this.z = z;
+        return this;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public Bullet setY(Double y) {
+        this.y = y;
         return this;
     }
 
@@ -101,8 +101,8 @@ public class Bullet {
         return "Bullet{" +
                 "tankId=" + tankId +
                 ", x=" + x +
-                ", y=" + y +
                 ", z=" + z +
+                ", y=" + y +
                 ", angle=" + angle +
                 ", verticalAngle=" + verticalAngle +
                 ", speed=" + speed +

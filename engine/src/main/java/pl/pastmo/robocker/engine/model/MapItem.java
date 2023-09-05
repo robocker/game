@@ -5,7 +5,7 @@ public interface MapItem {
 
     MapItem setX(Double x);
 
-    Double getY();
+    Double getZ();
 
-    MapItem setY(Double y);
+    MapItem setZ(Double z);
 }

@@ -40,7 +40,7 @@ public class ShootServiceTest {
         turret = new Turret().setAngleVertical(Math.PI / 3).setAngleVertical(Math.PI / 4);
 
         tank = new Tank();
-        tank.setX(148.0).setY(31.0).setWidthX(5.0).setWidthYFront(8.0).setWidthYBack(8.0).setHeight(5.0)
+        tank.setX(148.0).setZ(31.0).setWidthX(5.0).setWidthYFront(8.0).setWidthYBack(8.0).setHeight(5.0)
                 .setTurret(turret);
 
     }
@@ -58,8 +58,8 @@ public class ShootServiceTest {
         assertEquals(bullet.getAngle(), tank.getAngle() + tank.getTurret().getAngle());
         assertEquals(bullet.getVerticalAngle(), tank.getTurret().getAngleVertical());
         assertEquals(bullet.getX(), tank.getX());
-        assertEquals(bullet.getY(), tank.getY());
-        assertEquals(bullet.getZ(), (double) tank.getHeight());
+        assertEquals(bullet.getZ(), tank.getZ());
+        assertEquals(bullet.getY(), (double) tank.getHeight());
     }
 
     @Test
@@ -75,8 +75,8 @@ public class ShootServiceTest {
         assertEquals(bullet.getAngle(), tank.getAngle() + tank.getTurret().getAngle());
         assertEquals(bullet.getVerticalAngle(), tank.getTurret().getAngleVertical());
         assertEquals(bullet.getX(), tank.getX());
-        assertEquals(bullet.getY(), tank.getY());
-        assertEquals(bullet.getZ(), (double) tank.getHeight());
+        assertEquals(bullet.getZ(), tank.getZ());
+        assertEquals(bullet.getY(), (double) tank.getHeight());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ShootServiceTest {
 
         Explosion explosion = shootService.getExplosions().get(0);
         assertEquals(tank.getX(), explosion.getX());
-        assertEquals(tank.getY(), explosion.getY());
+        assertEquals(tank.getZ(), explosion.getZ());
     }
 
     @ParameterizedTest
@@ -106,8 +106,8 @@ public class ShootServiceTest {
         assertEquals(expectedResult.angle, bullet.getAngle());
         assertEquals(expectedResult.verticalAngle, bullet.getVerticalAngle());
         assertEquals(expectedResult.x, bullet.getX(), 0.0001);
-        assertEquals(expectedResult.y, bullet.getY(), 0.0001);
-        assertEquals(expectedResult.z, bullet.getZ(), 0.0001);
+        assertEquals(expectedResult.y, bullet.getZ(), 0.0001);
+        assertEquals(expectedResult.z, bullet.getY(), 0.0001);
         assertEquals(expectedResult.speed, bullet.getSpeed());
         assertEquals(expectedResult.gravitySpeed, bullet.getGravitationSpeed());
 
@@ -122,7 +122,7 @@ public class ShootServiceTest {
                                 .setTurretVerticalAngle(0.0)
                                 .setX(0.0)
                                 .setHeight(Z)
-                                .setY(0.0)),
+                                .setZ(0.0)),
                         new ExpectedResult().setAngle(0).setVerticalAngle(0)
                                 .setZ(Z - Bullet.GRAVITY_ACCELERATION)
                                 .setX(Bullet.SPEED).setY(0)
@@ -132,7 +132,7 @@ public class ShootServiceTest {
                                 .setAngle(Math.PI / 2)
                                 .setTurretVerticalAngle(Math.PI / 4)
                                 .setX(0.0)
-                                .setY(0.0)
+                                .setZ(0.0)
                                 .setHeight(Z)),
                         new ExpectedResult().setAngle(Math.PI / 2)
                                 .setZ(Z + (Bullet.SPEED / Math.sqrt(2.0)) - Bullet.GRAVITY_ACCELERATION)
@@ -145,7 +145,7 @@ public class ShootServiceTest {
                                 .setAngle(Math.PI)
                                 .setTurretVerticalAngle(0.0)
                                 .setX(0.0)
-                                .setY(0.0)
+                                .setZ(0.0)
                                 .setHeight(Z)),
                         new ExpectedResult().setAngle(Math.PI)
                                 .setZ(Z - Bullet.GRAVITY_ACCELERATION)
@@ -157,7 +157,7 @@ public class ShootServiceTest {
                                 .setAngle(Math.PI * 3 / 2)
                                 .setTurretVerticalAngle(-Math.PI / 4)
                                 .setX(0.0)
-                                .setY(0.0)
+                                .setZ(0.0)
                                 .setHeight(0.9)),
                         new ExpectedResult().setAngle(Math.PI * 3 / 2)
                                 .setVerticalAngle(-Math.PI / 4)
@@ -171,7 +171,7 @@ public class ShootServiceTest {
                                 .setTurretVerticalAngle(Math.PI / 4)
                                 .setTurretAngle(Math.PI / 4)
                                 .setX(10.0)
-                                .setY(3.0)
+                                .setZ(3.0)
                                 .setHeight(0.9)),
                         new ExpectedResult().setAngle(Math.PI / 2)
                                 .setVerticalAngle(Math.PI / 4)
@@ -201,22 +201,22 @@ public class ShootServiceTest {
         return Stream.of(
                 Arguments.arguments(new Tank()
                                 .setX(1.1)
-                                .setY(2.0),
-                        new Explosion().setX(1.1).setY(2.0), 1),
+                                .setZ(2.0),
+                        new Explosion().setX(1.1).setZ(2.0), 1),
                 Arguments.arguments(new Tank()
                                 .setX(1.1)
-                                .setY(2.0),
-                        new Explosion().setX(2.1).setY(2.0), 0),
+                                .setZ(2.0),
+                        new Explosion().setX(2.1).setZ(2.0), 0),
                 Arguments.arguments(new Tank()
                                 .setX(109.48934996867631)
-                                .setY(69.84252848323732 ),
+                                .setZ(69.84252848323732 ),
                         new Explosion().setX(108.68703496531755)
-                                .setY(80.31183078259735), 0),
+                                .setZ(80.31183078259735), 0),
                 Arguments.arguments(new Tank()
                                 .setX(108.4)
-                                .setY(55.0 ),
+                                .setZ(55.0 ),
                         new Explosion().setX(108.0)
-                                .setY(55.4), 1)
+                                .setZ(55.4), 1)
 
         );
     }

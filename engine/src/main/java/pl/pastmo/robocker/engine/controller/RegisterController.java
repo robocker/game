@@ -53,8 +53,8 @@ public class RegisterController {
 
             Double basePosition = Math.random() * 100;
 
-            player.addTank((new Tank(tankImage)).setX(basePosition).setY(basePosition).setAngle(Math.PI / 2).setTurret(new Turret()));
-            player.addTank((new Tank(tankImage)).setX(basePosition + 10).setY(basePosition).setTurret(new Turret()));
+            player.addTank((new Tank(tankImage)).setX(basePosition).setZ(basePosition).setAngle(Math.PI / 2).setTurret(new Turret()));
+            player.addTank((new Tank(tankImage)).setX(basePosition + 10).setZ(basePosition).setTurret(new Turret()));
             game.addPlayer(player);
 
         }

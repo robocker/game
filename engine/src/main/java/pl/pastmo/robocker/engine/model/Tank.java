@@ -20,7 +20,7 @@ public class Tank implements MapItem, Containerized {
     private static Integer idCounter = 1;
     private Integer id;
     private Double x;
-    private Double y;
+    private Double z;
     private Double angle = 0d;
     private Turret turret;
     private Double widthX = 1.3;
@@ -53,8 +53,8 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
-    public Double getY() {
-        return y;
+    public Double getZ() {
+        return z;
     }
 
     @Override
@@ -64,8 +64,8 @@ public class Tank implements MapItem, Containerized {
     }
 
     @Override
-    public Tank setY(Double y) {
-        this.y = y;
+    public Tank setZ(Double z) {
+        this.z = z;
         return this;
     }
 
@@ -256,11 +256,11 @@ public class Tank implements MapItem, Containerized {
                 double changeY = Math.sin(stepAngle) * currentSpeed;
                 int howMany = (int) (distance / currentSpeed);
 
-                this.steps.add(turretStep.createNewStep().setX(changeX).setY(changeY).setHowManyTimes(howMany));
+                this.steps.add(turretStep.createNewStep().setX(changeX).setZ(changeY).setHowManyTimes(howMany));
 
                 double rest = distance - (howMany * currentSpeed);
                 if (Math.abs(rest) > distanceTolerance) {
-                    this.steps.add(turretStep.createNewStep().setX(Math.cos(stepAngle) * rest).setY(Math.sin(stepAngle) * rest).setHowManyTimes(1));
+                    this.steps.add(turretStep.createNewStep().setX(Math.cos(stepAngle) * rest).setZ(Math.sin(stepAngle) * rest).setHowManyTimes(1));
                 }
             }
 

@@ -47,18 +47,18 @@ def move():
 
 def compute_angle_and_distance(current_tank, destination):
     dx = destination['x'] - current_tank['x']
-    dy = destination['y'] - current_tank['y']
-    distance = math.sqrt(dx**2 + dy**2)
-    angle = math.degrees(math.atan2(dy, dx))
+    dz = destination['z'] - current_tank['z']
+    distance = math.sqrt(dx**2 + dz**2)
+    angle = math.degrees(math.atan2(dz, dx))
 
     # Adjust angle based on quadrant of destination point
-    if dx >= 0 and dy >= 0:
+    if dx >= 0 and dz >= 0:
         angle -= 90
-    elif dx >= 0 and dy < 0:
+    elif dx >= 0 and dz < 0:
         angle = 90 - angle
-    elif dx < 0 and dy < 0:
+    elif dx < 0 and dz < 0:
         angle += 90
-    elif dx < 0 and dy >= 0:
+    elif dx < 0 and dz >= 0:
         angle += 90
 
     return angle, distance
@@ -67,7 +67,7 @@ def compute_angle_and_distance(current_tank, destination):
 def compute_aim(current_tank, closest_enemy, distance):
     bullet_speed = 10
     bullet_gravity = 1
-    required_angle = math.degrees(math.atan2(closest_enemy['y'] - current_tank['y'], closest_enemy['x'] - current_tank['x']))
+    required_angle = math.degrees(math.atan2(closest_enemy['z'] - current_tank['z'], closest_enemy['x'] - current_tank['x']))
     horizontal_distance = distance * math.cos(math.radians(current_tank['angle'] - required_angle))
     time_to_target = horizontal_distance / bullet_speed
     vertical_distance = (distance * math.sin(math.radians(current_tank['angle'] - required_angle))
@@ -109,8 +109,8 @@ def get_closest_enemy(current_tank, enemies):
     closest_distance = float('inf')
     for enemy in enemies:
         dx = enemy['x'] - current_tank['x']
-        dy = enemy['y'] - current_tank['y']
-        distance = math.sqrt(dx ** 2 + dy ** 2)
+        dz = enemy['z'] - current_tank['z']
+        distance = math.sqrt(dx ** 2 + dz ** 2)
         if distance < closest_distance:
             closest_enemy = enemy
             closest_distance = distance

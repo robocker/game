@@ -111,7 +111,7 @@ export class TanksManager {
   }
 
   updateTankPosition(sps, tankData) {
-    sps.mesh.position.z = tankData.y;
+    sps.mesh.position.z = tankData.z;
     sps.mesh.position.x = tankData.x;
     sps.mesh.rotation.y = -tankData.angle;
 

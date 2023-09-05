@@ -46,7 +46,7 @@ setInterval(() => {
           angleVertical: 0,
         },
         x: -10,
-        y: 0,
+        z: 0,
         lifeLevel,
       },
       {
@@ -58,7 +58,7 @@ setInterval(() => {
           angleVertical: Math.PI / 4,
         },
         x: 0,
-        y: 0,
+        z: 0,
         lifeLevel: 2,
       },
       {
@@ -69,7 +69,7 @@ setInterval(() => {
           angleVertical: Math.PI / 6,
         },
         x: -10,
-        y: 20,
+        z: 20,
         lifeLevel,
       },
       {
@@ -81,7 +81,7 @@ setInterval(() => {
           angleVertical: Math.PI / 4,
         },
         x: 10,
-        y: 0,
+        z: 0,
         lifeLevel: 3,
       },
     ],
@@ -92,11 +92,11 @@ setInterval(() => {
         tankId: 4,
         verticalAngle: 0.7853981633974483,
         x: 15,
-        y: 5,
+        z: 5,
         z: 1.1,
       },
     ],
-    explosions: [{ x: 17, y: 10, tankId: 1, timer: explosionTimer, id: 0 }],
+    explosions: [{ x: 17, z: 10, tankId: 1, timer: explosionTimer, id: 0 }],
   };
 
   explosionTimer++;

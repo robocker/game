@@ -5,7 +5,7 @@ import pl.pastmo.robocker.engine.model.Tank;
 
 public class TankMsg {
     double x;
-    double y;
+    double z;
     Integer id;
     Integer playerId;
     Double angle;
@@ -16,14 +16,14 @@ public class TankMsg {
         this.lifeLevel = Tank.START_LIFE_LEVEL;
     }
 
-    public TankMsg(double x, double y) {
+    public TankMsg(double x, double z) {
         this.x = x;
-        this.y = y;
+        this.z = z;
     }
 
 
     public static TankMsg fromTank(Tank tank, Player player){
-        return new TankMsg(tank.getX(), tank.getY())
+        return new TankMsg(tank.getX(), tank.getZ())
                 .setId(tank.getId())
                 .setAngle(tank.getAngle())
                 .setLifeLevel(tank.getLifeLevel())
@@ -41,12 +41,12 @@ public class TankMsg {
         return this;
     }
 
-    public double getY() {
-        return y;
+    public double getZ() {
+        return z;
     }
 
-    public TankMsg setY(double y) {
-        this.y = y;
+    public TankMsg setZ(double z) {
+        this.z = z;
         return this;
     }
 
@@ -99,7 +99,7 @@ public class TankMsg {
     public String toString() {
         return "TankMsg{" +
                 "x=" + x +
-                ", y=" + y +
+                ", z=" + z +
                 ", id=" + id +
                 ", playerId=" + playerId +
                 ", angle=" + angle +

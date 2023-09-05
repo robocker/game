@@ -125,7 +125,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(148.0).setY(31.0);
+        tank.setX(148.0).setZ(31.0);
 
         player.addTank(tank);
 
@@ -161,7 +161,7 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
         Tank tank = new Tank();
-        tank.setX(148.0).setY(31.0);
+        tank.setX(148.0).setZ(31.0);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -192,7 +192,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148.0).setY(31.0);
+        tank.setX(148.0).setZ(31.0);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -223,7 +223,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148.0).setY(31.0);
+        tank.setX(148.0).setZ(31.0);
         player2.addTank(tank);
 
         game.addPlayer(player2);
@@ -245,7 +245,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
         tank.addIp("2.2.2.2");
-        tank.setX(148.0).setY(31.0);
+        tank.setX(148.0).setZ(31.0);
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -282,7 +282,7 @@ class GameServiceTest {
             Step step = steps.get(i);
 
             assertEquals(expect[0], step.x, Tank.distanceTolerance);
-            assertEquals(expect[1], step.y, Tank.distanceTolerance);
+            assertEquals(expect[1], step.z, Tank.distanceTolerance);
             assertEquals(expect[2], step.angle);
             assertEquals(expect[3], step.howManyTimes);
 
@@ -358,7 +358,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setAngle(0d)
+        tank.setX(0d).setZ(0d).setAngle(0d)
                 .setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
@@ -414,7 +414,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setAngle(0d).setTurret(new Turret());
+        tank.setX(0d).setZ(0d).setAngle(0d).setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -462,7 +462,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setAngle(0d).setTurret(new Turret());
+        tank.setX(0d).setZ(0d).setAngle(0d).setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
 
@@ -496,7 +496,7 @@ class GameServiceTest {
 
         Tank tank = new Tank();
 
-        tank.setX(0d).setY(0d).setAngle(2 * Math.PI - 0.05)
+        tank.setX(0d).setZ(0d).setAngle(2 * Math.PI - 0.05)
                 .setTurret(new Turret());
         player.addTank(tank);
         game.addPlayer(player);
@@ -521,7 +521,7 @@ class GameServiceTest {
 
         Player player = new Player(gameService.getNewPlayerId());
 
-        Tank tank = new Tank().setX(0d).setY(0d).setAngle(2 * Math.PI - 0.05)
+        Tank tank = new Tank().setX(0d).setZ(0d).setAngle(2 * Math.PI - 0.05)
                 .setTurret(new Turret());
 
         when(shootService.checkDemage(any(), any())).thenReturn(1);

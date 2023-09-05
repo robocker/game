@@ -78,7 +78,7 @@ export class GameManager {
                 ids: [SPS.vars.tankData.containerName.replace("tank-", "")],
                 destination: {
                   x: pointerInfo.pickInfo.pickedPoint.x,
-                  y: pointerInfo.pickInfo.pickedPoint.z,
+                  z: pointerInfo.pickInfo.pickedPoint.z,
                 },
               })
                 .then(function (response) {
@@ -106,7 +106,7 @@ export class GameManager {
       const tank = this.SPSs[tankData.id];
 
       if (
-        tank.mesh.position.z !== tankData.y ||
+        tank.mesh.position.z !== tankData.z ||
         tank.mesh.position.x !== tankData.x ||
         tank.mesh.rotation.y !== -tankData.angle
       ) {
@@ -135,8 +135,8 @@ export class GameManager {
         this.sceneCreator.scene
       );
       capsule.position.x = bullet.x;
-      capsule.position.z = bullet.y;
-      capsule.position.y = bullet.z;
+      capsule.position.z = bullet.z;
+      capsule.position.y = bullet.y;
 
       this.bullets.push(capsule);
     }
@@ -157,7 +157,7 @@ export class GameManager {
           s.maxScaleX = 0.01;
           s.maxScaleY = 0.01;
         });
-        set.start({ x: explosion.x, z: explosion.y, y: 0 });
+        set.start({ x: explosion.x, z: explosion.z, y: 0 });
       });
     }
   }

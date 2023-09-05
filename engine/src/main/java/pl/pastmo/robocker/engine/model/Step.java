@@ -4,7 +4,7 @@ import pl.pastmo.robocker.engine.websocket.ShootType;
 
 public class Step extends StepTurret {
     public double x;
-    public double y;
+    public double z;
     public double angle;
     public int howManyTimes;
 
@@ -14,8 +14,8 @@ public class Step extends StepTurret {
         return this;
     }
 
-    public Step setY(double y) {
-        this.y = y;
+    public Step setZ(double z) {
+        this.z = z;
         return this;
     }
 
@@ -48,7 +48,7 @@ public class Step extends StepTurret {
     public String toString() {
         return "Step{" +
                 "x=" + x +
-                ", y=" + y +
+                ", z=" + z +
                 ", angle=" + angle +
                 ", turretAngle=" + turretAngle +
                 ", turretVerticalAngle=" + turretVerticalAngle +

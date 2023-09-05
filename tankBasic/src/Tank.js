@@ -35,12 +35,12 @@ module.exports = class {
       const commands = this.computeActions(
         {
           x: this.currentState.x,
-          y: this.currentState.y,
+          z: this.currentState.z,
           angle: this.currentState.angle,
         },
         {
           x: this.requiredDestinetion.x,
-          y: this.requiredDestinetion.y,
+          z: this.requiredDestinetion.z,
         }
       );
 
@@ -61,37 +61,37 @@ module.exports = class {
     debug(current, required);
     const commands = [];
 
-    if (current.x === required.x && current.y === required.y) {
+    if (current.x === required.x && current.z === required.z) {
       return commands;
     }
 
-    const yDiff = required.y - current.y;
+    const zDiff = required.z - current.z;
     const xDiff = required.x - current.x;
 
-    debug("dif:", xDiff, yDiff);
+    debug("dif:", xDiff, zDiff);
 
-    const tan = yDiff / xDiff;
+    const tan = zDiff / xDiff;
 
     let newAngle = Math.atan(tan);
     debug("newAngle:", newAngle);
 
-    if (xDiff < 0 && yDiff > 0) {
+    if (xDiff < 0 && zDiff > 0) {
       newAngle += Math.PI;
     }
 
-    if (xDiff < 0 && yDiff < 0) {
+    if (xDiff < 0 && zDiff < 0) {
       newAngle -= Math.PI;
     }
 
     if (newAngle !== current.angle) {
       debug({ newAngle, currentAngle: current.angle });
       commands.push({ angle: newAngle - current.angle });
-    } else if (xDiff < 0 && yDiff == 0) {
+    } else if (xDiff < 0 && zDiff == 0) {
       debug({ currentAngle: current.angle });
       commands.push({ angle: Math.PI });
     }
 
-    const newDistance = xDiff === 0 ? yDiff : xDiff / Math.cos(newAngle);
+    const newDistance = xDiff === 0 ? zDiff : xDiff / Math.cos(newAngle);
 
     const actionTurret = {
       angle: Math.PI/4,

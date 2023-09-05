@@ -5,7 +5,7 @@ public class Explosion {
     private static Integer idCounter = 1;
 
     private Double x;
-    private Double y;
+    private Double z;
     private Integer tankId;
     private Integer timer = 0;
     private Integer id;
@@ -18,7 +18,7 @@ public class Explosion {
     public static Explosion fromBullet(Bullet bullet) {
         Explosion explosion = new Explosion();
         explosion.setX(bullet.getX());
-        explosion.setY(bullet.getY());
+        explosion.setZ(bullet.getZ());
         explosion.setTankId(bullet.getTankId());
         return explosion;
     }
@@ -32,12 +32,12 @@ public class Explosion {
         return this;
     }
 
-    public Double getY() {
-        return y;
+    public Double getZ() {
+        return z;
     }
 
-    public Explosion setY(Double y) {
-        this.y = y;
+    public Explosion setZ(Double z) {
+        this.z = z;
         return this;
     }
 
@@ -63,7 +63,7 @@ public class Explosion {
     public String toString() {
         return "Explosion{" +
                 "x=" + x +
-                ", y=" + y +
+                ", z=" + z +
                 '}';
     }
 }

@@ -23,7 +23,7 @@ public class MoveService {
 
             if (step.howManyTimes > 0) {
                 tank.setX(tank.getX() + step.x);
-                tank.setY(tank.getY() + step.y);
+                tank.setZ(tank.getZ() + step.z);
                 tank.setAngle(tank.getAngle() + step.angle);
                 step.howManyTimes--;
 

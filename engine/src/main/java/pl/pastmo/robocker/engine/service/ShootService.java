@@ -29,22 +29,22 @@ public class ShootService {
 
             bullet.setGravitationSpeed(bullet.getGravitationSpeed() - Bullet.GRAVITY_ACCELERATION);
 
-            double newZ = bullet.getZ() + bullet.getGravitationSpeed();
+            double newZ = bullet.getY() + bullet.getGravitationSpeed();
 
             if (newZ > 0) {
 
                 bullet.setX(bullet.getX() + newX);
-                bullet.setY(bullet.getY() + newY);
-                bullet.setZ(newZ);
+                bullet.setZ(bullet.getZ() + newY);
+                bullet.setY(newZ);
                 bullet.setSpeed(Bullet.SPEED);
 
             } else {
 
-                double proportion = bullet.getZ() / (bullet.getZ() - newZ);
+                double proportion = bullet.getY() / (bullet.getY() - newZ);
 
                 bullet.setX(bullet.getX() + newX * proportion);
-                bullet.setY(bullet.getY() + newY * proportion);
-                bullet.setZ(0.0);
+                bullet.setZ(bullet.getZ() + newY * proportion);
+                bullet.setY(0.0);
                 bullet.setSpeed(0.0);
                 bullet.setGravitationSpeed(0.0);
 
@@ -89,7 +89,7 @@ public class ShootService {
 
         for (Explosion explosion : explosions) {
             double distance = Math.sqrt(Math.pow(explosion.getX() - tank.getX(), 2)
-                    + Math.pow(explosion.getY() - tank.getY(), 2));
+                    + Math.pow(explosion.getZ() - tank.getZ(), 2));
 
             if (distance <= Tank.SENSITIVE_DAMAGE_DISTANCE) {
                 result++;
@@ -97,7 +97,7 @@ public class ShootService {
 
             if (distance <= 5) {
             System.out.println("\ndistance:" + distance + " Tank:" + tank.getId() + "x:"
-                    + tank.getX() + " y:" + tank.getY() + " explosion:" + explosion);
+                    + tank.getX() + " y:" + tank.getZ() + " explosion:" + explosion);
             }
         }
         return result;
