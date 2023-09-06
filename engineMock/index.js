@@ -93,7 +93,7 @@ setInterval(() => {
         verticalAngle: 0.7853981633974483,
         x: 15,
         z: 5,
-        z: 1.1,
+        y: 1.1,
       },
     ],
     explosions: [{ x: 17, z: 10, tankId: 1, timer: explosionTimer, id: 0 }],
