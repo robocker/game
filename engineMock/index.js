@@ -1,5 +1,25 @@
 const debug = require("debug")("engineMock:index.js");
 const WebSocket = require("ws");
+const express = require("express");
+
+const app = express();
+
+app.use(express.json());
+
+const PORT = 3000;
+
+app.listen(PORT, (error) => {
+  if (!error) {
+    console.log("It's working!");
+  } else {
+    console.log(error);
+  }
+});
+
+app.get("/tank/info", (req, resp) => {
+  resp.status(200);
+  resp.send({ playerId: 1, id: 4 });
+});
 
 debug("start mock engine");
 
@@ -63,7 +83,7 @@ setInterval(() => {
       },
       {
         id: "3",
-        angle: -Math.PI*3/4,
+        angle: (-Math.PI * 3) / 4,
         turret: {
           angle: -Math.PI / 4,
           angleVertical: Math.PI / 6,
