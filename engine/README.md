@@ -38,7 +38,7 @@ You can check if works in browser: http://localhost:8080/
 
 ## Run demo game ##
 
-Just open: http://localhost:8080/containers/demo?tanks=robockergame/tankbasic,robockergame/tankpython
+Just open: http://localhost:8080/containers/demo?tanks=robockergame/tankbasic,robockergame/tankplayground
 
 Where robockergame/tankbasic,robockergame/tankpython is tank container which will be created for player 1 (tankbasic) and player2 (tankpython). You can adjust it to run your image.
 

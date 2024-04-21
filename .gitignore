@@ -14,3 +14,5 @@ engineMock/node_modules/
 .vscode/
 tankPython/env/Scripts/
 tankPython/env/pyvenv.cfg
+tankPlayground/node_modules/
+commander/node_modules/

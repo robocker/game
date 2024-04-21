@@ -1,32 +1,9 @@
 const debug = require("debug")("engineMock:index.js");
 const WebSocket = require("ws");
-const express = require("express");
-
-const app = express();
-
-app.use(express.json());
-
-const PORT = 8081;
-
-app.listen(PORT, (error) => {
-  if (!error) {
-    console.log("It's working!");
-  } else {
-    console.log(error);
-  }
-});
-
-app.get("/api/info", (req, resp) => {
-  console.log("/api/info");
-  resp.status(200);
-  resp.send({ playerId: 1, id: 4 });
-});
-
-debug("start mock engine");
 
 const server = new WebSocket.Server({
-  port: 8080,
-  path: "/state",
+  port: 8070,
+  path: "/connection",
 });
 let sockets = [];
 server.on("connection", function (socket) {
@@ -84,7 +61,6 @@ setInterval(() => {
       },
       {
         id: "3",
-        playerId: 2,
         angle: (-Math.PI * 3) / 4,
         turret: {
           angle: -Math.PI / 4,
@@ -125,4 +101,4 @@ setInterval(() => {
 
   //   debug(JSON.stringify(msg));
   sockets.forEach((s) => s.send(JSON.stringify(msg)));
-}, 1000);
+}, 1500);

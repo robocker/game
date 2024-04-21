@@ -1,6 +1,7 @@
 import { TanksManager } from "./TanksManager";
 import { AxiosManager } from "./AxiosRealManager";
 import { Websocket } from "./Websocket";
+import { TanksWebsocket } from "./TanksWebsocket";
 import { Utils } from "./Utils";
 import { LogManager } from "./LogManager";
 
@@ -23,7 +24,7 @@ export class GameManager {
     AxiosManager.get("/api/info", {})
       .then((response) => {
         LogManager.instance.debug(response);
-        this.players = this.players;
+        this.players = response.data.players;
 
         for (let player of response.data.players) {
           if (player.current) {
@@ -42,6 +43,7 @@ export class GameManager {
           }
 
           Websocket.run(this);
+          TanksWebsocket.run(this);
         }
       })
       .catch(function (error) {
@@ -64,14 +66,14 @@ export class GameManager {
               return;
             }
 
-            if (pointerInfo.pickInfo.pickedMesh === SPS.mesh &&
-                SPS.vars.playerId == this.currentPlayerId) {
+            if (
+              pointerInfo.pickInfo.pickedMesh === SPS.mesh &&
+              SPS.vars.playerId == this.currentPlayerId
+            ) {
               SPS.vars.selected = true;
               LogManager.instance.debug(tankData);
               LogManager.instance.debug(SPS.vars);
-            } else if (
-              SPS.vars.selected
-            ) {
+            } else if (SPS.vars.selected) {
               SPS.vars.selected = false;
 
               AxiosManager.post("/api/tanks/move", {
@@ -103,7 +105,18 @@ export class GameManager {
 
   updateGameState(data) {
     for (let tankData of data.tanks) {
-      const tank = this.SPSs[tankData.id];
+      let tank = this.SPSs[tankData.id];
+
+      if (!tank) {
+        const player = this.players.filter(
+          (player) => player.id == tankData.playerId
+        );
+        if (player.length === 0) {
+          continue;
+        }
+        this.addTank(tankData, player[0]);
+        tank = this.SPSs[tankData.id];
+      }
 
       if (
         tank.mesh.position.z !== tankData.z ||
