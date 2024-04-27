@@ -1,4 +1,4 @@
-const debug = require("debug")("engineMock:index.js");
+const debug = require("debug")("commander:index.js");
 const WebSocket = require("ws");
 
 const server = new WebSocket.Server({

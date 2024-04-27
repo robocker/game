@@ -104,6 +104,8 @@ export class GameManager {
   }
 
   updateGameState(data) {
+    TanksWebsocket.sendMessage(data);
+
     for (let tankData of data.tanks) {
       let tank = this.SPSs[tankData.id];
 
@@ -173,6 +175,10 @@ export class GameManager {
         set.start({ x: explosion.x, z: explosion.z, y: 0 });
       });
     }
+  }
+
+  handleCommanderMessage(data){
+    console.log(data);
   }
 
   moveTank(index, tryb) {

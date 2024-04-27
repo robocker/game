@@ -5,7 +5,6 @@ export class TanksWebsocket {
   static gameManager;
   static adress = "ws://localhost:8070/connection";
 
-
   static setConnected(isConnected) {
     LogManager.instance.debug(isConnected);
   }
@@ -14,9 +13,7 @@ export class TanksWebsocket {
     this.ws = new WebSocket(this.adress);
     this.ws.onmessage = (response) => {
       const data = JSON.parse(response.data);
-      if (data.bullets.length > 0) {
-        LogManager.instance.debug(data);
-      }
+      this.gameManager.handleCommanderMessage(data);
     };
     this.ws.onclose = async (event) => {
       console.error(event);
@@ -39,5 +36,9 @@ export class TanksWebsocket {
     setTimeout(() => {
       this.ws.send(JSON.stringify({ name: "TanksWebsocket message" }));
     }, 500);
+  }
+
+  static sendMessage(data) {
+    this.ws.send(JSON.stringify(data));
   }
 }

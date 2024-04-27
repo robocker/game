@@ -4,7 +4,7 @@
   "description": "Is made as example app tomanage users' units on localhost",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "set DEBUG=commander:* && node ./index.js"
   },
   "author": "",
   "license": "ISC",
