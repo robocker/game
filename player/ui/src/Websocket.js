@@ -9,7 +9,7 @@ export class Websocket {
   }
 
   static connect() {
-    this.ws = new WebSocket("ws://34.118.117.179:8080/state");
+    this.ws = new WebSocket("ws://34.118.111.129:8080/state");
     this.ws.onmessage = (response) => {
         const data = JSON.parse(response.data);
         if(data.bullets.length > 0){
