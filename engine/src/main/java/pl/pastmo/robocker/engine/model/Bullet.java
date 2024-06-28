@@ -12,7 +12,7 @@ public class Bullet {
     private Double speed;
     private Double gravitationSpeed;
 
-    public static Bullet fromTank(Tank tank) {
+    public static Bullet fromTank(AbstractTank tank) {
         return new Bullet()
                 .setAngle(tank.getAngle() + tank.getTurret().getAngle())
                 .setVerticalAngle(tank.getTurret().getAngleVertical())

@@ -45,16 +45,28 @@ public class RegisterController {
         Game game = new Game();
 
         if (parameters.length == 0) {
-            parameters = new String[]{"robockergame/tankbasic", "robockergame/tankbasic"};
+            parameters = new String[]{TankRemote.REMOTE, TankRemote.REMOTE};
         }
 
         for (String tankImage : parameters) {
-            Player player = new Player(this.gameService.getNewPlayerId()).setColor(new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
+            boolean isRemote = tankImage.equals(TankRemote.REMOTE);
+
+            Player player = new Player(this.gameService.getNewPlayerId()).setColor(new Color((float) Math.random(), (float) Math.random(), (float) Math.random())).setRemote(isRemote);
 
             Double basePosition = Math.random() * 100;
 
-            player.addTank((new Tank(tankImage)).setX(basePosition).setZ(basePosition).setAngle(Math.PI / 2).setTurret(new Turret()));
-            player.addTank((new Tank(tankImage)).setX(basePosition + 10).setZ(basePosition).setTurret(new Turret()));
+            if(isRemote){
+                System.out.println("remote");
+                player.addTank((new TankRemote()).setX(basePosition).setZ(basePosition).setAngle(Math.PI / 2).setTurret(new Turret()));
+                player.addTank((new TankRemote()).setX(basePosition + 10).setZ(basePosition).setTurret(new Turret()));
+            }
+            else{
+                System.out.println("docker");
+                player.addTank((new Tank(tankImage)).setX(basePosition).setZ(basePosition).setAngle(Math.PI / 2).setTurret(new Turret()));
+                player.addTank((new Tank(tankImage)).setX(basePosition + 10).setZ(basePosition).setTurret(new Turret()));
+            }
+
+
             game.addPlayer(player);
 
         }

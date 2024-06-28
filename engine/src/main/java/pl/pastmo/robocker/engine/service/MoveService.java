@@ -2,8 +2,8 @@ package pl.pastmo.robocker.engine.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.pastmo.robocker.engine.model.AbstractTank;
 import pl.pastmo.robocker.engine.model.Step;
-import pl.pastmo.robocker.engine.model.Tank;
 import pl.pastmo.robocker.engine.model.Turret;
 import pl.pastmo.robocker.engine.websocket.ShootType;
 
@@ -13,7 +13,7 @@ public class MoveService {
     @Autowired
     private ShootService shootService;
 
-    public void updatePosition(Tank tank) {
+    public void updatePosition(AbstractTank tank) {
         for (Step step : tank.getSteps()) {
 
             if (step.shootType == ShootType.NOW) {

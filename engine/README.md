@@ -40,6 +40,11 @@ You can check if works in browser: http://localhost:8080/
 
 Just open: http://localhost:8080/containers/demo?tanks=robockergame/tankbasic,robockergame/tankplayground
 
+OR
+
+http://localhost:8080/containers/demo?tanks=remote,remote
+
+
 Where robockergame/tankbasic,robockergame/tankpython is tank container which will be created for player 1 (tankbasic) and player2 (tankpython). You can adjust it to run your image.
 
 Then you can open players` views using returned ports e.g. for player1 it should be http://localhost:3000/

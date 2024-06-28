@@ -1,5 +1,6 @@
 package pl.pastmo.robocker.engine.websocket;
 
+import pl.pastmo.robocker.engine.model.AbstractTank;
 import pl.pastmo.robocker.engine.model.Player;
 import pl.pastmo.robocker.engine.model.Tank;
 
@@ -22,7 +23,7 @@ public class TankMsg {
     }
 
 
-    public static TankMsg fromTank(Tank tank, Player player){
+    public static TankMsg fromTank(AbstractTank tank, Player player){
         return new TankMsg(tank.getX(), tank.getZ())
                 .setId(tank.getId())
                 .setAngle(tank.getAngle())

@@ -1,6 +1,7 @@
 package pl.pastmo.robocker.engine.service;
 
 import org.springframework.stereotype.Component;
+import pl.pastmo.robocker.engine.model.AbstractTank;
 import pl.pastmo.robocker.engine.model.Bullet;
 import pl.pastmo.robocker.engine.model.Explosion;
 import pl.pastmo.robocker.engine.model.Tank;
@@ -14,11 +15,11 @@ public class ShootService {
     LinkedList<Bullet> bullets = new LinkedList<>();
     LinkedList<Explosion> explosions = new LinkedList<>();
 
-    public void shootOnStart(Tank tank) {
+    public void shootOnStart(AbstractTank tank) {
         bullets.push(Bullet.fromTank(tank));
     }
 
-    public void shootOnEnd(Tank tank) {
+    public void shootOnEnd(AbstractTank tank) {
         bullets.push(Bullet.fromTank(tank));
     }
 
@@ -84,7 +85,7 @@ public class ShootService {
         return explosions;
     }
 
-    public int checkDemage(Tank tank, List<Explosion> explosions) {
+    public int checkDemage(AbstractTank tank, List<Explosion> explosions) {
         int result = 0;
 
         for (Explosion explosion : explosions) {

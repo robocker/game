@@ -5,17 +5,25 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.google.common.primitives.UnsignedInteger;
 import org.springframework.stereotype.Component;
 import pl.pastmo.robocker.engine.model.Containerized;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Component("dockerService")
 public class DockerService {
 
+    private Set<UnsignedInteger> usedPorts = new TreeSet<>();
     private DockerClient dockerClient;
     private Network currentNetwork;
+
+    public DockerService(DockerClient dockerClient) {
+        this.dockerClient = dockerClient;
+    }
 
     public DockerService() {
         dockerClient = DockerClientBuilder.getInstance().build();
@@ -131,6 +139,23 @@ public class DockerService {
         }
 
         return null;
+    }
+
+    public String calculatePorts(Containerized item) {
+        UnsignedInteger insiderPort = item.getInsidePortNumber();
+        String result = ":" + insiderPort;
+
+        if (item.requiredExternalPort()) {
+            UnsignedInteger externalPort = insiderPort;
+            while (usedPorts.contains(externalPort)) {
+                externalPort = externalPort.plus(UnsignedInteger.valueOf(1));
+            }
+            usedPorts.add(externalPort);
+
+            item.setExternalPort(externalPort);
+            result = externalPort.toString() + result;
+        }
+        return result;
     }
 
 }

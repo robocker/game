@@ -1,7 +1,6 @@
 package pl.pastmo.robocker.engine.service;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.google.common.primitives.UnsignedInteger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.pastmo.robocker.engine.exceptions.ConfigurationException;
 import pl.pastmo.robocker.engine.model.*;
 import pl.pastmo.robocker.engine.response.GameInfo;
 import pl.pastmo.robocker.engine.response.TankInfo;
-import pl.pastmo.robocker.engine.websocket.*;
+import pl.pastmo.robocker.engine.websocket.Action;
+import pl.pastmo.robocker.engine.websocket.ShootType;
+import pl.pastmo.robocker.engine.websocket.TankRequest;
+import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -38,13 +41,18 @@ class GameServiceTest {
     MessageService messageService;
     @Mock
     ShootService shootService;
+    @Autowired
+    RemoteTankService remoteTankService;
+    @InjectMocks
+    ContainerisedTankService containerisedTankService;
     private GameService gameService;
     @Captor
     ArgumentCaptor<TankStateMsg> tankMsgCaptor;
 
     @BeforeEach
     void setUp() {
-        gameService = new GameService(dockerServiceMock, messageService, new MoveService(), shootService);
+        gameService = new GameService(dockerServiceMock, messageService, new MoveService(), shootService,
+                containerisedTankService, remoteTankService);
         gameService.getMoveService().setShootService(shootService);
 
     }
@@ -73,6 +81,8 @@ class GameServiceTest {
         Player player = new Player(1);
         game.addPlayer(player);
 
+        when(dockerServiceMock.calculatePorts(any())).thenReturn("42:42");
+
         gameService.runGame(game);
 
         verify(dockerServiceMock)
@@ -80,7 +90,7 @@ class GameServiceTest {
                         ArgumentMatchers.eq("robockergame/player"),
                         ArgumentMatchers.eq("robocker-net"),
                         ArgumentMatchers.eq("player-1"),
-                        ArgumentMatchers.eq("3000:3000"));
+                        ArgumentMatchers.eq("42:42"));
     }
 
     @Test
@@ -91,6 +101,8 @@ class GameServiceTest {
         game.addPlayer(player);
         Player player2 = new Player(2);
         game.addPlayer(player2);
+
+        when(dockerServiceMock.calculatePorts(any())).thenReturn("42:42");
 
         gameService.runGame(game);
 
@@ -109,10 +121,7 @@ class GameServiceTest {
         assertEquals(Arrays.asList("robockergame/player", "robockergame/player"), images);
         assertEquals(Arrays.asList("robocker-net", "robocker-net"), networks);
         assertEquals(Arrays.asList("player-1", "player-2"), containers);
-        assertEquals(Arrays.asList("3000:3000", "3001:3000"), ports);
-
-        assertEquals(UnsignedInteger.valueOf(3000), player.getExternalPort());
-        assertEquals(UnsignedInteger.valueOf(3001), player2.getExternalPort());
+        assertEquals(Arrays.asList("42:42", "42:42"), ports);
 
 
     }
@@ -131,6 +140,8 @@ class GameServiceTest {
 
         game.addPlayer(player);
 
+        when(dockerServiceMock.calculatePorts(any())).thenReturn("42:42");
+
         gameService.runGame(game);
 
         verify(dockerServiceMock, times(2))
@@ -148,14 +159,15 @@ class GameServiceTest {
         assertEquals(Arrays.asList("robockergame/player", "robockergame/tankbasic"), images);
         assertEquals(Arrays.asList("robocker-net", "robocker-net"), networks);
         assertEquals(Arrays.asList("player-1", "tank-1"), containers);
-        assertEquals(Arrays.asList("3000:3000", ":80"), ports);
-
+        assertEquals(Arrays.asList("42:42", "42:42"), ports);
 
     }
 
     @Test
     public void getGameDescription() throws ConfigurationException {
         mockCreateContainer();
+
+        when(dockerServiceMock.calculatePorts(any())).thenReturn("42:42");
 
         Game game = new Game();
 
@@ -174,8 +186,6 @@ class GameServiceTest {
         String result = gameService.getGameDescription();
 
         assertThat(result, containsString("Player"));
-        assertThat(result, containsString("externalPort=3000"));
-        assertThat(result, containsString("externalPort=3001"));
         assertThat(result, containsString("containerName=player-1"));
         assertThat(result, containsString("robockergame/tankbasic"));
 
@@ -545,8 +555,8 @@ class GameServiceTest {
         verify(messageService, times(3)).sendMessage(tankMsgCaptor.capture());
         TankStateMsg tankMsg = tankMsgCaptor.getAllValues().get(2);
 
-        assertEquals(1,tankMsg.getTanks().size());
-        assertEquals(0,tankMsg.getTanks().get(0).getLifeLevel());
+        assertEquals(1, tankMsg.getTanks().size());
+        assertEquals(0, tankMsg.getTanks().get(0).getLifeLevel());
 
         assertEquals(0, tank.getLifeLevel());
         verify(dockerServiceMock).remove("tank-1");

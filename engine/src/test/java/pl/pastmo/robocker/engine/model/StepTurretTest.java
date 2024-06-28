@@ -1,5 +1,6 @@
 package pl.pastmo.robocker.engine.model;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class StepTurretTest {
+
+    @AfterEach
+    void reset() {
+        Tank.resetCounter();
+    }
 
     @Test
     public void createNewStep_shoot_false() {

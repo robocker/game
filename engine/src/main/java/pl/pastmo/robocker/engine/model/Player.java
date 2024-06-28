@@ -10,15 +10,13 @@ public class Player implements Containerized {
 
     private String imageName;
     private Integer id;
-    private List<Tank> tanks = new LinkedList<>();
+    private List<AbstractTank> tanks = new LinkedList<>();
     private UnsignedInteger externalPort;
     private List<String> ips = new LinkedList<>();
     private Color color;
+    private boolean isRemote= false;
 
     public Player(Integer id) throws ConfigurationException {
-        if (id == null) {
-            throw new ConfigurationException("Player must have id");
-        }
 
         this.id = id;
         this.imageName = "player";
@@ -29,11 +27,11 @@ public class Player implements Containerized {
     }
 
 
-    public void addTank(Tank tank) {
+    public void addTank(AbstractTank tank) {
         this.tanks.add(tank);
     }
 
-    public List<Tank> getTanks() {
+    public List<AbstractTank> getTanks() {
         return tanks;
     }
 
@@ -83,6 +81,15 @@ public class Player implements Containerized {
     @Override
     public List<String> getIps(){
         return this.ips;
+    }
+
+    public boolean isRemote() {
+        return isRemote;
+    }
+
+    public Player setRemote(boolean remote) {
+        isRemote = remote;
+        return this;
     }
 
     @Override

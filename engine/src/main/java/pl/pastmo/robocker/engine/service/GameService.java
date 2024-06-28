@@ -1,7 +1,6 @@
 package pl.pastmo.robocker.engine.service;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.google.common.primitives.UnsignedInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.pastmo.robocker.engine.model.*;
@@ -13,7 +12,10 @@ import pl.pastmo.robocker.engine.websocket.TankRequest;
 import pl.pastmo.robocker.engine.websocket.TankStateMsg;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Component("gameService")
 public class GameService extends TimerTask {
@@ -26,20 +28,27 @@ public class GameService extends TimerTask {
     private MoveService moveService;
     @Autowired
     private ShootService shootService;
+    @Autowired
+    private ContainerisedTankService containerisedTankService;
+    @Autowired
+    private RemoteTankService remoteTankService;
 
     public static final String defaultNetwork = "robocker-net";
-    private Set<UnsignedInteger> usedPorts = new TreeSet<>();
+
     private Game game;
     private Integer currentPlayerId = 0;
 
     public GameService() {
     }
 
-    public GameService(DockerService ds, MessageService messageService, MoveService moveService, ShootService shootService) {
+    public GameService(DockerService ds, MessageService messageService, MoveService moveService, ShootService shootService,
+                       ContainerisedTankService containerisedTankService, RemoteTankService remoteTankService) {
         this.dockerService = ds;
         this.messageService = messageService;
         this.moveService = moveService;
         this.shootService = shootService;
+        this.containerisedTankService = containerisedTankService;
+        this.remoteTankService = remoteTankService;
     }
 
     @PostConstruct
@@ -51,15 +60,16 @@ public class GameService extends TimerTask {
     public void runGame(Game newGame) {
         setGame(newGame);
 
-        dockerService.connectToNetwork(defaultNetwork,"engine");
+        dockerService.connectToNetwork(defaultNetwork, "engine");
 
         for (Player player : game.getPlayers()) {
-            CreateContainerResponse playerResp = dockerService.createCotnainer(player.getImageName(), defaultNetwork, player.getContainerName(), calculatePorts(player));
+            CreateContainerResponse playerResp = dockerService.createCotnainer(player.getImageName(), defaultNetwork, player.getContainerName(), dockerService.calculatePorts(player));
             dockerService.fillContainerInfo(playerResp.getId(), player);
 
-            for (Tank tank : player.getTanks()) {
-                CreateContainerResponse tankResp = dockerService.createCotnainer(tank.getImageName(), defaultNetwork, tank.getContainerName(), calculatePorts(tank));
-                dockerService.fillContainerInfo(tankResp.getId(), tank);
+            for (AbstractTank tank : player.getTanks()) {
+                getTankService(tank).fillTankInfo(tank);
+
+
             }
         }
 
@@ -84,6 +94,7 @@ public class GameService extends TimerTask {
             playerResult.color = player.getColor();
             playerResult.tanks = player.getTanks();
             playerResult.id = player.getId();
+            playerResult.isRemote = player.isRemote();
 
             if (player.getIps().contains(ip)) {
                 playerResult.current = true;
@@ -104,9 +115,9 @@ public class GameService extends TimerTask {
 
         for (Player player : game.getPlayers()) {
 
-            for (Tank tank : player.getTanks()) {
-                if (tank.getIps().contains(ip)) {
-                    result.id = tank.getId();
+            for (AbstractTank tank : player.getTanks()) {
+                if (((Tank) tank).getIps().contains(ip)) {
+                    result.id = ((Tank) tank).getId();
                     result.playerId = player.getId();
                     return result;
                 }
@@ -119,9 +130,9 @@ public class GameService extends TimerTask {
 
     public void move(String ip, TankRequest request) {
         for (Player player : game.getPlayers()) {
-            for (Tank tank : player.getTanks()) {
-                if (tank.getId() == request.getTankId()) {
-                    System.out.println(tank.getIps());
+            for (AbstractTank tank : player.getTanks()) {
+                if (tank instanceof Tank && ((Tank) tank).getId() == request.getTankId()) {
+                    System.out.println(((Tank) tank).getIps());
                     tank.setTankRequest(request);
                 }
             }
@@ -147,10 +158,10 @@ public class GameService extends TimerTask {
         tanksMsgs.setExplosions(explosions);
         tanksMsgs.setBullets(shootService.getBullets());
 
-        List<Tank> tanksToRemove = new LinkedList<>();
+        List<AbstractTank> tanksToRemove = new LinkedList<>();
 
         for (Player player : game.getPlayers()) {
-            for (Tank tank : player.getTanks()) {
+            for (AbstractTank tank : player.getTanks()) {
                 boolean toRemove = false;
 
                 int hits = shootService.checkDemage(tank, explosions);
@@ -159,7 +170,8 @@ public class GameService extends TimerTask {
                 if (tank.getLifeLevel() > 0) {
                     moveService.updatePosition(tank);
                 } else {
-                    dockerService.remove(tank.getContainerName());
+                    getTankService(tank).remove(tank);
+
                     tanksToRemove.add(tank);
                     toRemove = true;
                 }
@@ -177,22 +189,6 @@ public class GameService extends TimerTask {
         shootService.removeExplosions(explosions);
     }
 
-    public String calculatePorts(Containerized item) {
-        UnsignedInteger insiderPort = item.getInsidePortNumber();
-        String result = ":" + insiderPort;
-
-        if (item.requiredExternalPort()) {
-            UnsignedInteger externalPort = insiderPort;
-            while (usedPorts.contains(externalPort)) {
-                externalPort = externalPort.plus(UnsignedInteger.valueOf(1));
-            }
-            usedPorts.add(externalPort);
-
-            item.setExternalPort(externalPort);
-            result = externalPort.toString() + result;
-        }
-        return result;
-    }
 
     public void setGame(Game game) {
         this.game = game;
@@ -205,5 +201,14 @@ public class GameService extends TimerTask {
 
     public MoveService getMoveService() {
         return moveService;
+    }
+
+    public AbstractTankService getTankService(AbstractTank tank) {
+        if (tank instanceof Tank) {
+            return containerisedTankService;
+        } else {
+            return remoteTankService;
+        }
+
     }
 }
