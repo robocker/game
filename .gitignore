@@ -8,6 +8,7 @@ player/dist/
 .vagrant/
 .idea/
 player/node_modules/
+playerOld/node_modules/
 engine/Running
 engine/Using
 engineMock/node_modules/

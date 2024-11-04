@@ -1,4 +1,7 @@
+import { AxiosManagerFactory } from "./AxiosManager/AxiosManagerFactory";
 import { LogManager } from "./LogManager";
+
+const AxiosManager = AxiosManagerFactory();
 
 export class Websocket {
   static ws;
@@ -9,19 +12,24 @@ export class Websocket {
   }
 
   static connect() {
-    this.ws = new WebSocket("ws://34.118.111.129:8080/state");
+    this.ws = new WebSocket(AxiosManager.wsUrl);
     this.ws.onmessage = (response) => {
-        const data = JSON.parse(response.data);
-        if(data.bullets.length > 0){
-            LogManager.instance.debug(data);
-        }
+      const data = JSON.parse(response.data);
+      if (data.bullets.length > 0) {
+        LogManager.instance.debug(data);
+      }
       this.gameManager.updateGameState(data);
     };
+
+    this.ws.onopen = (event) => {
+      this.setConnected(true);
+      this.ws.send(JSON.stringify({ name: "works like a charm!" }));
+    };
+
     this.ws.onclose = async (event) => {
       console.error(event);
-      //do what you want
+      this.setConnected(false);
     };
-    this.setConnected(true);
   }
 
   static disconnect() {
@@ -35,9 +43,5 @@ export class Websocket {
   static run(gameManager) {
     this.gameManager = gameManager;
     this.connect();
-
-    setTimeout(() => {
-      this.ws.send(JSON.stringify({ name: "works like a charm!" }));
-    }, 500);
   }
 }

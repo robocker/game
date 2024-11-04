@@ -1,29 +1,47 @@
 {
   "name": "player",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "set DEBUG=player:* && node ./index.js",
-    "dev": "concurrently \"cd ./ui && yarn start\" \"set DEBUG=player:* && node ./index.js\"",
-    "build": "cd ./ui && yarn build"
-  },
-  "author": "",
-  "license": "ISC",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.21.1",
-    "concurrently": "^6.2.1",
-    "express": "^4.17.1",
-    "express-ws": "^5.0.2",
     "babylonjs": "^4.2.0",
     "babylonjs-loaders": "^4.2.0",
-    "copy-webpack-plugin": "^9.0.1",
-    "sockjs-client": "^1.5.2"
+    "express": "^4.17.1",
+    "express-ws": "^5.0.2",
+    "http-proxy-middleware": "^3.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
+    "save-dev": "^0.0.1-security",
+    "sockjs-client": "^1.5.2",
+    "web-vitals": "^2.1.4"
   },
-  "devDependencies": {
-    "html-webpack-plugin": "^5.3.1",
-    "webpack": "^5.38.1",
-    "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2"
+  "scripts": {
+    "start": "react-scripts start",
+    "startMock": "set \"REACT_APP_AXIOS_SERVICE_IMPLEMETATION=AxiosMockManager\"  &&  react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

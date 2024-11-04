@@ -13,9 +13,12 @@ class LogManager {
   }
 
   static get instance() {
+    /* eslint-disable-next-line no-restricted-globals */
     if (!self._instance) {
+        /* eslint-disable-next-line no-restricted-globals */
       self._instance = new LogManager();
     }
+    /* eslint-disable-next-line no-restricted-globals */
     return self._instance;
   }
 
