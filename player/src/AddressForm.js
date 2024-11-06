@@ -16,6 +16,7 @@ function AddressForm() {
     <>
       {!approvedAdress && (
         <header className="App-header">
+          <label>Enter address of your local commander</label>
           <input
             value={commanderAdress}
             onChange={(e) => setCommanderAdress(e.target.value)}
