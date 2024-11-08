@@ -15,6 +15,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "rxjs": "^7.8.1",
     "save-dev": "^0.0.1-security",
     "sockjs-client": "^1.5.2",
     "web-vitals": "^2.1.4"

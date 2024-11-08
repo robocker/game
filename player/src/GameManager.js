@@ -5,6 +5,8 @@ import { Utils } from "./Utils";
 import { LogManager } from "./LogManager";
 import * as BABYLON from "babylonjs";
 import { AxiosManagerFactory } from "./AxiosManager/AxiosManagerFactory";
+import { CommanderService } from "./CommanderService";
+import { filter } from "rxjs";
 
 const AxiosManager = AxiosManagerFactory();
 
@@ -45,14 +47,19 @@ export class GameManager {
             this.addTank(tank, player);
           }
 
-
-        //   TanksWebsocket.run(this);
+          //   TanksWebsocket.run(this);
         }
 
         Websocket.run(this);
       })
       .catch(function (error) {
         LogManager.instance.error(error);
+      });
+
+    CommanderService.instance.address$
+      .pipe(filter((value) => value != undefined))
+      .subscribe((address) => {
+        console.log(address);
       });
   };
 
@@ -109,7 +116,7 @@ export class GameManager {
   }
 
   updateGameState(data) {
-   // TanksWebsocket.sendMessage(data);
+    // TanksWebsocket.sendMessage(data);
 
     for (let tankData of data.tanks) {
       let tank = this.SPSs[tankData.id];
@@ -182,7 +189,7 @@ export class GameManager {
     }
   }
 
-  handleCommanderMessage(data){
+  handleCommanderMessage(data) {
     console.log(data);
   }
 
