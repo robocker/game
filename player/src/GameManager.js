@@ -47,7 +47,7 @@ export class GameManager {
             this.addTank(tank, player);
           }
 
-          //   TanksWebsocket.run(this);
+          //
         }
 
         Websocket.run(this);
@@ -60,6 +60,7 @@ export class GameManager {
       .pipe(filter((value) => value != undefined))
       .subscribe((address) => {
         console.log(address);
+        TanksWebsocket.run(this, address);
       });
   };
 

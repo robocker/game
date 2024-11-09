@@ -29,7 +29,8 @@ export class TanksWebsocket {
     LogManager.instance.error("Disconnected");
   }
 
-  static run(gameManager) {
+  static run(gameManager, address) {
+    this.adress = address;
     this.gameManager = gameManager;
     this.connect();
 
