@@ -23,13 +23,17 @@ export class Websocket {
 
     this.ws.onopen = (event) => {
       this.setConnected(true);
-      this.ws.send(JSON.stringify({ name: "works like a charm!" }));
+
     };
 
     this.ws.onclose = async (event) => {
       console.error(event);
       this.setConnected(false);
     };
+  }
+
+  static sendMessage(message){
+    this.ws.send(JSON.stringify(message));
   }
 
   static disconnect() {

@@ -191,27 +191,27 @@ export class GameManager {
   }
 
   handleCommanderMessage(data) {
-    console.log(data);
+    Websocket.sendMessage(data);
   }
 
-  moveTank(index, tryb) {
-    const tank = this.SPSs[index];
+//   moveTank(index, tryb) {
+//     const tank = this.SPSs[index];
 
-    tank.particles[1].rotation.y -= Math.PI / 180;
-    tank.particles[2].rotation.y -= Math.PI / 180;
-    tank.particles[2].rotation.z -= Math.PI / 180;
+//     tank.particles[1].rotation.y -= Math.PI / 180;
+//     tank.particles[2].rotation.y -= Math.PI / 180;
+//     tank.particles[2].rotation.z -= Math.PI / 180;
 
-    tank.setParticles();
+//     tank.setParticles();
 
-    AxiosManager.post("/api/tanks/move", {
-      ids: [42, 11],
-      destination: { x: 33, y: 98 },
-    })
-      .then(function (response) {
-        LogManager.instance.debug(response);
-      })
-      .catch(function (error) {
-        LogManager.instance.error(error);
-      });
-  }
+//     AxiosManager.post("/api/tanks/move", {
+//       ids: [42, 11],
+//       destination: { x: 33, y: 98 },
+//     })
+//       .then(function (response) {
+//         LogManager.instance.debug(response);
+//       })
+//       .catch(function (error) {
+//         LogManager.instance.error(error);
+//       });
+//   }
 }
